@@ -105,15 +105,26 @@
     <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 hidden"></div>
   </main>
 
+  <!-- ================= VISOR DE IMAGEN (ZOOM) ================= -->
+  <div id="zoom-modal" class="fixed inset-0 z-[70] hidden bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out" onclick="this.classList.add('hidden')">
+    <img id="zoom-img" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl" />
+    <button class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center transition">
+      <i class="ph ph-x text-2xl font-bold"></i>
+    </button>
+  </div>
+
   <!-- ================= MODAL VISTA DETALLADA DEL PRODUCTO ================= -->
   <div id="product-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[92vh]">
       <div class="relative bg-slate-100 h-72 sm:h-80 w-full overflow-hidden flex items-center justify-center group">
-        <img id="modal-img" src="" alt="Detalle" class="w-full h-full object-contain bg-white transition duration-300 group-hover:scale-110" />
-        <div id="modal-badge-container" class="absolute top-4 left-4 flex flex-col gap-1.5"></div>
+        <img id="modal-img" src="" alt="Detalle" onclick="document.getElementById('zoom-modal').classList.remove('hidden'); document.getElementById('zoom-img').src = this.src;" class="w-full h-full object-contain bg-white cursor-zoom-in transition duration-300 group-hover:scale-105" title="Toca para ampliar imagen" />
+        <div id="modal-badge-container" class="absolute top-4 left-4 flex flex-col gap-1.5 pointer-events-none"></div>
         <button onclick="closeProductModal()" class="absolute top-4 right-4 bg-white/90 hover:bg-white text-slate-800 hover:text-black w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition">
           <i class="ph ph-x text-xl font-bold"></i>
         </button>
+        <div class="absolute bottom-3 right-3 bg-black/50 text-white rounded-full p-2 pointer-events-none opacity-70 group-hover:opacity-100 transition">
+          <i class="ph ph-magnifying-glass-plus text-xl"></i>
+        </div>
       </div>
 
       <div class="p-6 flex-1 overflow-y-auto space-y-4">
@@ -263,7 +274,7 @@
           <input type="hidden" id="adm-edit-id" value="" />
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <input type="text" id="adm-name" placeholder="Nombre (Ej: Pulpa Castaña Natura / Crema Avon)" class="p-2 border rounded-lg text-xs bg-white" />
+            <input type="text" id="adm-name" placeholder="Nombre (Ej: Pulpa Castaña Natura)" class="p-2 border rounded-lg text-xs bg-white" />
             <input type="number" id="adm-price" placeholder="Precio (Ej: 85)" class="p-2 border rounded-lg text-xs bg-white" />
             
             <select id="adm-cat" onchange="handleCategorySelectionChange()" class="p-2 border rounded-lg text-xs bg-white font-medium">
@@ -279,9 +290,15 @@
             </div>
           </div>
 
-          <div class="flex flex-col">
-            <label class="text-[11px] font-bold text-slate-600 mb-1">Foto desde Celular/PC (Opcional si solo estás editando):</label>
-            <input type="file" id="adm-file" accept="image/*" class="text-xs file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-slate-900 file:text-white" />
+          <div class="space-y-2">
+            <div class="flex flex-col">
+              <label class="text-[11px] font-bold text-slate-600 mb-1">Opción A: Subir Foto desde Celular/PC:</label>
+              <input type="file" id="adm-file" accept="image/*" class="text-xs file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-slate-900 file:text-white" />
+            </div>
+            <div class="flex flex-col">
+              <label class="text-[11px] font-bold text-slate-600 mb-1">Opción B: Pegar Link Directo de Imagen (Opcional, 0 consumo):</label>
+              <input type="text" id="adm-img-url" placeholder="https://ejemplo.com/foto.jpg" class="p-2 border rounded-lg text-xs bg-white" />
+            </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -328,6 +345,15 @@
     let cart = [];
     let currentCategory = "todos";
     let editingProductData = null;
+
+    // Función de optimización para Cloudinary
+    function getOptimizedImageUrl(url) {
+      if (!url) return 'https://placehold.co/400x400?text=Sin+Imagen';
+      if (url.includes('cloudinary.com') && url.includes('/upload/')) {
+        return url.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
+      }
+      return url;
+    }
 
     window.addEventListener("DOMContentLoaded", () => {
       fetchProductsFromCloud();
@@ -398,7 +424,11 @@
         products = [];
         if (data) {
           Object.keys(data).forEach(key => {
-            products.push({ firebaseId: key, ...data[key] });
+            // ESCUDO ANTI-ERRORES: Solo agrega productos que tengan un nombre válido.
+            // Esto evita que productos "fantasmas" o vacíos rompan la tienda.
+            if (data[key] && data[key].name) {
+              products.push({ firebaseId: key, ...data[key] });
+            }
           });
           products.reverse();
         }
@@ -435,13 +465,14 @@
         const isPedido = !!p.isPedido;
         const stockUnits = typeof p.stock !== "undefined" ? Number(p.stock) : 1;
         const isOutOfStock = p.isOutOfStock || stockUnits <= 0;
+        const displayImage = getOptimizedImageUrl(p.image);
 
         const card = document.createElement("div");
         card.className = `bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-md transition flex flex-col group ${isOutOfStock ? 'opacity-80' : ''}`;
         
         card.innerHTML = `
           <div onclick="openProductModal('${p.firebaseId}')" class="h-44 sm:h-52 bg-slate-100 overflow-hidden relative cursor-pointer">
-            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300 ${isOutOfStock ? 'grayscale-[35%]' : ''}" onerror="this.src='https://placehold.co/400x400?text=Sin+Imagen'"/>
+            <img src="${displayImage}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300 ${isOutOfStock ? 'grayscale-[35%]' : ''}" onerror="this.src='https://placehold.co/400x400?text=Sin+Imagen'"/>
             
             ${isOutOfStock ? `
               <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -493,8 +524,9 @@
 
       const stockUnits = typeof prod.stock !== "undefined" ? Number(prod.stock) : 1;
       const isOutOfStock = prod.isOutOfStock || stockUnits <= 0;
+      const displayImage = getOptimizedImageUrl(prod.image);
 
-      document.getElementById("modal-img").src = prod.image;
+      document.getElementById("modal-img").src = displayImage;
       document.getElementById("modal-name").textContent = prod.name;
       document.getElementById("modal-price").textContent = `S/ ${Number(prod.price).toFixed(2)}`;
       document.getElementById("modal-desc").textContent = prod.description || "Sin descripción adicional.";
@@ -587,6 +619,7 @@
       const isPedido = document.getElementById("adm-is-pedido").checked;
       const isOutOfStock = document.getElementById("adm-is-outofstock").checked;
       const fileInput = document.getElementById("adm-file");
+      const directUrl = document.getElementById("adm-img-url").value.trim();
 
       if (!name || isNaN(price)) {
         alert("Por favor completa el nombre y el precio.");
@@ -596,7 +629,10 @@
       const btnText = document.getElementById("btn-save-text");
       let imageUrl = editingProductData ? editingProductData.image : "";
 
-      if (fileInput.files && fileInput.files.length > 0) {
+      if (directUrl) {
+        imageUrl = directUrl;
+      }
+      else if (fileInput.files && fileInput.files.length > 0) {
         btnText.textContent = "Subiendo imagen a Cloudinary...";
         try {
           const formData = new FormData();
@@ -616,7 +652,7 @@
           return;
         }
       } else if (!editId && !imageUrl) {
-        alert("Selecciona una foto para el nuevo producto.");
+        alert("Selecciona una foto o pega el link de una imagen.");
         return;
       }
 
@@ -673,6 +709,7 @@
       document.getElementById("adm-cat").value = prod.category;
       document.getElementById("adm-stock").value = typeof prod.stock !== "undefined" ? prod.stock : 1;
       document.getElementById("adm-desc").value = prod.description || "";
+      document.getElementById("adm-img-url").value = prod.image || "";
       document.getElementById("adm-is-pedido").checked = !!prod.isPedido;
       document.getElementById("adm-is-outofstock").checked = !!prod.isOutOfStock;
       
@@ -688,6 +725,7 @@
       document.getElementById("adm-price").value = "";
       document.getElementById("adm-stock").value = "1";
       document.getElementById("adm-desc").value = "";
+      document.getElementById("adm-img-url").value = "";
       document.getElementById("adm-is-pedido").checked = false;
       document.getElementById("adm-is-outofstock").checked = false;
       document.getElementById("adm-file").value = "";
@@ -704,7 +742,7 @@
         item.className = "flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200 text-xs";
         item.innerHTML = `
           <div class="flex items-center gap-2.5 truncate">
-            <img src="${p.image}" class="w-9 h-9 rounded-lg object-cover" />
+            <img src="${getOptimizedImageUrl(p.image)}" class="w-9 h-9 rounded-lg object-cover" />
             <div>
               <div class="font-bold flex items-center gap-1.5">
                 <span>${p.name}</span>
@@ -762,19 +800,42 @@
     function addToCart(prodId) {
       const prod = products.find(p => p.firebaseId === prodId);
       if (!prod) return;
-      const isOutOfStock = prod.isOutOfStock || (typeof prod.stock !== "undefined" && prod.stock <= 0);
+      
+      const stockUnits = typeof prod.stock !== "undefined" ? Number(prod.stock) : 1;
+      const isOutOfStock = prod.isOutOfStock || stockUnits <= 0;
       if (isOutOfStock) return alert("Este producto se encuentra agotado.");
 
       const exist = cart.find(i => i.firebaseId === prodId);
-      if (exist) { exist.qty += 1; } else { cart.push({ ...prod, qty: 1 }); }
+      
+      if (!exist) {
+        if (!prod.isPedido && stockUnits < 1) return alert(`Solo hay ${stockUnits} unidades disponibles.`);
+        cart.push({ ...prod, qty: 1 });
+      } else {
+        if (!prod.isPedido && (exist.qty + 1) > stockUnits) {
+          return alert(`Solo hay ${stockUnits} unidades disponibles de este producto.`);
+        }
+        exist.qty += 1;
+      }
+      
       renderCart();
     }
 
     function changeQty(prodId, delta) {
       const item = cart.find(i => i.firebaseId === prodId);
       if (!item) return;
-      item.qty += delta;
-      if (item.qty <= 0) { cart = cart.filter(i => i.firebaseId !== prodId); }
+      const originalProd = products.find(p => p.firebaseId === prodId);
+      const stockUnits = typeof originalProd.stock !== "undefined" ? Number(originalProd.stock) : 1;
+      
+      const newQty = item.qty + delta;
+      
+      if (newQty <= 0) {
+        cart = cart.filter(i => i.firebaseId !== prodId);
+      } else {
+        if (!originalProd.isPedido && newQty > stockUnits) {
+          return alert(`Solo hay ${stockUnits} unidades disponibles de este producto.`);
+        }
+        item.qty = newQty;
+      }
       renderCart();
     }
 
@@ -812,7 +873,7 @@
         const row = document.createElement("div");
         row.className = "flex items-center gap-3 p-2 bg-slate-50 rounded-xl border border-slate-100";
         row.innerHTML = `
-          <img src="${item.image}" class="w-12 h-12 object-cover rounded-lg bg-slate-200" />
+          <img src="${getOptimizedImageUrl(item.image)}" class="w-12 h-12 object-cover rounded-lg bg-slate-200" />
           <div class="flex-1 min-w-0">
             <h5 class="text-xs font-bold text-slate-900 truncate">${item.name}</h5>
             <div class="flex items-center gap-1.5 mt-0.5">
@@ -902,14 +963,14 @@
         text += `\n📌 *CONDICIONES DE PAGO:*\n`;
         text += `✅ *Anticipo requerido (50% Catálogo):* S/ ${anticipoRequerido.toFixed(2)} (vía Yape/Plin)\n`;
         text += `🤝 *Saldo a liquidar al entregar:* S/ ${saldoRestante.toFixed(2)}\n\n`;
-        text += `Hola D'Ana Boutique, por favor envíame los datos de Yape/Plin para abonar el anticipo de S/ ${anticipoRequerido.toFixed(2)} y reservar mi orden.`;
+        text += `Hola, por favor envíame los datos de Yape/Plin para abonar el anticipo de S/ ${anticipoRequerido.toFixed(2)} y reservar mi orden.`;
       } else {
         if (payment === "Contraentrega") {
           text += `🤝 *Modalidad:* Pago completo contraentrega en el punto acordado.\n\n`;
-          text += `Hola D'Ana Boutique, deseo coordinar la fecha y hora de entrega en el punto seleccionado.`;
+          text += `Hola, deseo coordinar la fecha y hora de entrega en el punto seleccionado.`;
         } else {
           text += `📲 *Estado:* Por favor envíame los datos para transferirte el total.\n\n`;
-          text += `Hola D'Ana Boutique, deseo confirmar los datos de pago para mi entrega.`;
+          text += `Hola, deseo confirmar los datos de pago para mi entrega.`;
         }
       }
 
