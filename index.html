@@ -6,90 +6,95 @@
   <title>D'Ana Boutique - Tienda Oficial</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    /* Efecto de scroll suave y barra de desplazamiento elegante */
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
 
-  <!-- ================= NAVBAR ================= -->
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-24 flex items-center justify-between">
+  <!-- ================= NAVBAR PREMIUM ================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-lg border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-28 flex items-center justify-between">
       
-      <!-- LOGO -->
-      <div id="logo-trigger" onclick="openLoginModal()" class="flex items-center gap-3 cursor-pointer select-none" title="Acceder a Administración">
-        <img src="logo.png" alt="logo de la tienda" class="h-20 w-auto object-contain" onerror="this.src='https://placehold.co/100x100?text=D%27Ana'"/>
-        <div>
-          <h1 id="shop-name-display" class="font-extrabold text-xl leading-tight tracking-tight text-slate-900">D'Ana Boutique</h1>
-          <p class="text-xs text-slate-500">Moda, Calzado & Fragancias</p>
+      <!-- LOGO Y TÍTULO (ACCESO SECRETO AL PANEL) -->
+      <div id="logo-trigger" onclick="openLoginModal()" class="flex items-center gap-4 cursor-pointer select-none group" title="Acceso exclusivo Administrador">
+        <img src="logo.png" alt="D'Ana Boutique Logo" class="h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" onerror="this.src='https://placehold.co/150x150?text=D%27Ana'"/>
+        <div class="hidden sm:block">
+          <h1 class="font-black text-3xl leading-none tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-slate-800 to-slate-900">D'Ana Boutique</h1>
+          <p class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Moda, Calzado & Fragancias</p>
         </div>
       </div>
       
-      <!-- BOTONES SUPERIORES -->
-      <div class="flex items-center gap-2">
-        <button onclick="openLoginModal()" class="text-slate-500 hover:text-slate-900 p-2 rounded-xl text-xs flex items-center gap-1 border border-slate-200">
-          <i class="ph ph-gear text-base"></i>
-          <span class="hidden sm:inline">Panel</span>
-        </button>
-
-        <button id="btn-open-cart" class="relative bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm transition">
-          <i class="ph ph-shopping-bag text-xl text-amber-400"></i>
-          <span class="font-medium text-sm hidden sm:inline">Mi Pedido</span>
-          <span id="cart-counter" class="bg-rose-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+      <!-- BOTÓN CARRITO MODERNO -->
+      <div class="flex items-center gap-3">
+        <button id="btn-open-cart" class="relative bg-gradient-to-r from-slate-900 to-slate-800 hover:from-rose-900 hover:to-slate-900 text-white px-5 py-3 rounded-2xl flex items-center gap-2.5 shadow-lg hover:shadow-xl transition-all duration-300">
+          <i class="ph ph-shopping-bag text-2xl text-amber-400"></i>
+          <span class="font-bold text-sm hidden sm:inline">Mi Pedido</span>
+          <span id="cart-counter" class="absolute -top-2 -right-2 bg-rose-500 text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-md">0</span>
         </button>
       </div>
     </div>
 
-    <!-- CATEGORÍAS -->
-    <div class="bg-white border-t border-slate-100 overflow-x-auto">
-      <div class="max-w-6xl mx-auto px-4 py-2 flex gap-2">
-        <button onclick="filterCategory('todos', this)" class="cat-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-white transition whitespace-nowrap">Todos</button>
-        <button onclick="filterCategory('natura', this)" class="cat-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition whitespace-nowrap">🌿 Natura</button>
-        <button onclick="filterCategory('avon', this)" class="cat-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-fuchsia-50 text-fuchsia-800 border border-fuchsia-200 hover:bg-fuchsia-100 transition whitespace-nowrap">🌸 Avon</button>
-        <button onclick="filterCategory('stock', this)" class="cat-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">⚡ Stock Inmediato</button>
-        <button onclick="filterCategory('catalogo', this)" class="cat-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition whitespace-nowrap">📖 Todo Catálogo</button>
-        <button onclick="filterCategory('fragancias', this)" class="cat-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap">Fragancias & Perfumes</button>
-        <button onclick="filterCategory('zapatos', this)" class="cat-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap">Zapatos de Dama</button>
-        <button onclick="filterCategory('ropa', this)" class="cat-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap">Ropa & Accesorios</button>
+    <!-- BARRA DE CATEGORÍAS MEJORADA -->
+    <div class="bg-white border-t border-slate-100 overflow-x-auto shadow-inner">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex gap-2.5">
+        <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
+        <button onclick="filterCategory('natura', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition whitespace-nowrap">🌿 Natura</button>
+        <button onclick="filterCategory('avon', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-fuchsia-50 text-fuchsia-800 border border-fuchsia-200 hover:bg-fuchsia-100 transition whitespace-nowrap">🌸 Avon</button>
+        <button onclick="filterCategory('stock', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">⚡ En Stock (Contraentrega)</button>
+        <button onclick="filterCategory('catalogo', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition whitespace-nowrap">📖 Solo Catálogo</button>
+        <button onclick="filterCategory('fragancias', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap">Fragancias & Perfumes</button>
+        <button onclick="filterCategory('zapatos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap">Zapatos de Dama</button>
+        <button onclick="filterCategory('ropa', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap">Ropa & Accesorios</button>
       </div>
     </div>
   </header>
 
-  <!-- ================= BANNER INFORMATIVO ================= -->
-  <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-2 w-full">
+  <!-- ================= BANNER PRINCIPAL ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-4 w-full">
     
-    <!-- AVISO DINÁMICO EXCLUSIVO PARA NATURA / AVON -->
-    <div id="brand-catalogo-banner" class="hidden mb-4 bg-gradient-to-r from-emerald-50 to-amber-50 border-2 border-emerald-300 p-4 rounded-2xl shadow-xs flex items-center gap-3.5 text-emerald-950">
-      <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow">
-        <i class="ph ph-sparkle text-2xl"></i>
+    <!-- AVISO DINÁMICO EXCLUSIVO -->
+    <div id="brand-catalogo-banner" class="hidden mb-6 bg-gradient-to-r from-emerald-50 to-white border border-emerald-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 text-emerald-950">
+      <div class="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
+        <i class="ph ph-sparkle text-3xl"></i>
       </div>
-      <div class="text-xs sm:text-sm leading-snug">
-        <span id="brand-banner-title" class="font-black text-emerald-900 block text-sm">Catálogo Oficial</span>
-        Todos los productos de esta sección se solicitan a pedido y se separan con el <b>50% del costo total</b>. El saldo restante se cancela contraentrega.
+      <div class="text-sm leading-relaxed">
+        <span id="brand-banner-title" class="font-black text-emerald-900 block text-base mb-0.5">Catálogo Oficial</span>
+        Todos los productos de esta sección se solicitan a pedido y se separan con el <b class="bg-emerald-100 px-1 rounded">50% del costo total</b>.
       </div>
     </div>
 
-    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 text-white rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-md">
-      <div>
-        <span class="inline-block bg-amber-400/20 text-amber-300 text-xs uppercase tracking-wider font-bold px-3 py-1 rounded-full mb-3">Temporada Exclusiva</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold mb-2">Moda, Calzado & Fragancias</h2>
-        <p class="text-slate-300 text-sm max-w-md">Arma tu selección y coordina la entrega directa por WhatsApp con nosotros.</p>
+    <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 text-white rounded-3xl p-8 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden">
+      <!-- Elemento decorativo de fondo -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <span class="inline-block bg-amber-400 text-amber-950 text-xs uppercase tracking-widest font-black px-4 py-1.5 rounded-full mb-4 shadow-sm">Nueva Temporada</span>
+        <h2 class="text-3xl sm:text-5xl font-black mb-4 tracking-tight leading-tight">Encuentra tu estilo<br><span class="text-amber-300">perfecto hoy.</span></h2>
+        <p class="text-slate-300 text-base max-w-lg leading-relaxed">Explora nuestra colección y coordina tu entrega directa por WhatsApp con atención personalizada.</p>
       </div>
 
-      <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-        <!-- AVISO GENERAL DE CATÁLOGO -->
-        <div class="bg-amber-400/10 border border-amber-400/30 backdrop-blur-sm p-3.5 rounded-xl flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow">
-            <i class="ph ph-hand-coins text-2xl font-bold"></i>
+      <div class="flex flex-col gap-4 w-full lg:w-auto relative z-10">
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center gap-4 shadow-lg">
+          <div class="w-12 h-12 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-inner">
+            <i class="ph ph-info text-2xl font-bold"></i>
           </div>
-          <div class="text-xs text-amber-200 leading-snug">
-            <span class="font-extrabold text-amber-300 block mb-0.5">Nota importante:</span>
-            Los artículos de catálogo o a pedido se separan con el <b>50% del costo total</b>.
+          <div class="text-sm text-amber-100 leading-snug">
+            <span class="font-black text-white block mb-0.5 text-base">Atención al cliente</span>
+            Artículos de catálogo se reservan con el <b class="text-amber-300">50% de abono</b>.
           </div>
         </div>
-
-        <!-- MEDIOS DE PAGO -->
-        <div class="text-center bg-white/10 backdrop-blur-sm p-3.5 rounded-xl border border-white/10 shrink-0 flex flex-col justify-center">
-          <p class="text-[11px] text-slate-200 mb-1">Medios de pago disponibles</p>
-          <div class="flex gap-2 justify-center font-bold text-sm text-amber-300">
-            <span>Yape</span> • <span>Plin</span> • <span>Contraentrega</span>
+        <div class="text-center bg-black/20 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+          <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mb-2">Medios de pago oficiales</p>
+          <div class="flex gap-3 justify-center font-black text-sm text-white">
+            <span class="bg-indigo-600 px-3 py-1 rounded-lg shadow-sm">Yape</span>
+            <span class="bg-sky-500 px-3 py-1 rounded-lg shadow-sm">Plin</span>
+            <span class="bg-emerald-600 px-3 py-1 rounded-lg shadow-sm">Efectivo</span>
           </div>
         </div>
       </div>
@@ -97,243 +102,297 @@
   </section>
 
   <!-- ================= PRODUCTOS ================= -->
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 pb-16 flex-1 w-full">
-    <div id="loading-spinner" class="py-16 text-center text-slate-400 flex flex-col items-center justify-center gap-2">
-      <i class="ph ph-spinner animate-spin text-3xl text-amber-600"></i>
-      <p class="text-sm font-medium">Cargando catálogo en vivo...</p>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-20 flex-1 w-full mt-4">
+    <div id="loading-spinner" class="py-24 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
+      <i class="ph ph-spinner-gap animate-spin text-5xl text-rose-800"></i>
+      <p class="text-base font-bold tracking-wide">Cargando la mejor selección...</p>
     </div>
-    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 hidden"></div>
+    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 sm:gap-6 hidden"></div>
   </main>
 
+  <!-- ================= FOOTER PROFESIONAL ================= -->
+  <footer class="bg-slate-950 text-slate-400 pt-16 pb-8 border-t-4 border-rose-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+      <div class="text-center md:text-left max-w-sm">
+        <h2 class="text-2xl font-black text-white tracking-tight mb-2">D'Ana Boutique</h2>
+        <p class="text-sm leading-relaxed text-slate-500">Tu tienda de confianza en Chiclayo. Ofrecemos moda, fragancias y calzado con entrega segura y atención personalizada.</p>
+      </div>
+      <div class="flex flex-col items-center md:items-end gap-2 text-sm font-medium">
+        <p class="flex items-center gap-2"><i class="ph ph-shield-check text-emerald-500 text-lg"></i> Compras 100% Seguras</p>
+        <p class="flex items-center gap-2"><i class="ph ph-map-pin text-rose-500 text-lg"></i> Entregas en Chiclayo</p>
+        <p class="flex items-center gap-2"><i class="ph ph-whatsapp-logo text-green-500 text-lg"></i> Atención Inmediata</p>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-12 pt-8 border-t border-slate-800/50 text-center flex flex-col items-center">
+      <p class="text-xs text-slate-600 font-medium">
+        &copy; 2026 D'Ana Boutique. Todos los derechos reservados.<br>
+        Sitio protegido por derechos de autor y políticas de privacidad comercial.
+      </p>
+      <!-- Icono candado minúsculo como otra forma de entrar al panel -->
+      <i class="ph ph-lock-key text-slate-800 hover:text-slate-500 cursor-pointer mt-4 transition" onclick="openLoginModal()" title="Acceso Panel"></i>
+    </div>
+  </footer>
+
+  <!-- ================= BOTÓN FLOTANTE WHATSAPP (AYUDA AL CLIENTE) ================= -->
+  <a href="https://api.whatsapp.com/send?phone=51916052207&text=Hola%20D'Ana%20Boutique,%20necesito%20ayuda%20o%20tengo%20una%20consulta%20sobre%20un%20producto." target="_blank" class="fixed bottom-6 right-6 z-40 bg-emerald-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:bg-emerald-400 transition-all duration-300" title="Servicio al Cliente">
+    <i class="ph ph-whatsapp-logo text-4xl"></i>
+    <span class="absolute -top-2 -left-2 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md animate-pulse">Ayuda</span>
+  </a>
+
   <!-- ================= VISOR DE IMAGEN (ZOOM) ================= -->
-  <div id="zoom-modal" class="fixed inset-0 z-[70] hidden bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out" onclick="this.classList.add('hidden')">
-    <img id="zoom-img" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl" />
-    <button class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center transition">
+  <div id="zoom-modal" class="fixed inset-0 z-[70] hidden bg-black/95 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out" onclick="this.classList.add('hidden')">
+    <img id="zoom-img" src="" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl" />
+    <button class="absolute top-6 right-6 bg-white/10 hover:bg-white/30 text-white w-12 h-12 rounded-full flex items-center justify-center transition">
       <i class="ph ph-x text-2xl font-bold"></i>
     </button>
   </div>
 
   <!-- ================= MODAL VISTA DETALLADA DEL PRODUCTO ================= -->
-  <div id="product-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[92vh]">
-      <div class="relative bg-slate-100 h-72 sm:h-80 w-full overflow-hidden flex items-center justify-center group">
-        <img id="modal-img" src="" alt="Detalle" onclick="document.getElementById('zoom-modal').classList.remove('hidden'); document.getElementById('zoom-img').src = this.src;" class="w-full h-full object-contain bg-white cursor-zoom-in transition duration-300 group-hover:scale-105" title="Toca para ampliar imagen" />
-        <div id="modal-badge-container" class="absolute top-4 left-4 flex flex-col gap-1.5 pointer-events-none"></div>
-        <button onclick="closeProductModal()" class="absolute top-4 right-4 bg-white/90 hover:bg-white text-slate-800 hover:text-black w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition">
+  <div id="product-modal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <div class="relative bg-slate-50 h-80 w-full overflow-hidden flex items-center justify-center group">
+        <img id="modal-img" src="" alt="Detalle" onclick="document.getElementById('zoom-modal').classList.remove('hidden'); document.getElementById('zoom-img').src = this.src;" class="w-full h-full object-contain bg-white cursor-zoom-in transition duration-500 group-hover:scale-110" title="Toca para ampliar imagen" />
+        <div id="modal-badge-container" class="absolute top-5 left-5 flex flex-col gap-2 pointer-events-none"></div>
+        <button onclick="closeProductModal()" class="absolute top-5 right-5 bg-white/90 hover:bg-slate-900 text-slate-800 hover:text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition">
           <i class="ph ph-x text-xl font-bold"></i>
         </button>
-        <div class="absolute bottom-3 right-3 bg-black/50 text-white rounded-full p-2 pointer-events-none opacity-70 group-hover:opacity-100 transition">
-          <i class="ph ph-magnifying-glass-plus text-xl"></i>
+        <div class="absolute bottom-4 right-4 bg-black/60 text-white rounded-full p-2.5 pointer-events-none opacity-0 group-hover:opacity-100 transition duration-300">
+          <i class="ph ph-magnifying-glass-plus text-2xl"></i>
         </div>
       </div>
 
-      <div class="p-6 flex-1 overflow-y-auto space-y-4">
+      <div class="p-8 flex-1 overflow-y-auto space-y-5">
         <div>
-          <div class="flex items-start justify-between gap-3">
-            <h3 id="modal-name" class="text-xl sm:text-2xl font-black text-slate-900 leading-tight"></h3>
-            <span id="modal-stock-indicator" class="text-xs font-bold px-2 py-1 rounded-full shrink-0"></span>
+          <div class="flex items-start justify-between gap-4">
+            <h3 id="modal-name" class="text-2xl font-black text-slate-900 leading-tight"></h3>
+            <span id="modal-stock-indicator" class="text-xs font-black px-3 py-1.5 rounded-lg shrink-0 uppercase tracking-widest shadow-sm"></span>
           </div>
-          <p id="modal-price" class="text-2xl font-extrabold text-amber-600 mt-2"></p>
+          <p id="modal-price" class="text-3xl font-black text-rose-700 mt-3"></p>
         </div>
 
-        <div id="modal-pedido-warning" class="hidden bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900">
-          ⚠️ <b>Artículo a pedido / catálogo:</b> Se reserva previo abono del <b>50% del costo total</b> vía Yape o Plin. El saldo restante se cancela al momento de la entrega.
+        <div id="modal-pedido-warning" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-2xl text-sm text-amber-950 shadow-inner">
+          <div class="flex gap-2 items-center mb-1">
+            <i class="ph ph-warning-circle text-amber-600 text-lg font-bold"></i>
+            <b class="text-amber-800">Condición de Catálogo:</b>
+          </div>
+          Se reserva previo abono del <b>50% del costo total</b> vía Yape/Plin. El saldo restante se cancela al entregar.
         </div>
 
-        <div class="border-t border-slate-100 pt-3">
-          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Descripción y Detalles:</h4>
+        <div class="border-t border-slate-100 pt-4">
+          <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Descripción del Producto</h4>
           <p id="modal-desc" class="text-slate-600 text-sm leading-relaxed whitespace-pre-line"></p>
         </div>
       </div>
 
-      <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center gap-3">
-        <button id="modal-add-btn" class="flex-1 bg-slate-900 hover:bg-amber-500 hover:text-slate-900 text-white font-bold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 shadow-md transition disabled:bg-slate-300 disabled:cursor-not-allowed">
-          <i class="ph ph-shopping-bag text-xl"></i>
-          <span id="modal-add-text">Agregar a Mi Pedido</span>
+      <div class="p-5 border-t border-slate-100 bg-white flex items-center gap-3">
+        <button id="modal-add-btn" class="flex-1 bg-slate-900 hover:bg-rose-700 text-white font-black py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-xl hover:shadow-rose-500/30 transition-all duration-300 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed">
+          <i class="ph ph-shopping-cart text-2xl"></i>
+          <span id="modal-add-text" class="text-base uppercase tracking-wider">Agregar a Mi Pedido</span>
         </button>
       </div>
     </div>
   </div>
 
   <!-- ================= PANEL CARRITO ================= -->
-  <div id="cart-drawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0">
-    <div id="cart-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-xs transition-opacity"></div>
+  <div id="cart-drawer" class="fixed inset-0 z-[60] pointer-events-none transition-opacity duration-300 opacity-0">
+    <div id="cart-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
     <div id="cart-panel" class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 pointer-events-auto">
-      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-        <div class="flex items-center gap-2">
-          <i class="ph ph-shopping-bag text-xl text-amber-600"></i>
-          <h3 class="font-bold text-slate-900 text-lg">Tu Carrito de Pedido</h3>
+      <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-white">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-rose-100 text-rose-700 rounded-full flex items-center justify-center">
+            <i class="ph ph-shopping-cart text-xl font-bold"></i>
+          </div>
+          <h3 class="font-black text-slate-900 text-xl tracking-tight">Tu Compra</h3>
         </div>
-        <button id="btn-close-cart" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-200 transition">
-          <i class="ph ph-x text-xl font-bold"></i>
+        <button id="btn-close-cart" class="text-slate-400 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 w-9 h-9 rounded-full flex items-center justify-center transition">
+          <i class="ph ph-x text-lg font-bold"></i>
         </button>
       </div>
 
-      <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+      <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50"></div>
 
       <!-- FORMULARIO DE ENVÍO Y PAGO -->
-      <div class="p-5 border-t border-slate-100 bg-slate-50 space-y-3">
-        <div id="cart-pedido-alert" class="hidden bg-amber-50 border border-amber-300 p-2.5 rounded-xl text-xs text-amber-900 font-medium">
-          📦 Tu pedido incluye artículos <b>a pedido / catálogo</b>. Se coordinará el <b>50% de anticipo</b> vía Yape/Plin para procesar la orden.
+      <div class="p-6 border-t border-slate-100 bg-white space-y-4 shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
+        <div id="cart-pedido-alert" class="hidden bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900 font-medium">
+          📦 Tu pedido incluye artículos <b>a pedido</b>. Se coordinará el <b>50% de anticipo</b> vía Yape/Plin.
         </div>
 
-        <div class="space-y-2.5">
-          <label class="block text-xs font-semibold text-slate-700">Tus Datos para la Entrega:</label>
-          <input type="text" id="cust-name" placeholder="Nombre y Apellido completo" class="w-full text-xs p-2.5 rounded-lg border border-slate-300 bg-white focus:outline-slate-900" />
+        <div class="space-y-3">
+          <label class="block text-xs font-black text-slate-800 uppercase tracking-wider">Tus Datos para la Entrega</label>
+          <input type="text" id="cust-name" placeholder="Escribe tu nombre completo" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition" />
           
-          <div class="flex flex-col">
-            <label class="text-[11px] font-bold text-slate-500 mb-1">Modalidad de Pago y Entrega:</label>
-            <select id="cust-payment" onchange="toggleDeliveryOptions()" class="w-full text-xs p-2.5 rounded-lg border border-slate-300 bg-white font-medium focus:outline-slate-900">
+          <div class="flex flex-col pt-1">
+            <select id="cust-payment" onchange="toggleDeliveryOptions()" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-700 focus:bg-white focus:border-rose-500 outline-none transition cursor-pointer">
               <option value="Contraentrega">Contraentrega (Puntos céntricos Chiclayo)</option>
-              <option value="Yape">Yape (Pago directo / Envío)</option>
-              <option value="Plin">Plin (Pago directo / Envío)</option>
-              <option value="Transferencia">Transferencia Bancaria (BCP / BBVA / Interbank)</option>
+              <option value="Yape">Pago con Yape</option>
+              <option value="Plin">Pago con Plin</option>
+              <option value="Transferencia">Transferencia Bancaria</option>
             </select>
           </div>
 
           <div id="box-contraentrega" class="flex flex-col">
-            <label class="text-[11px] font-bold text-amber-800 mb-1">Punto de Entrega Acordado:</label>
-            <select id="cust-delivery-point" class="w-full text-xs p-2.5 rounded-lg border border-amber-300 bg-amber-50/60 font-semibold text-slate-800 focus:outline-amber-600">
+            <select id="cust-delivery-point" class="w-full text-sm p-3 rounded-xl border border-rose-200 bg-rose-50 text-rose-900 font-bold focus:border-rose-500 outline-none transition cursor-pointer">
               <option value="Real Plaza Chiclayo">Real Plaza Chiclayo</option>
               <option value="Parque Principal de Chiclayo">Parque Principal de Chiclayo</option>
               <option value="Plaza Elías Aguirre">Plaza Elías Aguirre</option>
-              <option value="Esquina de Banco de la Nación">Esquina de Banco de la Nación (Chiclayo Centro)</option>
+              <option value="Esquina de Banco de la Nación">Banco de la Nación (Centro)</option>
             </select>
           </div>
 
           <div id="box-address" class="hidden flex flex-col">
-            <label class="text-[11px] font-bold text-slate-600 mb-1">Dirección de Entrega o Ciudad:</label>
-            <input type="text" id="cust-address" placeholder="Ej: Urb. Los Parques / Distrito / Referencia" class="w-full text-xs p-2.5 rounded-lg border border-slate-300 bg-white focus:outline-slate-900" />
+            <input type="text" id="cust-address" placeholder="Ej: Urb. Los Parques / Distrito / Ref." class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 outline-none transition" />
           </div>
         </div>
 
-        <div class="pt-2 border-t border-slate-200 space-y-1">
-          <div class="flex justify-between items-baseline text-xs text-slate-500">
-            <span>Total del pedido:</span>
-            <span id="cart-total" class="font-bold text-slate-800">S/ 0.00</span>
+        <div class="pt-4 border-t border-slate-100 space-y-2">
+          <div class="flex justify-between items-end text-sm">
+            <span class="font-bold text-slate-500">Total del pedido:</span>
+            <span id="cart-total" class="font-black text-2xl text-slate-900">S/ 0.00</span>
           </div>
-          <div id="row-anticipo" class="hidden flex justify-between items-baseline text-xs font-bold text-amber-700 bg-amber-100/60 p-1.5 rounded-lg">
-            <span>Adelanto Requerido (50% Catálogo):</span>
-            <span id="cart-anticipo">S/ 0.00</span>
+          <div id="row-anticipo" class="hidden flex justify-between items-center text-xs font-bold text-amber-800 bg-amber-100 p-2.5 rounded-lg">
+            <span>Adelanto Requerido (50%):</span>
+            <span id="cart-anticipo" class="text-sm">S/ 0.00</span>
           </div>
         </div>
 
-        <button id="btn-send-whatsapp" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition">
+        <button id="btn-send-whatsapp" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black py-4 px-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/30 transition-all duration-300 transform hover:-translate-y-1 mt-2">
           <i class="ph ph-whatsapp-logo text-2xl"></i>
-          <span>Enviar Pedido a WhatsApp</span>
+          <span class="tracking-wide">ENVIAR PEDIDO</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- ================= MODAL DE LOGIN MODERNO ================= -->
-  <div id="login-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-      <div class="p-5 bg-slate-900 text-white flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i class="ph ph-shield-check text-amber-400 text-xl"></i>
-          <h4 class="font-bold text-sm">Acceso Administrativo</h4>
-        </div>
-        <button onclick="closeLoginModal()" class="text-slate-400 hover:text-white">
-          <i class="ph ph-x text-lg"></i>
+  <!-- ================= MODAL DE LOGIN (ESTILIZADO) ================= -->
+  <div id="login-modal" class="fixed inset-0 z-[80] hidden bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-slate-100">
+      <div class="p-6 text-center space-y-2 relative">
+        <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center transition">
+          <i class="ph ph-x font-bold"></i>
         </button>
+        <div class="w-16 h-16 bg-slate-900 rounded-2xl mx-auto flex items-center justify-center shadow-lg rotate-3">
+          <i class="ph ph-shield-check text-amber-400 text-3xl -rotate-3"></i>
+        </div>
+        <h4 class="font-black text-xl text-slate-900 pt-2">Acceso Restringido</h4>
+        <p class="text-xs text-slate-500 font-medium">Panel de administración D'Ana Boutique</p>
       </div>
-      <div class="p-6 space-y-4">
+      <div class="p-6 pt-2 space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Ingresa tu contraseña:</label>
-          <input type="password" id="input-admin-pass" placeholder="••••••••" class="w-full p-2.5 rounded-xl border border-slate-300 text-center font-bold tracking-widest text-slate-800 text-base focus:outline-slate-900" />
-          <p id="login-error-msg" class="text-rose-500 text-xs mt-1.5 hidden text-center font-medium">Contraseña incorrecta.</p>
+          <input type="password" id="input-admin-pass" placeholder="••••••••" class="w-full p-4 rounded-2xl border-2 border-slate-100 text-center font-black tracking-[0.5em] text-slate-900 text-lg focus:border-slate-900 focus:ring-0 outline-none transition bg-slate-50" />
+          <p id="login-error-msg" class="text-rose-500 text-xs mt-2 hidden text-center font-bold">Contraseña incorrecta.</p>
         </div>
-        <button onclick="verifyAdminPassword()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition">
-          <i class="ph ph-lock-key-open text-base text-amber-400"></i>
-          <span>Ingresar al Panel</span>
+        <button onclick="verifyAdminPassword()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all duration-300">
+          <span>INGRESAR AL PANEL</span>
+          <i class="ph ph-arrow-right text-lg"></i>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- ================= MODAL ADMIN ================= -->
-  <div id="admin-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col">
-      <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white rounded-t-2xl">
-        <h3 class="font-bold text-base flex items-center gap-2">
-          <i class="ph ph-storefront text-amber-400"></i> Panel de Administración
+  <!-- ================= MODAL ADMIN PREMIUM ================= -->
+  <div id="admin-modal" class="fixed inset-0 z-[80] hidden bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6">
+    <div class="bg-white w-full max-w-2xl rounded-[2rem] shadow-2xl flex flex-col h-full max-h-[90vh] overflow-hidden">
+      <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white">
+        <h3 class="font-black text-lg sm:text-xl flex items-center gap-3 tracking-tight">
+          <i class="ph ph-storefront text-amber-400 text-2xl"></i> Centro de Control
         </h3>
-        <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white">
-          <i class="ph ph-x text-xl"></i>
+        <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white bg-white/10 hover:bg-rose-500 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+          <i class="ph ph-x text-xl font-bold"></i>
         </button>
       </div>
 
-      <div class="p-5 overflow-y-auto space-y-5 flex-1 text-sm">
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 id="admin-form-title" class="font-bold text-slate-800 text-xs uppercase tracking-wider">Agregar Producto</h4>
-            <button id="btn-cancel-edit" onclick="cancelEditing()" class="hidden text-xs text-rose-600 font-bold hover:underline">Cancelar Edición</button>
+      <div class="p-5 sm:p-8 overflow-y-auto flex-1 space-y-8 bg-slate-50">
+        <!-- ZONA DE EDICIÓN -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+          <div class="flex items-center justify-between mb-2">
+            <h4 id="admin-form-title" class="font-black text-slate-900 text-sm uppercase tracking-widest flex items-center gap-2">
+              <i class="ph ph-plus-circle text-emerald-600 text-xl"></i> Nuevo Producto
+            </h4>
+            <button id="btn-cancel-edit" onclick="cancelEditing()" class="hidden text-xs bg-rose-100 text-rose-700 font-bold px-3 py-1.5 rounded-lg hover:bg-rose-200 transition">Cancelar Edición</button>
           </div>
           
           <input type="hidden" id="adm-edit-id" value="" />
 
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Nombre</label>
+              <input type="text" id="adm-name" placeholder="Ej: Pulpa Castaña Natura" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-medium" />
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Precio (S/)</label>
+              <input type="number" id="adm-price" placeholder="85.00" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-black text-slate-900" />
+            </div>
+            
+            <div class="space-y-1.5">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Categoría</label>
+              <select id="adm-cat" onchange="handleCategorySelectionChange()" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-bold text-slate-700">
+                <option value="natura">🌿 Natura (Catálogo)</option>
+                <option value="avon">🌸 Avon (Catálogo)</option>
+                <option value="fragancias">Fragancias & Perfumes</option>
+                <option value="zapatos">Zapatos de Dama</option>
+                <option value="ropa">Ropa & Accesorios</option>
+              </select>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Unidades en Stock</label>
+              <input type="number" id="adm-stock" placeholder="Cantidad" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-bold" min="0" value="1" />
+            </div>
+          </div>
+
+          <div class="bg-slate-100 p-4 rounded-2xl border border-slate-200 space-y-4">
+            <h5 class="text-[11px] font-black text-slate-700 uppercase tracking-widest">Imagen del Producto</h5>
+            <div class="flex flex-col gap-3">
+              <div>
+                <label class="text-xs font-bold text-slate-600 block mb-1">Opción A: Subir Foto</label>
+                <input type="file" id="adm-file" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition" />
+              </div>
+              <div class="relative flex items-center py-2">
+                <div class="flex-grow border-t border-slate-300"></div>
+                <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-bold uppercase">O</span>
+                <div class="flex-grow border-t border-slate-300"></div>
+              </div>
+              <div>
+                <label class="text-xs font-bold text-slate-600 block mb-1">Opción B: Pegar Link de Internet (No consume espacio)</label>
+                <input type="text" id="adm-img-url" placeholder="https://ejemplo.com/foto.jpg" class="w-full p-3 border border-slate-200 rounded-xl text-xs bg-white focus:border-slate-900 outline-none transition" />
+              </div>
+            </div>
+          </div>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <input type="text" id="adm-name" placeholder="Nombre (Ej: Pulpa Castaña Natura)" class="p-2 border rounded-lg text-xs bg-white" />
-            <input type="number" id="adm-price" placeholder="Precio (Ej: 85)" class="p-2 border rounded-lg text-xs bg-white" />
-            
-            <select id="adm-cat" onchange="handleCategorySelectionChange()" class="p-2 border rounded-lg text-xs bg-white font-medium">
-              <option value="natura">🌿 Natura (Catálogo)</option>
-              <option value="avon">🌸 Avon (Catálogo)</option>
-              <option value="fragancias">Fragancias & Perfumes</option>
-              <option value="zapatos">Zapatos de Dama</option>
-              <option value="ropa">Ropa & Accesorios</option>
-            </select>
-            
-            <div class="flex items-center gap-2">
-              <input type="number" id="adm-stock" placeholder="Unidades Stock (Ej: 5)" class="p-2 border rounded-lg text-xs bg-white w-full" min="0" value="1" />
-            </div>
+            <label class="flex items-center gap-3 p-3.5 bg-amber-50 rounded-xl border border-amber-200 cursor-pointer hover:bg-amber-100 transition">
+              <input type="checkbox" id="adm-is-pedido" class="w-5 h-5 text-amber-600 rounded" />
+              <span class="text-xs font-black text-amber-900 uppercase tracking-wide">Es a Pedido (50%)</span>
+            </label>
+
+            <label class="flex items-center gap-3 p-3.5 bg-slate-100 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-200 transition">
+              <input type="checkbox" id="adm-is-outofstock" class="w-5 h-5 text-slate-800 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-wide">Marcar Agotado</span>
+            </label>
           </div>
 
-          <div class="space-y-2">
-            <div class="flex flex-col">
-              <label class="text-[11px] font-bold text-slate-600 mb-1">Opción A: Subir Foto desde Celular/PC:</label>
-              <input type="file" id="adm-file" accept="image/*" class="text-xs file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-slate-900 file:text-white" />
-            </div>
-            <div class="flex flex-col">
-              <label class="text-[11px] font-bold text-slate-600 mb-1">Opción B: Pegar Link Directo de Imagen (Opcional, 0 consumo):</label>
-              <input type="text" id="adm-img-url" placeholder="https://ejemplo.com/foto.jpg" class="p-2 border rounded-lg text-xs bg-white" />
-            </div>
+          <div class="space-y-1.5">
+            <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Descripción</label>
+            <textarea id="adm-desc" placeholder="Detalles, aroma, tallas..." rows="2" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition resize-none"></textarea>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div class="p-2.5 bg-amber-50 rounded-lg border border-amber-200 flex items-center gap-2">
-              <input type="checkbox" id="adm-is-pedido" class="w-4 h-4 text-amber-600 rounded cursor-pointer" />
-              <label for="adm-is-pedido" class="text-[11px] font-bold text-amber-900 cursor-pointer">
-                ¿Catálogo / A Pedido? (50% anticipo)
-              </label>
-            </div>
-
-            <div class="p-2.5 bg-slate-100 rounded-lg border border-slate-200 flex items-center gap-2">
-              <input type="checkbox" id="adm-is-outofstock" class="w-4 h-4 text-slate-800 rounded cursor-pointer" />
-              <label for="adm-is-outofstock" class="text-[11px] font-bold text-slate-700 cursor-pointer">
-                Marcar como AGOTADO (Sin stock)
-              </label>
-            </div>
-          </div>
-
-          <input type="text" id="adm-desc" placeholder="Descripción breve (aroma, contenido en ml, beneficios...)" class="w-full p-2 border rounded-lg text-xs bg-white" />
-
-          <button id="btn-save-prod" onclick="handleDirectUploadAndSave()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg text-xs flex items-center justify-center gap-2">
-            <i class="ph ph-cloud-arrow-up text-lg text-amber-400"></i>
-            <span id="btn-save-text">Publicar en Todos los Dispositivos</span>
+          <button id="btn-save-prod" onclick="handleDirectUploadAndSave()" class="w-full bg-slate-900 hover:bg-emerald-600 text-white font-black py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all duration-300">
+            <i class="ph ph-cloud-arrow-up text-xl text-emerald-400"></i>
+            <span id="btn-save-text" class="tracking-wide uppercase">Publicar en Tienda</span>
           </button>
         </div>
 
+        <!-- LISTA DE PRODUCTOS (INVENTARIO) -->
         <div>
-          <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2">Productos en Catálogo</h4>
-          <div id="admin-prod-list" class="space-y-2 max-h-56 overflow-y-auto"></div>
+          <h4 class="font-black text-slate-900 text-sm uppercase tracking-widest mb-4 flex items-center gap-2">
+            <i class="ph ph-archive text-slate-400 text-xl"></i> Inventario Actual
+          </h4>
+          <div id="admin-prod-list" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= LÓGICA COMPLETA ================= -->
+  <!-- ================= LÓGICA DE LA TIENDA (INTACTA) ================= -->
   <script>
     const FIREBASE_DB_URL = "https://d-ana-tienda-default-rtdb.firebaseio.com/";
     const CLOUD_NAME = "jykepmvw";
@@ -346,7 +405,7 @@
     let currentCategory = "todos";
     let editingProductData = null;
 
-    // Función de optimización para Cloudinary
+    // Optimización de imágenes
     function getOptimizedImageUrl(url) {
       if (!url) return 'https://placehold.co/400x400?text=Sin+Imagen';
       if (url.includes('cloudinary.com') && url.includes('/upload/')) {
@@ -424,8 +483,7 @@
         products = [];
         if (data) {
           Object.keys(data).forEach(key => {
-            // ESCUDO ANTI-ERRORES: Solo agrega productos que tengan un nombre válido.
-            // Esto evita que productos "fantasmas" o vacíos rompan la tienda.
+            // Escudo Anti-Errores
             if (data[key] && data[key].name) {
               products.push({ firebaseId: key, ...data[key] });
             }
@@ -439,7 +497,7 @@
 
       } catch (err) {
         console.error("Error al cargar de Firebase:", err);
-        document.getElementById("loading-spinner").innerHTML = `<p class="text-rose-500 text-xs">Error de conexión con la base de datos.</p>`;
+        document.getElementById("loading-spinner").innerHTML = `<p class="text-rose-500 font-bold">Error de conexión con la base de datos.</p>`;
       }
     }
 
@@ -457,7 +515,7 @@
       }
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400">No hay productos en esta sección.</div>`;
+        grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 font-bold text-lg">No hay productos en esta sección.</div>`;
         return;
       }
 
@@ -468,48 +526,45 @@
         const displayImage = getOptimizedImageUrl(p.image);
 
         const card = document.createElement("div");
-        card.className = `bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-md transition flex flex-col group ${isOutOfStock ? 'opacity-80' : ''}`;
+        // Tarjeta estilo App
+        card.className = `bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group ${isOutOfStock ? 'opacity-70' : ''}`;
         
         card.innerHTML = `
-          <div onclick="openProductModal('${p.firebaseId}')" class="h-44 sm:h-52 bg-slate-100 overflow-hidden relative cursor-pointer">
-            <img src="${displayImage}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300 ${isOutOfStock ? 'grayscale-[35%]' : ''}" onerror="this.src='https://placehold.co/400x400?text=Sin+Imagen'"/>
+          <div onclick="openProductModal('${p.firebaseId}')" class="h-48 sm:h-56 bg-slate-50 overflow-hidden relative cursor-pointer flex items-center justify-center p-2">
+            <img src="${displayImage}" alt="${p.name}" loading="lazy" class="max-w-full max-h-full object-contain group-hover:scale-110 transition duration-500 ${isOutOfStock ? 'grayscale-[50%]' : ''}" onerror="this.src='https://placehold.co/400x400?text=Sin+Imagen'"/>
             
             ${isOutOfStock ? `
-              <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                <span class="bg-black/90 text-white text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-md shadow-lg border border-white/20">
+              <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center z-10">
+                <span class="bg-black/90 text-white text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-lg shadow-2xl">
                   AGOTADO
                 </span>
               </div>
             ` : ''}
 
-            <div class="absolute top-2 left-2 flex flex-col gap-1">
+            <div class="absolute top-3 left-3 flex flex-col gap-1.5 z-20">
               ${isPedido 
-                ? `<span class="bg-amber-500 text-slate-950 font-black text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow">📖 A Pedido (50%)</span>`
-                : `<span class="bg-emerald-600 text-white font-bold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow">⚡ Stock Inmediato</span>`
+                ? `<span class="bg-amber-400 text-amber-950 font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">A Pedido (50%)</span>`
+                : `<span class="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">⚡ Stock Inmediato</span>`
               }
-              <span class="bg-white/90 backdrop-blur-xs text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full text-slate-700 shadow-xs w-fit capitalize">
-                ${p.category}
-              </span>
             </div>
 
-            <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-              <span class="bg-white/90 text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow">Ver detalle</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4 z-10">
+              <span class="text-white text-xs font-bold flex items-center gap-1"><i class="ph ph-eye text-lg"></i> Ver detalles</span>
             </div>
           </div>
           
-          <div class="p-3.5 flex-1 flex flex-col justify-between">
+          <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between bg-white relative z-20">
             <div onclick="openProductModal('${p.firebaseId}')" class="cursor-pointer">
-              <h4 class="font-bold text-slate-900 text-sm leading-snug line-clamp-1 hover:text-amber-600 transition">${p.name}</h4>
-              <p class="text-xs text-slate-500 mt-1 line-clamp-2">${p.description}</p>
+              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1 block">${p.category}</span>
+              <h4 class="font-black text-slate-900 text-base leading-tight line-clamp-2 group-hover:text-rose-600 transition-colors">${p.name}</h4>
             </div>
             
-            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <div class="mt-4 pt-4 border-t border-slate-100 flex items-end justify-between">
               <div>
-                <span class="text-base font-extrabold text-slate-900">S/ ${Number(p.price).toFixed(2)}</span>
-                ${isPedido ? `<p class="text-[10px] text-amber-700 font-semibold leading-none">Separa con S/ ${(p.price * 0.5).toFixed(2)}</p>` : ''}
+                <span class="text-xl font-black text-slate-900">S/ ${Number(p.price).toFixed(2)}</span>
               </div>
-              <button onclick="addToCart('${p.firebaseId}')" ${isOutOfStock ? 'disabled' : ''} class="${isOutOfStock ? 'bg-slate-300 cursor-not-allowed text-slate-500' : 'bg-slate-900 hover:bg-amber-500 hover:text-slate-900 text-white'} p-2 rounded-xl transition flex items-center justify-center" title="${isOutOfStock ? 'Agotado' : 'Agregar al carrito'}">
-                <i class="ph ph-plus font-bold text-sm"></i>
+              <button onclick="addToCart('${p.firebaseId}')" ${isOutOfStock ? 'disabled' : ''} class="${isOutOfStock ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-rose-600 hover:scale-105 shadow-md'} w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center" title="${isOutOfStock ? 'Agotado' : 'Agregar al carrito'}">
+                <i class="ph ph-plus font-bold text-lg"></i>
               </button>
             </div>
           </div>
@@ -529,23 +584,23 @@
       document.getElementById("modal-img").src = displayImage;
       document.getElementById("modal-name").textContent = prod.name;
       document.getElementById("modal-price").textContent = `S/ ${Number(prod.price).toFixed(2)}`;
-      document.getElementById("modal-desc").textContent = prod.description || "Sin descripción adicional.";
+      document.getElementById("modal-desc").textContent = prod.description || "Sin descripción detallada.";
 
       const stockIndicator = document.getElementById("modal-stock-indicator");
       if (isOutOfStock) {
         stockIndicator.textContent = "Agotado";
-        stockIndicator.className = "text-xs font-bold px-2.5 py-1 rounded-full bg-slate-900 text-white shrink-0";
+        stockIndicator.className = "text-xs font-black px-3 py-1.5 rounded-lg bg-slate-100 text-slate-500 shrink-0 uppercase tracking-widest";
       } else {
-        stockIndicator.textContent = `${stockUnits} disponibles`;
-        stockIndicator.className = "text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 shrink-0";
+        stockIndicator.textContent = `${stockUnits} Disp.`;
+        stockIndicator.className = "text-xs font-black px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 shrink-0 uppercase tracking-widest";
       }
 
       const badgeBox = document.getElementById("modal-badge-container");
       badgeBox.innerHTML = `
-        <span class="bg-white/90 text-slate-800 text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow w-fit capitalize">${prod.category}</span>
+        <span class="bg-white/95 text-slate-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg shadow-sm">${prod.category}</span>
         ${prod.isPedido 
-          ? `<span class="bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow w-fit">Catálogo / A Pedido (50% anticipo)</span>`
-          : `<span class="bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow w-fit">En Stock Inmediato</span>`
+          ? `<span class="bg-amber-400 text-amber-950 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg shadow-sm">Catálogo (50%)</span>`
+          : `<span class="bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg shadow-sm">En Stock</span>`
         }
       `;
 
@@ -561,7 +616,7 @@
 
       if (isOutOfStock) {
         addBtn.disabled = true;
-        addText.textContent = "Producto Agotado";
+        addText.textContent = "AGOTADO";
       } else {
         addBtn.disabled = false;
         addText.textContent = "Agregar a Mi Pedido";
@@ -585,22 +640,22 @@
     function filterCategory(cat, element) {
       currentCategory = cat;
       document.querySelectorAll(".cat-pill").forEach(btn => {
-        btn.classList.remove("bg-slate-900", "text-white");
+        btn.classList.remove("bg-slate-900", "text-white", "shadow-md");
         btn.classList.add("bg-slate-100", "text-slate-600");
       });
       element.classList.remove("bg-slate-100", "text-slate-600");
-      element.classList.add("bg-slate-900", "text-white");
+      element.classList.add("bg-slate-900", "text-white", "shadow-md");
 
       const brandBanner = document.getElementById("brand-catalogo-banner");
       const bannerTitle = document.getElementById("brand-banner-title");
 
       if (cat === "natura") {
-        bannerTitle.textContent = "🌿 Catálogo Oficial Natura";
-        brandBanner.className = "mb-4 bg-gradient-to-r from-emerald-50 to-amber-50 border-2 border-emerald-300 p-4 rounded-2xl shadow-xs flex items-center gap-3.5 text-emerald-950";
+        bannerTitle.textContent = "Catálogo Oficial Natura";
+        brandBanner.className = "mb-6 bg-gradient-to-r from-emerald-50 to-white border border-emerald-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 text-emerald-950";
         brandBanner.classList.remove("hidden");
       } else if (cat === "avon") {
-        bannerTitle.textContent = "🌸 Catálogo Oficial Avon";
-        brandBanner.className = "mb-4 bg-gradient-to-r from-fuchsia-50 to-amber-50 border-2 border-fuchsia-300 p-4 rounded-2xl shadow-xs flex items-center gap-3.5 text-fuchsia-950";
+        bannerTitle.textContent = "Catálogo Oficial Avon";
+        brandBanner.className = "mb-6 bg-gradient-to-r from-fuchsia-50 to-white border border-fuchsia-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 text-fuchsia-950";
         brandBanner.classList.remove("hidden");
       } else {
         brandBanner.classList.add("hidden");
@@ -627,13 +682,15 @@
       }
 
       const btnText = document.getElementById("btn-save-text");
+      const btnIcon = document.querySelector("#btn-save-prod i");
       let imageUrl = editingProductData ? editingProductData.image : "";
 
       if (directUrl) {
         imageUrl = directUrl;
       }
       else if (fileInput.files && fileInput.files.length > 0) {
-        btnText.textContent = "Subiendo imagen a Cloudinary...";
+        btnText.textContent = "Subiendo foto...";
+        btnIcon.className = "ph ph-spinner animate-spin text-xl text-emerald-400";
         try {
           const formData = new FormData();
           formData.append("file", fileInput.files[0]);
@@ -648,15 +705,16 @@
           imageUrl = dataCloud.secure_url;
         } catch (err) {
           alert("Error al subir la imagen.");
-          btnText.textContent = editId ? "Guardar Modificaciones" : "Publicar en Todos los Dispositivos";
+          btnText.textContent = editId ? "Guardar Modificación" : "Publicar en Tienda";
+          btnIcon.className = "ph ph-cloud-arrow-up text-xl text-emerald-400";
           return;
         }
       } else if (!editId && !imageUrl) {
-        alert("Selecciona una foto o pega el link de una imagen.");
+        alert("Selecciona una foto o pega un link.");
         return;
       }
 
-      btnText.textContent = "Sincronizando con catálogo...";
+      btnText.textContent = "Guardando...";
 
       const productPayload = {
         name,
@@ -691,9 +749,10 @@
         renderAdminList();
 
       } catch (e) {
-        alert("Error al guardar en Firebase.");
+        alert("Error al guardar.");
       } finally {
-        btnText.textContent = "Publicar en Todos los Dispositivos";
+        btnText.textContent = "Publicar en Tienda";
+        btnIcon.className = "ph ph-cloud-arrow-up text-xl text-emerald-400";
       }
     }
 
@@ -702,7 +761,7 @@
       if (!prod) return;
 
       editingProductData = prod;
-      document.getElementById("admin-form-title").textContent = "Modificar Producto";
+      document.getElementById("admin-form-title").innerHTML = `<i class="ph ph-pencil-simple text-amber-500 text-xl"></i> Editando Producto`;
       document.getElementById("adm-edit-id").value = prod.firebaseId;
       document.getElementById("adm-name").value = prod.name;
       document.getElementById("adm-price").value = prod.price;
@@ -713,13 +772,13 @@
       document.getElementById("adm-is-pedido").checked = !!prod.isPedido;
       document.getElementById("adm-is-outofstock").checked = !!prod.isOutOfStock;
       
-      document.getElementById("btn-save-text").textContent = "Guardar Modificaciones";
+      document.getElementById("btn-save-text").textContent = "Guardar Modificación";
       document.getElementById("btn-cancel-edit").classList.remove("hidden");
     }
 
     function cancelEditing() {
       editingProductData = null;
-      document.getElementById("admin-form-title").textContent = "Agregar Producto";
+      document.getElementById("admin-form-title").innerHTML = `<i class="ph ph-plus-circle text-emerald-600 text-xl"></i> Nuevo Producto`;
       document.getElementById("adm-edit-id").value = "";
       document.getElementById("adm-name").value = "";
       document.getElementById("adm-price").value = "";
@@ -729,7 +788,7 @@
       document.getElementById("adm-is-pedido").checked = false;
       document.getElementById("adm-is-outofstock").checked = false;
       document.getElementById("adm-file").value = "";
-      document.getElementById("btn-save-text").textContent = "Publicar en Todos los Dispositivos";
+      document.getElementById("btn-save-text").textContent = "Publicar en Tienda";
       document.getElementById("btn-cancel-edit").classList.add("hidden");
     }
 
@@ -739,24 +798,24 @@
       products.forEach(p => {
         const isOutOfStock = p.isOutOfStock || (typeof p.stock !== "undefined" && p.stock <= 0);
         const item = document.createElement("div");
-        item.className = "flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200 text-xs";
+        item.className = "flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-slate-300 transition";
         item.innerHTML = `
-          <div class="flex items-center gap-2.5 truncate">
-            <img src="${getOptimizedImageUrl(p.image)}" class="w-9 h-9 rounded-lg object-cover" />
+          <div class="flex items-center gap-4 truncate">
+            <img src="${getOptimizedImageUrl(p.image)}" class="w-12 h-12 rounded-xl object-contain bg-slate-50" />
             <div>
-              <div class="font-bold flex items-center gap-1.5">
-                <span>${p.name}</span>
-                ${isOutOfStock ? `<span class="bg-black text-white text-[9px] px-1.5 py-0.2 rounded font-black">AGOTADO</span>` : `<span class="text-slate-500 text-[10px]">(${p.stock || 1} uds)</span>`}
+              <div class="font-black text-slate-900 text-sm flex items-center gap-2">
+                <span class="truncate">${p.name}</span>
+                ${isOutOfStock ? `<span class="bg-rose-100 text-rose-700 text-[9px] px-2 py-0.5 rounded uppercase">AGOTADO</span>` : `<span class="text-slate-400 text-[10px]">(${p.stock || 1} u)</span>`}
               </div>
-              <div class="text-[11px] text-slate-500 capitalize">
-                ${p.isPedido ? `<span class="text-amber-700 font-bold">[A Pedido]</span>` : `<span class="text-emerald-700 font-bold">[Stock]</span>`}
+              <div class="text-xs font-medium text-slate-500 capitalize mt-0.5">
+                ${p.isPedido ? `<span class="text-amber-600 font-bold">A Pedido</span>` : `<span class="text-emerald-600 font-bold">Stock</span>`}
                 • ${p.category} • S/ ${Number(p.price).toFixed(2)}
               </div>
             </div>
           </div>
-          <div class="flex items-center gap-1 shrink-0">
-            <button onclick="editProduct('${p.firebaseId}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-2 py-1 rounded-lg transition">Editar</button>
-            <button onclick="removeProduct('${p.firebaseId}')" class="text-rose-600 hover:bg-rose-50 font-bold px-2 py-1 rounded-lg transition">Eliminar</button>
+          <div class="flex items-center gap-2 shrink-0 ml-2">
+            <button onclick="editProduct('${p.firebaseId}')" class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 flex items-center justify-center transition" title="Editar"><i class="ph ph-pencil-simple font-bold"></i></button>
+            <button onclick="removeProduct('${p.firebaseId}')" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center transition" title="Eliminar"><i class="ph ph-trash font-bold"></i></button>
           </div>
         `;
         list.appendChild(item);
@@ -764,7 +823,7 @@
     }
 
     async function removeProduct(id) {
-      if (!confirm("¿Eliminar este producto de todos los dispositivos?")) return;
+      if (!confirm("¿Eliminar definitivamente de la tienda?")) return;
       try {
         await fetch(`${FIREBASE_DB_URL}productos/${id}.json`, { method: "DELETE" });
         await fetchProductsFromCloud();
@@ -774,7 +833,7 @@
       }
     }
 
-    // ================= CARRITO Y WHATSAPP =================
+    // ================= CARRITO Y LÓGICA =================
     function setupCartDrawer() {
       const openBtn = document.getElementById("btn-open-cart");
       const closeBtn = document.getElementById("btn-close-cart");
@@ -808,15 +867,14 @@
       const exist = cart.find(i => i.firebaseId === prodId);
       
       if (!exist) {
-        if (!prod.isPedido && stockUnits < 1) return alert(`Solo hay ${stockUnits} unidades disponibles.`);
+        if (!prod.isPedido && stockUnits < 1) return alert(`Solo hay ${stockUnits} unidades.`);
         cart.push({ ...prod, qty: 1 });
       } else {
         if (!prod.isPedido && (exist.qty + 1) > stockUnits) {
-          return alert(`Solo hay ${stockUnits} unidades disponibles de este producto.`);
+          return alert(`Límite de stock: ${stockUnits} unidades.`);
         }
         exist.qty += 1;
       }
-      
       renderCart();
     }
 
@@ -832,7 +890,7 @@
         cart = cart.filter(i => i.firebaseId !== prodId);
       } else {
         if (!originalProd.isPedido && newQty > stockUnits) {
-          return alert(`Solo hay ${stockUnits} unidades disponibles de este producto.`);
+          return alert(`Límite de stock: ${stockUnits} unidades.`);
         }
         item.qty = newQty;
       }
@@ -850,7 +908,7 @@
       counter.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
 
       if (cart.length === 0) {
-        list.innerHTML = `<div class="h-64 flex flex-col items-center justify-center text-slate-400 text-sm">Tu carrito está vacío</div>`;
+        list.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-slate-400 space-y-3 opacity-50"><i class="ph ph-shopping-cart text-5xl"></i><p class="font-bold text-sm">Tu carrito está vacío</p></div>`;
         totalDisplay.textContent = "S/ 0.00";
         anticipoRow.classList.add("hidden");
         alertPedido.classList.add("hidden");
@@ -871,20 +929,19 @@
         }
 
         const row = document.createElement("div");
-        row.className = "flex items-center gap-3 p-2 bg-slate-50 rounded-xl border border-slate-100";
+        row.className = "flex items-center gap-4 p-3 bg-white rounded-2xl border border-slate-100 shadow-sm";
         row.innerHTML = `
-          <img src="${getOptimizedImageUrl(item.image)}" class="w-12 h-12 object-cover rounded-lg bg-slate-200" />
+          <img src="${getOptimizedImageUrl(item.image)}" class="w-16 h-16 object-contain rounded-xl bg-slate-50" />
           <div class="flex-1 min-w-0">
-            <h5 class="text-xs font-bold text-slate-900 truncate">${item.name}</h5>
-            <div class="flex items-center gap-1.5 mt-0.5">
-              <span class="text-xs font-semibold text-slate-700">S/ ${item.price.toFixed(2)}</span>
-              ${item.isPedido ? `<span class="text-[9px] bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-bold">A Pedido</span>` : `<span class="text-[9px] bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded font-bold">En Stock</span>`}
+            <h5 class="text-sm font-black text-slate-900 truncate leading-tight">${item.name}</h5>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-sm font-bold text-rose-600">S/ ${item.price.toFixed(2)}</span>
             </div>
           </div>
-          <div class="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-1">
-            <button onclick="changeQty('${item.firebaseId}', -1)" class="w-5 h-5 flex items-center justify-center text-xs font-bold">-</button>
-            <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-            <button onclick="changeQty('${item.firebaseId}', 1)" class="w-5 h-5 flex items-center justify-center text-xs font-bold">+</button>
+          <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl p-1">
+            <button onclick="changeQty('${item.firebaseId}', -1)" class="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 font-bold bg-white rounded-lg shadow-sm">-</button>
+            <span class="text-sm font-black w-4 text-center">${item.qty}</span>
+            <button onclick="changeQty('${item.firebaseId}', 1)" class="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 font-bold bg-white rounded-lg shadow-sm">+</button>
           </div>
         `;
         list.appendChild(row);
@@ -912,18 +969,14 @@
       const address = document.getElementById("cust-address").value.trim();
 
       if (!name) return alert("Por favor ingresa tu nombre completo.");
-
       if (payment !== "Contraentrega" && !address) {
-        return alert("Por favor ingresa tu dirección de entrega o ciudad.");
+        return alert("Por favor ingresa tu dirección de entrega.");
       }
 
       const prodsStock = cart.filter(i => !i.isPedido);
       const prodsPedido = cart.filter(i => i.isPedido);
 
-      let total = 0;
-      let totalStock = 0;
-      let totalPedido = 0;
-
+      let total = 0, totalStock = 0, totalPedido = 0;
       prodsStock.forEach(i => { totalStock += (i.price * i.qty); });
       prodsPedido.forEach(i => { totalPedido += (i.price * i.qty); });
       total = totalStock + totalPedido;
@@ -934,46 +987,43 @@
       let text = `🛍️ *NUEVO PEDIDO - D'Ana Boutique*\n`;
       text += `----------------------------------\n`;
       text += `👤 *Cliente:* ${name}\n`;
-      text += `💳 *Modalidad Elegida:* ${payment}\n`;
+      text += `💳 *Pago:* ${payment}\n`;
 
       if (payment === "Contraentrega") {
-        text += `📍 *Punto de Entrega Acordado:* ${point}\n`;
+        text += `📍 *Lugar:* ${point}\n`;
       } else {
-        text += `📍 *Dirección / Ciudad:* ${address}\n`;
+        text += `📍 *Dirección:* ${address}\n`;
       }
 
       if (prodsStock.length > 0) {
-        text += `\n⚡ *PRODUCTOS EN STOCK INMEDIATO:*\n`;
+        text += `\n⚡ *PRODUCTOS EN STOCK:*\n`;
         prodsStock.forEach((i) => {
           text += `  • ${i.name} x${i.qty} = S/ ${(i.price * i.qty).toFixed(2)}\n`;
         });
       }
 
       if (prodsPedido.length > 0) {
-        text += `\n📖 *PRODUCTOS DE CATÁLOGO / A PEDIDO (NATURA / AVON):*\n`;
+        text += `\n📖 *A PEDIDO (NATURA/AVON):*\n`;
         prodsPedido.forEach((i) => {
           text += `  • ${i.name} x${i.qty} = S/ ${(i.price * i.qty).toFixed(2)}\n`;
         });
       }
 
       text += `\n----------------------------------\n`;
-      text += `💰 *MONTO TOTAL DEL PEDIDO: S/ ${total.toFixed(2)}*\n`;
+      text += `💰 *TOTAL: S/ ${total.toFixed(2)}*\n`;
 
       if (prodsPedido.length > 0) {
-        text += `\n📌 *CONDICIONES DE PAGO:*\n`;
-        text += `✅ *Anticipo requerido (50% Catálogo):* S/ ${anticipoRequerido.toFixed(2)} (vía Yape/Plin)\n`;
-        text += `🤝 *Saldo a liquidar al entregar:* S/ ${saldoRestante.toFixed(2)}\n\n`;
-        text += `Hola, por favor envíame los datos de Yape/Plin para abonar el anticipo de S/ ${anticipoRequerido.toFixed(2)} y reservar mi orden.`;
+        text += `\n📌 *CONDICIONES:*\n`;
+        text += `✅ *Anticipo (50%):* S/ ${anticipoRequerido.toFixed(2)}\n`;
+        text += `🤝 *Saldo al entregar:* S/ ${saldoRestante.toFixed(2)}\n\n`;
+        text += `Hola, envíame los datos de Yape/Plin para abonar el anticipo de S/ ${anticipoRequerido.toFixed(2)} y reservar mi orden.`;
       } else {
         if (payment === "Contraentrega") {
-          text += `🤝 *Modalidad:* Pago completo contraentrega en el punto acordado.\n\n`;
-          text += `Hola, deseo coordinar la fecha y hora de entrega en el punto seleccionado.`;
+          text += `\nHola, deseo coordinar la entrega en el punto seleccionado.`;
         } else {
-          text += `📲 *Estado:* Por favor envíame los datos para transferirte el total.\n\n`;
-          text += `Hola, deseo confirmar los datos de pago para mi entrega.`;
+          text += `\nHola, envíame los datos para transferir el total.`;
         }
       }
-
       window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURI(text)}`, "_blank");
     }
   </script>
