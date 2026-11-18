@@ -7,26 +7,32 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
-    /* Efecto de scroll suave y barra de desplazamiento elegante */
     html { scroll-behavior: smooth; }
     ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    ::-webkit-scrollbar-track { background: #fffaf7; }
+    ::-webkit-scrollbar-thumb { background: #e2cbd2; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #c2a3ab; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
+<body class="bg-[#fffaf7] text-slate-800 antialiased font-sans min-h-screen flex flex-col">
+
+  <!-- ================= ANIMACIÓN DE APERTURA (SPLASH SCREEN) ================= -->
+  <div id="splash-screen" class="fixed inset-0 z-[100] bg-[#fffaf7] flex flex-col items-center justify-center transition-opacity duration-700">
+    <img src="logo.png" alt="D'Ana Boutique" class="h-32 sm:h-40 mb-6 animate-pulse object-contain drop-shadow-md" onerror="this.src='https://placehold.co/200x200?text=D%27Ana'"/>
+    <h1 class="text-2xl sm:text-3xl font-black text-rose-900 tracking-[0.2em] uppercase">D'Ana Boutique</h1>
+    <p class="text-slate-500 text-xs mt-2 tracking-widest uppercase font-bold">Cargando colección...</p>
+  </div>
 
   <!-- ================= NAVBAR PREMIUM ================= -->
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-lg border-b border-slate-200 shadow-sm">
+  <header class="sticky top-0 z-40 bg-[#fffaf7]/95 backdrop-blur-lg border-b border-rose-100 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-28 flex items-center justify-between">
       
-      <!-- LOGO Y TÍTULO (ACCESO SECRETO AL PANEL) -->
-      <div id="logo-trigger" onclick="openLoginModal()" class="flex items-center gap-4 cursor-pointer select-none group" title="Acceso exclusivo Administrador">
-        <img src="logo.png" alt="D'Ana Boutique Logo" class="h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" onerror="this.src='https://placehold.co/150x150?text=D%27Ana'"/>
+      <!-- LOGO Y TÍTULO (ACCESO SECRETO AL PANEL SIN TEXTOS QUE DELATEN) -->
+      <div id="logo-trigger" onclick="openLoginModal()" class="flex items-center gap-4 cursor-pointer select-none group">
+        <img src="logo.png" alt="Logo" class="h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" onerror="this.src='https://placehold.co/150x150?text=D%27Ana'"/>
         <div class="hidden sm:block">
-          <h1 class="font-black text-3xl leading-none tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-slate-800 to-slate-900">D'Ana Boutique</h1>
-          <p class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Moda, Calzado & Fragancias</p>
+          <h1 class="font-black text-3xl leading-none tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-rose-800 to-slate-900">D'Ana Boutique</h1>
+          <p class="text-[11px] font-bold text-rose-900/60 uppercase tracking-[0.2em] mt-1">Moda, Calzado & Fragancias</p>
         </div>
       </div>
       
@@ -40,35 +46,23 @@
       </div>
     </div>
 
-    <!-- BARRA DE CATEGORÍAS MEJORADA -->
-    <div class="bg-white border-t border-slate-100 overflow-x-auto shadow-inner">
+    <!-- BARRA DE CATEGORÍAS -->
+    <div class="bg-white/60 border-t border-rose-50 overflow-x-auto shadow-inner">
       <div class="max-w-7xl mx-auto px-4 py-3 flex gap-2.5">
         <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
         <button onclick="filterCategory('natura', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition whitespace-nowrap">🌿 Natura</button>
         <button onclick="filterCategory('avon', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-fuchsia-50 text-fuchsia-800 border border-fuchsia-200 hover:bg-fuchsia-100 transition whitespace-nowrap">🌸 Avon</button>
         <button onclick="filterCategory('stock', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">⚡ En Stock (Contraentrega)</button>
         <button onclick="filterCategory('catalogo', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition whitespace-nowrap">📖 Solo Catálogo</button>
-        <button onclick="filterCategory('fragancias', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap">Fragancias & Perfumes</button>
-        <button onclick="filterCategory('zapatos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap">Zapatos de Dama</button>
-        <button onclick="filterCategory('ropa', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap">Ropa & Accesorios</button>
+        <button onclick="filterCategory('fragancias', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Fragancias & Perfumes</button>
+        <button onclick="filterCategory('zapatos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Zapatos de Dama</button>
+        <button onclick="filterCategory('ropa', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Ropa & Accesorios</button>
       </div>
     </div>
   </header>
 
-  <!-- ================= BANNER PRINCIPAL ================= -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-4 w-full">
-    
-    <!-- AVISO DINÁMICO EXCLUSIVO -->
-    <div id="brand-catalogo-banner" class="hidden mb-6 bg-gradient-to-r from-emerald-50 to-white border border-emerald-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 text-emerald-950">
-      <div class="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
-        <i class="ph ph-sparkle text-3xl"></i>
-      </div>
-      <div class="text-sm leading-relaxed">
-        <span id="brand-banner-title" class="font-black text-emerald-900 block text-base mb-0.5">Catálogo Oficial</span>
-        Todos los productos de esta sección se solicitan a pedido y se separan con el <b class="bg-emerald-100 px-1 rounded">50% del costo total</b>.
-      </div>
-    </div>
-
+  <!-- ================= BANNER PRINCIPAL (ACTUALIZADO) ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-4 w-full">
     <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 text-white rounded-3xl p-8 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden">
       <!-- Elemento decorativo de fondo -->
       <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
@@ -80,63 +74,82 @@
       </div>
 
       <div class="flex flex-col gap-4 w-full lg:w-auto relative z-10">
+        <!-- ATENCIÓN AL CLIENTE ACTUALIZADO -->
         <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center gap-4 shadow-lg">
           <div class="w-12 h-12 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-inner">
             <i class="ph ph-info text-2xl font-bold"></i>
           </div>
           <div class="text-sm text-amber-100 leading-snug">
             <span class="font-black text-white block mb-0.5 text-base">Atención al cliente</span>
-            Artículos de catálogo se reservan con el <b class="text-amber-300">50% de abono</b>.
+            Artículos de catálogo se reservan con el <b class="text-amber-300">50% de abono</b> previa coordinación.
           </div>
         </div>
-        <div class="text-center bg-black/20 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
-          <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mb-2">Medios de pago oficiales</p>
-          <div class="flex gap-3 justify-center font-black text-sm text-white">
+        <!-- MEDIOS DE PAGO ACTUALIZADOS -->
+        <div class="bg-black/20 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+          <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-2 text-center">Medios de pago oficiales</p>
+          <div class="flex flex-wrap gap-2 justify-center font-black text-xs sm:text-sm text-white mb-2">
             <span class="bg-indigo-600 px-3 py-1 rounded-lg shadow-sm">Yape</span>
             <span class="bg-sky-500 px-3 py-1 rounded-lg shadow-sm">Plin</span>
             <span class="bg-emerald-600 px-3 py-1 rounded-lg shadow-sm">Efectivo</span>
+            <span class="bg-slate-700 px-3 py-1 rounded-lg shadow-sm">Transferencias</span>
           </div>
+          <p class="text-[10px] text-amber-200/80 text-center font-bold tracking-wide">* Nota: Todo envío nacional se hace previa coordinación.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ================= PRODUCTOS ================= -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-20 flex-1 w-full mt-4">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-20 flex-1 w-full mt-2">
     <div id="loading-spinner" class="py-24 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
       <i class="ph ph-spinner-gap animate-spin text-5xl text-rose-800"></i>
       <p class="text-base font-bold tracking-wide">Cargando la mejor selección...</p>
     </div>
-    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 sm:gap-6 hidden"></div>
+    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 hidden"></div>
   </main>
 
-  <!-- ================= FOOTER PROFESIONAL ================= -->
+  <!-- ================= FOOTER PROFESIONAL (ACTUALIZADO) ================= -->
   <footer class="bg-slate-950 text-slate-400 pt-16 pb-8 border-t-4 border-rose-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center md:items-start gap-10">
+      
       <div class="text-center md:text-left max-w-sm">
-        <h2 class="text-2xl font-black text-white tracking-tight mb-2">D'Ana Boutique</h2>
-        <p class="text-sm leading-relaxed text-slate-500">Tu tienda de confianza en Chiclayo. Ofrecemos moda, fragancias y calzado con entrega segura y atención personalizada.</p>
+        <h2 class="text-2xl font-black text-white tracking-tight mb-3">D'Ana Boutique</h2>
+        <p class="text-sm leading-relaxed text-slate-500">Tu tienda de confianza en moda, accesorios y perfumes. Ofrecemos moda, fragancias y calzado con entrega segura y atención personalizada.</p>
       </div>
-      <div class="flex flex-col items-center md:items-end gap-2 text-sm font-medium">
-        <p class="flex items-center gap-2"><i class="ph ph-shield-check text-emerald-500 text-lg"></i> Compras 100% Seguras</p>
-        <p class="flex items-center gap-2"><i class="ph ph-map-pin text-rose-500 text-lg"></i> Entregas en Chiclayo</p>
-        <p class="flex items-center gap-2"><i class="ph ph-whatsapp-logo text-green-500 text-lg"></i> Atención Inmediata</p>
+      
+      <div class="flex flex-col items-center md:items-start gap-3 text-sm font-medium">
+        <p class="flex items-center gap-3"><i class="ph ph-shield-check text-emerald-500 text-xl"></i> Compras 100% Seguras</p>
+        <p class="flex items-center gap-3"><i class="ph ph-truck text-rose-500 text-xl"></i> Envíos a todo el Perú <span class="text-[10px] text-slate-500 ml-1">(Previa coordinación)</span></p>
+        <p class="flex items-center gap-3"><i class="ph ph-whatsapp-logo text-green-500 text-xl"></i> Atención Inmediata</p>
+      </div>
+
+      <!-- REDES SOCIALES -->
+      <div class="flex flex-col items-center md:items-end gap-3">
+        <p class="text-xs font-black uppercase tracking-widest text-slate-600 mb-1">Síguenos en</p>
+        <div class="flex items-center gap-4">
+          <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-blue-600 hover:scale-110 transition duration-300"><i class="ph ph-facebook-logo text-xl"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-pink-600 hover:scale-110 transition duration-300"><i class="ph ph-instagram-logo text-xl"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-black hover:scale-110 transition duration-300"><i class="ph ph-tiktok-logo text-xl"></i></a>
+        </div>
       </div>
     </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-12 pt-8 border-t border-slate-800/50 text-center flex flex-col items-center">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-12 pt-8 border-t border-slate-800/50 text-center flex flex-col items-center relative">
       <p class="text-xs text-slate-600 font-medium">
         &copy; 2026 D'Ana Boutique. Todos los derechos reservados.<br>
         Sitio protegido por derechos de autor y políticas de privacidad comercial.
       </p>
-      <!-- Icono candado minúsculo como otra forma de entrar al panel -->
-      <i class="ph ph-lock-key text-slate-800 hover:text-slate-500 cursor-pointer mt-4 transition" onclick="openLoginModal()" title="Acceso Panel"></i>
+      <!-- Candado invisible (sin textos que delaten) -->
+      <div onclick="openLoginModal()" class="absolute bottom-0 right-4 w-10 h-10 cursor-pointer flex items-center justify-center opacity-30 hover:opacity-100 transition">
+        <i class="ph ph-lock-key text-slate-700"></i>
+      </div>
     </div>
   </footer>
 
-  <!-- ================= BOTÓN FLOTANTE WHATSAPP (AYUDA AL CLIENTE) ================= -->
-  <a href="https://api.whatsapp.com/send?phone=51916052207&text=Hola%20D'Ana%20Boutique,%20necesito%20ayuda%20o%20tengo%20una%20consulta%20sobre%20un%20producto." target="_blank" class="fixed bottom-6 right-6 z-40 bg-emerald-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:bg-emerald-400 transition-all duration-300" title="Servicio al Cliente">
-    <i class="ph ph-whatsapp-logo text-4xl"></i>
-    <span class="absolute -top-2 -left-2 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md animate-pulse">Ayuda</span>
+  <!-- ================= BOTÓN FLOTANTE WHATSAPP ================= -->
+  <a href="https://api.whatsapp.com/send?phone=51916052207&text=Hola%20D'Ana%20Boutique,%20necesito%20ayuda%20o%20tengo%20una%20consulta%20en%20general." target="_blank" class="fixed bottom-6 right-6 z-40 bg-emerald-500 text-white w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:bg-emerald-400 transition-all duration-300">
+    <i class="ph ph-whatsapp-logo text-3xl sm:text-4xl"></i>
+    <span class="absolute -top-1 -left-2 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md animate-pulse">Ayuda</span>
   </a>
 
   <!-- ================= VISOR DE IMAGEN (ZOOM) ================= -->
@@ -150,7 +163,7 @@
   <!-- ================= MODAL VISTA DETALLADA DEL PRODUCTO ================= -->
   <div id="product-modal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-      <div class="relative bg-slate-50 h-80 w-full overflow-hidden flex items-center justify-center group">
+      <div class="relative bg-slate-50 h-72 sm:h-80 w-full overflow-hidden flex items-center justify-center group">
         <img id="modal-img" src="" alt="Detalle" onclick="document.getElementById('zoom-modal').classList.remove('hidden'); document.getElementById('zoom-img').src = this.src;" class="w-full h-full object-contain bg-white cursor-zoom-in transition duration-500 group-hover:scale-110" title="Toca para ampliar imagen" />
         <div id="modal-badge-container" class="absolute top-5 left-5 flex flex-col gap-2 pointer-events-none"></div>
         <button onclick="closeProductModal()" class="absolute top-5 right-5 bg-white/90 hover:bg-slate-900 text-slate-800 hover:text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition">
@@ -161,11 +174,11 @@
         </div>
       </div>
 
-      <div class="p-8 flex-1 overflow-y-auto space-y-5">
+      <div class="p-6 sm:p-8 flex-1 overflow-y-auto space-y-5">
         <div>
           <div class="flex items-start justify-between gap-4">
             <h3 id="modal-name" class="text-2xl font-black text-slate-900 leading-tight"></h3>
-            <span id="modal-stock-indicator" class="text-xs font-black px-3 py-1.5 rounded-lg shrink-0 uppercase tracking-widest shadow-sm"></span>
+            <span id="modal-stock-indicator" class="text-xs font-black px-3 py-1.5 rounded-lg shrink-0 uppercase tracking-widest shadow-sm border border-slate-200"></span>
           </div>
           <p id="modal-price" class="text-3xl font-black text-rose-700 mt-3"></p>
         </div>
@@ -184,10 +197,15 @@
         </div>
       </div>
 
-      <div class="p-5 border-t border-slate-100 bg-white flex items-center gap-3">
-        <button id="modal-add-btn" class="flex-1 bg-slate-900 hover:bg-rose-700 text-white font-black py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-xl hover:shadow-rose-500/30 transition-all duration-300 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed">
+      <!-- BOTONES: CONSULTAR Y AGREGAR -->
+      <div class="p-5 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row items-center gap-3">
+        <button id="modal-consult-btn" class="w-full sm:w-auto bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold py-3.5 px-5 rounded-2xl flex items-center justify-center gap-2 transition border border-emerald-200">
+          <i class="ph ph-whatsapp-logo text-2xl"></i>
+          <span>Consultar</span>
+        </button>
+        <button id="modal-add-btn" class="w-full flex-1 bg-slate-900 hover:bg-rose-700 text-white font-black py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-xl hover:shadow-rose-500/30 transition-all duration-300 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed">
           <i class="ph ph-shopping-cart text-2xl"></i>
-          <span id="modal-add-text" class="text-base uppercase tracking-wider">Agregar a Mi Pedido</span>
+          <span id="modal-add-text" class="text-base uppercase tracking-wider">Añadir</span>
         </button>
       </div>
     </div>
@@ -196,23 +214,23 @@
   <!-- ================= PANEL CARRITO ================= -->
   <div id="cart-drawer" class="fixed inset-0 z-[60] pointer-events-none transition-opacity duration-300 opacity-0">
     <div id="cart-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
-    <div id="cart-panel" class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 pointer-events-auto">
-      <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-white">
+    <div id="cart-panel" class="absolute right-0 top-0 h-full w-full max-w-md bg-[#fffaf7] shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 pointer-events-auto">
+      <div class="px-6 py-5 border-b border-rose-100 flex items-center justify-between bg-white">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-rose-100 text-rose-700 rounded-full flex items-center justify-center">
             <i class="ph ph-shopping-cart text-xl font-bold"></i>
           </div>
           <h3 class="font-black text-slate-900 text-xl tracking-tight">Tu Compra</h3>
         </div>
-        <button id="btn-close-cart" class="text-slate-400 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 w-9 h-9 rounded-full flex items-center justify-center transition">
+        <button id="btn-close-cart" class="text-slate-400 hover:text-rose-700 bg-slate-100 hover:bg-rose-50 w-9 h-9 rounded-full flex items-center justify-center transition">
           <i class="ph ph-x text-lg font-bold"></i>
         </button>
       </div>
 
-      <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50"></div>
+      <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
 
       <!-- FORMULARIO DE ENVÍO Y PAGO -->
-      <div class="p-6 border-t border-slate-100 bg-white space-y-4 shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
+      <div class="p-6 border-t border-rose-100 bg-white space-y-4 shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
         <div id="cart-pedido-alert" class="hidden bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900 font-medium">
           📦 Tu pedido incluye artículos <b>a pedido</b>. Se coordinará el <b>50% de anticipo</b> vía Yape/Plin.
         </div>
@@ -392,7 +410,7 @@
     </div>
   </div>
 
-  <!-- ================= LÓGICA DE LA TIENDA (INTACTA) ================= -->
+  <!-- ================= LÓGICA DE LA TIENDA ================= -->
   <script>
     const FIREBASE_DB_URL = "https://d-ana-tienda-default-rtdb.firebaseio.com/";
     const CLOUD_NAME = "jykepmvw";
@@ -404,6 +422,15 @@
     let cart = [];
     let currentCategory = "todos";
     let editingProductData = null;
+
+    // Splash Screen Logic
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        splash.style.opacity = '0';
+        setTimeout(() => splash.classList.add('hidden'), 700);
+      }, 1000);
+    });
 
     // Optimización de imágenes
     function getOptimizedImageUrl(url) {
@@ -483,7 +510,6 @@
         products = [];
         if (data) {
           Object.keys(data).forEach(key => {
-            // Escudo Anti-Errores
             if (data[key] && data[key].name) {
               products.push({ firebaseId: key, ...data[key] });
             }
@@ -499,6 +525,14 @@
         console.error("Error al cargar de Firebase:", err);
         document.getElementById("loading-spinner").innerHTML = `<p class="text-rose-500 font-bold">Error de conexión con la base de datos.</p>`;
       }
+    }
+
+    // Botón de Consultar en tarjeta y modal
+    function consultProduct(prodId) {
+      const prod = products.find(p => p.firebaseId === prodId);
+      if (!prod) return;
+      const text = `Hola D'Ana Boutique, deseo más información o consultar disponibilidad sobre el producto: *${prod.name}* (S/ ${Number(prod.price).toFixed(2)}).`;
+      window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURI(text)}`, "_blank");
     }
 
     function renderProducts() {
@@ -526,11 +560,10 @@
         const displayImage = getOptimizedImageUrl(p.image);
 
         const card = document.createElement("div");
-        // Tarjeta estilo App
-        card.className = `bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group ${isOutOfStock ? 'opacity-70' : ''}`;
+        card.className = `bg-white rounded-[1.5rem] overflow-hidden border border-rose-50 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group ${isOutOfStock ? 'opacity-70' : ''}`;
         
         card.innerHTML = `
-          <div onclick="openProductModal('${p.firebaseId}')" class="h-48 sm:h-56 bg-slate-50 overflow-hidden relative cursor-pointer flex items-center justify-center p-2">
+          <div onclick="openProductModal('${p.firebaseId}')" class="h-48 sm:h-60 bg-white overflow-hidden relative cursor-pointer flex items-center justify-center p-2">
             <img src="${displayImage}" alt="${p.name}" loading="lazy" class="max-w-full max-h-full object-contain group-hover:scale-110 transition duration-500 ${isOutOfStock ? 'grayscale-[50%]' : ''}" onerror="this.src='https://placehold.co/400x400?text=Sin+Imagen'"/>
             
             ${isOutOfStock ? `
@@ -544,28 +577,33 @@
             <div class="absolute top-3 left-3 flex flex-col gap-1.5 z-20">
               ${isPedido 
                 ? `<span class="bg-amber-400 text-amber-950 font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">A Pedido (50%)</span>`
-                : `<span class="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">⚡ Stock Inmediato</span>`
+                : `<span class="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">⚡ En Stock</span>`
               }
             </div>
-
-            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4 z-10">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-rose-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4 z-10">
               <span class="text-white text-xs font-bold flex items-center gap-1"><i class="ph ph-eye text-lg"></i> Ver detalles</span>
             </div>
           </div>
           
-          <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between bg-white relative z-20">
+          <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between bg-[#fffcfb] relative z-20">
             <div onclick="openProductModal('${p.firebaseId}')" class="cursor-pointer">
               <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1 block">${p.category}</span>
               <h4 class="font-black text-slate-900 text-base leading-tight line-clamp-2 group-hover:text-rose-600 transition-colors">${p.name}</h4>
             </div>
             
-            <div class="mt-4 pt-4 border-t border-slate-100 flex items-end justify-between">
+            <div class="mt-4 pt-4 border-t border-rose-100/60 flex items-center justify-between">
               <div>
                 <span class="text-xl font-black text-slate-900">S/ ${Number(p.price).toFixed(2)}</span>
               </div>
-              <button onclick="addToCart('${p.firebaseId}')" ${isOutOfStock ? 'disabled' : ''} class="${isOutOfStock ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-rose-600 hover:scale-105 shadow-md'} w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center" title="${isOutOfStock ? 'Agotado' : 'Agregar al carrito'}">
-                <i class="ph ph-plus font-bold text-lg"></i>
-              </button>
+              <div class="flex items-center gap-2">
+                <button onclick="consultProduct('${p.firebaseId}')" class="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm" title="Consultar por WhatsApp">
+                  <i class="ph ph-whatsapp-logo font-bold text-lg"></i>
+                </button>
+                <button onclick="addToCart('${p.firebaseId}')" ${isOutOfStock ? 'disabled' : ''} class="${isOutOfStock ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-rose-600 hover:scale-105 shadow-md'} w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center" title="${isOutOfStock ? 'Agotado' : 'Agregar al carrito'}">
+                  <i class="ph ph-plus font-bold text-lg"></i>
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -589,10 +627,10 @@
       const stockIndicator = document.getElementById("modal-stock-indicator");
       if (isOutOfStock) {
         stockIndicator.textContent = "Agotado";
-        stockIndicator.className = "text-xs font-black px-3 py-1.5 rounded-lg bg-slate-100 text-slate-500 shrink-0 uppercase tracking-widest";
+        stockIndicator.className = "text-xs font-black px-3 py-1.5 rounded-lg bg-slate-100 text-slate-500 shrink-0 uppercase tracking-widest border border-slate-200";
       } else {
         stockIndicator.textContent = `${stockUnits} Disp.`;
-        stockIndicator.className = "text-xs font-black px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 shrink-0 uppercase tracking-widest";
+        stockIndicator.className = "text-xs font-black px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 shrink-0 uppercase tracking-widest border border-emerald-200";
       }
 
       const badgeBox = document.getElementById("modal-badge-container");
@@ -611,6 +649,11 @@
         warning.classList.add("hidden");
       }
 
+      // Configurar Botón Consultar
+      const consultBtn = document.getElementById("modal-consult-btn");
+      consultBtn.onclick = () => { consultProduct(prod.firebaseId); };
+
+      // Configurar Botón Agregar
       const addBtn = document.getElementById("modal-add-btn");
       const addText = document.getElementById("modal-add-text");
 
@@ -641,26 +684,10 @@
       currentCategory = cat;
       document.querySelectorAll(".cat-pill").forEach(btn => {
         btn.classList.remove("bg-slate-900", "text-white", "shadow-md");
-        btn.classList.add("bg-slate-100", "text-slate-600");
+        btn.classList.add("bg-white", "text-slate-600");
       });
-      element.classList.remove("bg-slate-100", "text-slate-600");
+      element.classList.remove("bg-white", "text-slate-600");
       element.classList.add("bg-slate-900", "text-white", "shadow-md");
-
-      const brandBanner = document.getElementById("brand-catalogo-banner");
-      const bannerTitle = document.getElementById("brand-banner-title");
-
-      if (cat === "natura") {
-        bannerTitle.textContent = "Catálogo Oficial Natura";
-        brandBanner.className = "mb-6 bg-gradient-to-r from-emerald-50 to-white border border-emerald-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 text-emerald-950";
-        brandBanner.classList.remove("hidden");
-      } else if (cat === "avon") {
-        bannerTitle.textContent = "Catálogo Oficial Avon";
-        brandBanner.className = "mb-6 bg-gradient-to-r from-fuchsia-50 to-white border border-fuchsia-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 text-fuchsia-950";
-        brandBanner.classList.remove("hidden");
-      } else {
-        brandBanner.classList.add("hidden");
-      }
-
       renderProducts();
     }
 
@@ -908,7 +935,7 @@
       counter.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
 
       if (cart.length === 0) {
-        list.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-slate-400 space-y-3 opacity-50"><i class="ph ph-shopping-cart text-5xl"></i><p class="font-bold text-sm">Tu carrito está vacío</p></div>`;
+        list.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-rose-900/30 space-y-3"><i class="ph ph-shopping-cart text-6xl"></i><p class="font-bold text-sm">Tu carrito está vacío</p></div>`;
         totalDisplay.textContent = "S/ 0.00";
         anticipoRow.classList.add("hidden");
         alertPedido.classList.add("hidden");
@@ -929,7 +956,7 @@
         }
 
         const row = document.createElement("div");
-        row.className = "flex items-center gap-4 p-3 bg-white rounded-2xl border border-slate-100 shadow-sm";
+        row.className = "flex items-center gap-4 p-3 bg-white rounded-2xl border border-rose-50 shadow-sm";
         row.innerHTML = `
           <img src="${getOptimizedImageUrl(item.image)}" class="w-16 h-16 object-contain rounded-xl bg-slate-50" />
           <div class="flex-1 min-w-0">
@@ -1016,12 +1043,12 @@
         text += `\n📌 *CONDICIONES:*\n`;
         text += `✅ *Anticipo (50%):* S/ ${anticipoRequerido.toFixed(2)}\n`;
         text += `🤝 *Saldo al entregar:* S/ ${saldoRestante.toFixed(2)}\n\n`;
-        text += `Hola, envíame los datos de Yape/Plin para abonar el anticipo de S/ ${anticipoRequerido.toFixed(2)} y reservar mi orden.`;
+        text += `Hola, envíame los datos de Yape/Plin/Transferencia para abonar el anticipo de S/ ${anticipoRequerido.toFixed(2)} y reservar mi orden.`;
       } else {
         if (payment === "Contraentrega") {
           text += `\nHola, deseo coordinar la entrega en el punto seleccionado.`;
         } else {
-          text += `\nHola, envíame los datos para transferir el total.`;
+          text += `\nHola, envíame los datos para transferir el total de mi pedido.`;
         }
       }
       window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURI(text)}`, "_blank");
