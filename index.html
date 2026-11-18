@@ -12,6 +12,12 @@
     ::-webkit-scrollbar-track { background: #fffaf7; }
     ::-webkit-scrollbar-thumb { background: #e2cbd2; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #c2a3ab; }
+    
+    /* Estilos para logos en programación */
+    .logo-natura { font-family: 'Georgia', serif; letter-spacing: -0.05em; color: #FF6B00; }
+    .logo-avon { font-family: 'Arial', sans-serif; font-weight: 900; letter-spacing: 0.05em; color: #E5004B; }
+    .logo-esika { font-family: 'Arial', sans-serif; font-weight: 400; letter-spacing: -0.02em; color: #E60000; }
+    .logo-yanbal { font-family: 'Trebuchet MS', sans-serif; font-weight: 600; letter-spacing: 0.1em; color: #F27329; }
   </style>
 </head>
 <body class="bg-[#fffaf7] text-slate-800 antialiased font-sans min-h-screen flex flex-col">
@@ -46,53 +52,85 @@
       </div>
     </div>
 
-    <!-- BARRA DE CATEGORÍAS (DINÁMICA) -->
+    <!-- BARRA DE CATEGORÍAS (DINÁMICA DESDE PANEL) -->
     <div class="bg-white/60 border-t border-rose-50 overflow-x-auto shadow-inner">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex gap-2.5">
-        <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
+      <div class="max-w-7xl mx-auto px-4 py-3 flex gap-2.5 items-center">
+        <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
         
-        <!-- BOTONES DE MARCAS (SE OCULTAN/MUESTRAN DESDE EL PANEL) -->
-        <button id="btn-cat-natura" onclick="filterCategory('natura', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition whitespace-nowrap">🌿 Natura</button>
-        <button id="btn-cat-avon" onclick="filterCategory('avon', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-fuchsia-50 text-fuchsia-800 border border-fuchsia-200 hover:bg-fuchsia-100 transition whitespace-nowrap">🌸 Avon</button>
-        <button id="btn-cat-esika" onclick="filterCategory('esika', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100 transition whitespace-nowrap">✨ Ésika</button>
-        <button id="btn-cat-unique" onclick="filterCategory('unique', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-orange-50 text-orange-800 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap">💎 Unique</button>
+        <!-- BOTONES DE MARCAS (LOGOS EN PROGRAMACIÓN) -->
+        <button id="btn-cat-natura" onclick="filterCategory('natura', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl bg-orange-50 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap flex items-center gap-1.5">
+          <i class="ph ph-flower-tulip text-lg text-[#FF6B00]"></i><span class="logo-natura text-lg lowercase">natura</span>
+        </button>
+        <button id="btn-cat-avon" onclick="filterCategory('avon', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl bg-pink-50 border border-pink-200 hover:bg-pink-100 transition whitespace-nowrap">
+          <span class="logo-avon text-base uppercase">AVON</span>
+        </button>
+        <button id="btn-cat-esika" onclick="filterCategory('esika', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl bg-red-50 border border-red-200 hover:bg-red-100 transition whitespace-nowrap">
+          <span class="logo-esika text-lg lowercase">ésika</span>
+        </button>
+        <button id="btn-cat-yanbal" onclick="filterCategory('yanbal', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl bg-orange-50 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap flex items-center gap-1.5">
+          <div class="w-3.5 h-3.5 border-2 border-[#F27329] relative"><div class="absolute -top-1 -right-1 w-2 h-2 bg-[#F27329] rounded-bl-full"></div></div><span class="logo-yanbal text-sm uppercase">YANBAL</span>
+        </button>
         
-        <button onclick="filterCategory('stock', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">⚡ En Stock</button>
-        <button onclick="filterCategory('catalogo', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition whitespace-nowrap">📖 Solo Catálogo</button>
-        <button onclick="filterCategory('fragancias', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Fragancias & Perfumes</button>
-        <button onclick="filterCategory('zapatos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Zapatos de Dama</button>
-        <button onclick="filterCategory('ropa', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Ropa & Accesorios</button>
+        <!-- OTRAS CATEGORÍAS -->
+        <button id="btn-cat-stock" onclick="filterCategory('stock', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">⚡ En Stock</button>
+        <button id="btn-cat-catalogo" onclick="filterCategory('catalogo', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition whitespace-nowrap">📖 Solo Catálogo</button>
+        <button id="btn-cat-fragancias" onclick="filterCategory('fragancias', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Fragancias & Perfumes</button>
+        <button id="btn-cat-zapatos" onclick="filterCategory('zapatos', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Zapatos de Dama</button>
+        <button id="btn-cat-ropa" onclick="filterCategory('ropa', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Ropa & Accesorios</button>
       </div>
     </div>
   </header>
 
   <!-- ================= BANNER PRINCIPAL ================= -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-4 w-full">
-    <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 text-white rounded-3xl p-8 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden">
-      <!-- Elemento decorativo -->
+    <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 text-white rounded-3xl p-6 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden">
       <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
 
-      <div class="relative z-10">
+      <div class="relative z-10 w-full lg:w-1/2">
         <span class="inline-block bg-amber-400 text-amber-950 text-xs uppercase tracking-widest font-black px-4 py-1.5 rounded-full mb-4 shadow-sm">Nueva Temporada</span>
         <h2 class="text-3xl sm:text-5xl font-black mb-4 tracking-tight leading-tight">Encuentra tu estilo<br><span class="text-amber-300">perfecto hoy.</span></h2>
-        <p class="text-slate-300 text-base max-w-lg leading-relaxed">Explora nuestra colección y coordina tu entrega directa por WhatsApp con atención personalizada.</p>
+        
+        <!-- MEDIOS DE PAGO VISUALES -->
+        <div class="mt-6 pt-6 border-t border-white/10">
+          <p class="text-xs text-slate-300 font-bold uppercase tracking-widest mb-3">Métodos de pago aceptados:</p>
+          <div class="flex flex-wrap gap-2 sm:gap-3">
+            <div class="flex items-center gap-1.5 bg-[#7408B6] text-white px-3 py-1.5 rounded-xl shadow-md border border-[#9123d4]">
+              <i class="ph ph-device-mobile text-lg"></i><span class="font-black italic tracking-wide text-sm">yape</span>
+            </div>
+            <div class="flex items-center gap-1.5 bg-[#00E4C3] text-slate-900 px-3 py-1.5 rounded-xl shadow-md border border-[#1af3d4]">
+              <i class="ph ph-device-mobile text-lg"></i><span class="font-black tracking-tight text-sm">plin</span>
+            </div>
+            <div class="flex items-center gap-1.5 bg-slate-700 text-white px-3 py-1.5 rounded-xl shadow-md border border-slate-600">
+              <i class="ph ph-bank text-lg text-amber-400"></i><span class="font-bold text-xs">Transferencia</span>
+            </div>
+            <div class="flex items-center gap-1.5 bg-emerald-600 text-white px-3 py-1.5 rounded-xl shadow-md border border-emerald-500">
+              <i class="ph ph-hand-coins text-lg text-emerald-200"></i><span class="font-bold text-xs">Contraentrega</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="flex flex-col gap-4 w-full lg:w-auto relative z-10">
         <!-- ATENCIÓN AL CLIENTE -->
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center gap-4 shadow-lg">
-          <div class="w-12 h-12 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-inner">
-            <i class="ph ph-info text-2xl font-bold"></i>
+        <div class="bg-rose-50/10 backdrop-blur-md border border-rose-100/20 p-5 rounded-2xl flex items-center gap-4 shadow-lg hover:bg-rose-50/20 transition">
+          <div class="w-12 h-12 rounded-full bg-rose-200 text-rose-700 flex items-center justify-center shrink-0 shadow-inner">
+            <i class="ph ph-flower-lotus text-3xl font-bold"></i>
           </div>
-          <div class="text-sm text-amber-100 leading-snug">
-            <span class="font-black text-white block mb-0.5 text-base">Atención al cliente</span>
-            Artículos de catálogo se reservan con el <b class="text-amber-300">50% de abono</b> previa coordinación.
+          <div class="text-sm text-rose-100 leading-snug">
+            <span class="font-black text-white block mb-1 text-base tracking-wide">Atención al Cliente</span>
+            Los artículos de catálogo se reservan con el <b class="text-white bg-rose-900/50 px-1 rounded">50% de abono</b> previo a coordinación en WhatsApp.
           </div>
         </div>
-        <!-- NOTA ENVÍOS -->
-        <div class="bg-black/20 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
-          <p class="text-[11px] text-amber-200/90 text-center font-bold tracking-wide uppercase">📦 Importante</p>
-          <p class="text-sm font-black text-white text-center mt-1">Todo envío nacional se hace<br>previa coordinación.</p>
+        
+        <!-- IMPORTANTE ENVÍOS -->
+        <div class="bg-amber-400 p-5 rounded-2xl border border-amber-300 shadow-lg flex items-center gap-4 text-amber-950 transform hover:scale-[1.02] transition cursor-default">
+          <div class="w-12 h-12 rounded-full bg-white/40 flex items-center justify-center shrink-0 shadow-sm">
+            <i class="ph ph-truck text-3xl font-black"></i>
+          </div>
+          <div>
+            <p class="text-xs font-black uppercase tracking-widest mb-0.5">Importante</p>
+            <p class="text-sm font-bold leading-tight">Todo envío nacional se hace<br>previa coordinación.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -126,12 +164,10 @@
       <div class="flex flex-col items-center md:items-end gap-3">
         <p class="text-xs font-black uppercase tracking-widest text-slate-600 mb-1">Síguenos en</p>
         <div class="flex items-center gap-4">
-          
-          <!-- LÍNEA PARA AGREGAR TUS REDES (Reemplaza LINK_DE_..._AQUI por tus enlaces reales) -->
+          <!-- REEMPLAZA LOS LINKS AQUÍ -->
           <a href="LINK_DE_FACEBOOK_AQUI" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-blue-600 hover:scale-110 transition duration-300"><i class="ph ph-facebook-logo text-xl"></i></a>
           <a href="LINK_DE_INSTAGRAM_AQUI" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-pink-600 hover:scale-110 transition duration-300"><i class="ph ph-instagram-logo text-xl"></i></a>
           <a href="LINK_DE_TIKTOK_AQUI" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-black hover:scale-110 transition duration-300"><i class="ph ph-tiktok-logo text-xl"></i></a>
-          
         </div>
       </div>
     </div>
@@ -141,7 +177,6 @@
         &copy; 2026 D'Ana Boutique. Todos los derechos reservados.<br>
         Sitio protegido por derechos de autor y políticas de privacidad comercial.
       </p>
-      <!-- Candado invisible (sin textos que delaten) -->
       <div onclick="openLoginModal()" class="absolute bottom-0 right-4 w-10 h-10 cursor-pointer flex items-center justify-center opacity-30 hover:opacity-100 transition">
         <i class="ph ph-lock-key text-slate-700"></i>
       </div>
@@ -209,7 +244,7 @@
     </div>
   </div>
 
-  <!-- ================= PANEL CARRITO (NUEVO DISEÑO DE ENVÍO) ================= -->
+  <!-- ================= PANEL CARRITO ================= -->
   <div id="cart-drawer" class="fixed inset-0 z-[60] pointer-events-none transition-opacity duration-300 opacity-0">
     <div id="cart-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
     <div id="cart-panel" class="absolute right-0 top-0 h-full w-full max-w-md bg-[#fffaf7] shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 pointer-events-auto">
@@ -349,7 +384,7 @@
                 <option value="natura">🌿 Natura</option>
                 <option value="avon">🌸 Avon</option>
                 <option value="esika">✨ Ésika</option>
-                <option value="unique">💎 Unique</option>
+                <option value="yanbal">💎 Yanbal</option>
                 <option value="fragancias">Fragancias & Perfumes</option>
                 <option value="zapatos">Zapatos de Dama</option>
                 <option value="ropa">Ropa & Accesorios</option>
@@ -411,32 +446,53 @@
           <div id="admin-prod-list" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
         </div>
 
-        <!-- NUEVA ZONA: CONFIGURACIÓN DE BOTONES -->
+        <!-- CONFIGURACIÓN DE BOTONES (9 CATEGORÍAS) -->
         <div class="bg-rose-50 p-6 rounded-3xl border border-rose-200 shadow-sm mt-8">
-          <h4 class="font-black text-rose-900 text-sm uppercase tracking-widest mb-4 flex items-center gap-2">
-            <i class="ph ph-sliders text-rose-500 text-xl"></i> Configuración de Tienda (Activar Marcas)
+          <h4 class="font-black text-rose-900 text-sm uppercase tracking-widest mb-2 flex items-center gap-2">
+            <i class="ph ph-sliders text-rose-500 text-xl"></i> Configuración de Menú
           </h4>
-          <p class="text-xs text-rose-800 mb-4 font-medium">Marca las casillas para mostrar los botones de estas categorías a tus clientes, o desmárcalas para ocultarlos.</p>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-natura" class="w-4 h-4 text-emerald-600" />
-              <span class="text-sm font-bold text-slate-700">🌿 Natura</span>
+          <p class="text-xs text-rose-800 mb-5 font-medium">Marca o desmarca para mostrar u ocultar las pestañas en la barra superior.</p>
+          
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-natura" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Natura</span>
             </label>
-            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-avon" class="w-4 h-4 text-fuchsia-600" />
-              <span class="text-sm font-bold text-slate-700">🌸 Avon</span>
+            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-avon" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Avon</span>
             </label>
-            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-esika" class="w-4 h-4 text-rose-600" />
-              <span class="text-sm font-bold text-slate-700">✨ Ésika</span>
+            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-esika" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Ésika</span>
             </label>
-            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-unique" class="w-4 h-4 text-orange-600" />
-              <span class="text-sm font-bold text-slate-700">💎 Unique</span>
+            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-yanbal" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Yanbal</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-stock" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">En Stock</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-catalogo" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Solo Catálogo</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-fragancias" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Fragancias</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-zapatos" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Zapatos</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-ropa" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Ropa</span>
             </label>
           </div>
-          <button onclick="saveStoreConfig()" class="mt-4 w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md transition">
-            <i class="ph ph-floppy-disk text-lg"></i> Guardar Ajustes
+          <button onclick="saveStoreConfig()" class="mt-5 w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md transition transform hover:-translate-y-1">
+            <i class="ph ph-floppy-disk text-xl"></i> GUARDAR CONFIGURACIÓN
           </button>
         </div>
       </div>
@@ -455,7 +511,12 @@
     let cart = [];
     let currentCategory = "todos";
     let editingProductData = null;
-    let storeConfig = { natura: false, avon: false, esika: false, unique: false };
+    
+    // Estado inicial predeterminado para las 9 categorías
+    let storeConfig = {
+      natura: false, avon: false, esika: false, yanbal: false,
+      stock: true, catalogo: true, fragancias: true, zapatos: true, ropa: true
+    };
 
     window.addEventListener('load', () => {
       setTimeout(() => {
@@ -480,42 +541,45 @@
       setupPasswordEnterKey();
     });
 
-    // CONFIGURACIÓN DE BOTONES DINÁMICOS
+    // CONFIGURACIÓN DE BOTONES
     async function fetchStoreConfig() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}config.json`);
         const data = await res.json();
+        // Mezclamos la configuración de Firebase con la inicial por si faltan opciones
         if (data) storeConfig = { ...storeConfig, ...data };
-        
         applyConfigToUI();
       } catch (e) {
         console.error("Error cargando configuración", e);
+        applyConfigToUI();
       }
     }
 
     function applyConfigToUI() {
-      // Mostrar/Ocultar en la barra superior
-      document.getElementById("btn-cat-natura").style.display = storeConfig.natura ? 'inline-block' : 'none';
-      document.getElementById("btn-cat-avon").style.display = storeConfig.avon ? 'inline-block' : 'none';
-      document.getElementById("btn-cat-esika").style.display = storeConfig.esika ? 'inline-block' : 'none';
-      document.getElementById("btn-cat-unique").style.display = storeConfig.unique ? 'inline-block' : 'none';
-      
-      // Marcar checkboxes en el panel
-      document.getElementById("cfg-natura").checked = storeConfig.natura;
-      document.getElementById("cfg-avon").checked = storeConfig.avon;
-      document.getElementById("cfg-esika").checked = storeConfig.esika;
-      document.getElementById("cfg-unique").checked = storeConfig.unique;
+      // Mostrar/Ocultar botones del Navbar
+      const cats = ['natura', 'avon', 'esika', 'yanbal', 'stock', 'catalogo', 'fragancias', 'zapatos', 'ropa'];
+      cats.forEach(cat => {
+        const btn = document.getElementById(`btn-cat-${cat}`);
+        const chk = document.getElementById(`cfg-${cat}`);
+        if (btn) btn.style.display = storeConfig[cat] ? 'inline-flex' : 'none';
+        if (chk) chk.checked = storeConfig[cat];
+      });
     }
 
     async function saveStoreConfig() {
       const btn = event.currentTarget;
-      btn.innerHTML = `<i class="ph ph-spinner animate-spin text-lg"></i> Guardando...`;
+      btn.innerHTML = `<i class="ph ph-spinner animate-spin text-xl"></i> GUARDANDO...`;
       
       const newConfig = {
         natura: document.getElementById("cfg-natura").checked,
         avon: document.getElementById("cfg-avon").checked,
         esika: document.getElementById("cfg-esika").checked,
-        unique: document.getElementById("cfg-unique").checked
+        yanbal: document.getElementById("cfg-yanbal").checked,
+        stock: document.getElementById("cfg-stock").checked,
+        catalogo: document.getElementById("cfg-catalogo").checked,
+        fragancias: document.getElementById("cfg-fragancias").checked,
+        zapatos: document.getElementById("cfg-zapatos").checked,
+        ropa: document.getElementById("cfg-ropa").checked
       };
 
       try {
@@ -525,11 +589,11 @@
         });
         storeConfig = newConfig;
         applyConfigToUI();
-        alert("Configuración guardada. Los botones se han actualizado.");
+        alert("¡Configuración guardada exitosamente!");
       } catch(e) {
         alert("Error al guardar configuración.");
       } finally {
-        btn.innerHTML = `<i class="ph ph-floppy-disk text-lg"></i> Guardar Ajustes`;
+        btn.innerHTML = `<i class="ph ph-floppy-disk text-xl"></i> GUARDAR CONFIGURACIÓN`;
       }
     }
 
@@ -569,12 +633,11 @@
     function handleCategorySelectionChange() {
       const cat = document.getElementById("adm-cat").value;
       const checkPedido = document.getElementById("adm-is-pedido");
-      if (cat === "natura" || cat === "avon" || cat === "esika" || cat === "unique") {
+      if (cat === "natura" || cat === "avon" || cat === "esika" || cat === "yanbal") {
         checkPedido.checked = true;
       }
     }
 
-    // FORMULARIO DE ENVÍO - CAMBIO CONTRAENTREGA/NACIONAL
     function toggleDeliveryOptions() {
       const type = document.getElementById("cust-delivery-type").value;
       const boxContraentrega = document.getElementById("box-contraentrega");
@@ -665,6 +728,10 @@
                 : `<span class="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">⚡ En Stock</span>`
               }
             </div>
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-rose-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4 z-10">
+              <span class="text-white text-xs font-bold flex items-center gap-1"><i class="ph ph-eye text-lg"></i> Ver detalles</span>
+            </div>
           </div>
           
           <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between bg-[#fffcfb] relative z-20">
@@ -678,7 +745,7 @@
                 <span class="text-xl font-black text-slate-900">S/ ${Number(p.price).toFixed(2)}</span>
               </div>
               <div class="flex items-center gap-2">
-                <button onclick="consultProduct('${p.firebaseId}')" class="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm" title="Consultar">
+                <button onclick="consultProduct('${p.firebaseId}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm" title="Consultar">
                   <i class="ph ph-whatsapp-logo font-bold text-lg"></i>
                 </button>
                 <button onclick="addToCart('${p.firebaseId}')" ${isOutOfStock ? 'disabled' : ''} class="${isOutOfStock ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-rose-600 hover:scale-105 shadow-md'} w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center">
@@ -734,7 +801,7 @@
         addText.textContent = "AGOTADO";
       } else {
         addBtn.disabled = false;
-        addText.textContent = "Añadir";
+        addText.textContent = "Añadir a mi pedido";
         addBtn.onclick = () => {
           addToCart(prod.firebaseId);
           closeProductModal();
@@ -756,10 +823,18 @@
       currentCategory = cat;
       document.querySelectorAll(".cat-pill").forEach(btn => {
         btn.classList.remove("bg-slate-900", "text-white", "shadow-md");
-        btn.classList.add("bg-white", "text-slate-600");
+        // Restaurar bordes a los botones de marcas si no están seleccionados
+        if (!btn.id.includes("cat-natura") && !btn.id.includes("cat-avon") && !btn.id.includes("cat-esika") && !btn.id.includes("cat-yanbal")) {
+            btn.classList.add("bg-white", "text-slate-600");
+        }
       });
-      element.classList.remove("bg-white", "text-slate-600");
-      element.classList.add("bg-slate-900", "text-white", "shadow-md");
+      
+      // Estilizar el botón activo
+      if (cat === 'todos' || cat === 'stock' || cat === 'catalogo' || cat === 'fragancias' || cat === 'zapatos' || cat === 'ropa') {
+        element.classList.remove("bg-white", "text-slate-600");
+        element.classList.add("bg-slate-900", "text-white", "shadow-md");
+      }
+      
       renderProducts();
     }
 
@@ -982,7 +1057,6 @@
       const totalDisplay = document.getElementById("cart-total");
       const anticipoDisplay = document.getElementById("cart-anticipo");
       const anticipoRow = document.getElementById("row-anticipo");
-      const alertPedido = document.getElementById("cart-pedido-alert");
 
       counter.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
 
@@ -990,7 +1064,6 @@
         list.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-rose-900/30 space-y-3"><i class="ph ph-shopping-cart text-6xl"></i><p class="font-bold text-sm">Tu carrito está vacío</p></div>`;
         totalDisplay.textContent = "S/ 0.00";
         anticipoRow.classList.add("hidden");
-        alertPedido.classList.add("hidden");
         return;
       }
 
@@ -1028,10 +1101,8 @@
       if (hasPedido) {
         anticipoDisplay.textContent = `S/ ${(montoPedidoTotal * 0.50).toFixed(2)}`;
         anticipoRow.classList.remove("hidden");
-        alertPedido.classList.remove("hidden");
       } else {
         anticipoRow.classList.add("hidden");
-        alertPedido.classList.add("hidden");
       }
     }
 
@@ -1067,8 +1138,8 @@
       text += `👤 *Cliente:* ${name}\n`;
 
       if (dType === "Contraentrega") {
-        text += `📍 *Modalidad:* Contraentrega (Chiclayo)\n`;
-        text += `🎯 *Punto:* ${point}\n`;
+        text += `📍 *Modalidad:* Contraentrega (Solo Chiclayo)\n`;
+        text += `🎯 *Punto Acordado:* ${point}\n`;
       } else {
         text += `📍 *Modalidad:* Envío Nacional\n`;
         text += `🏙️ *Destino:* ${dep} - ${dist}\n`;
@@ -1089,7 +1160,7 @@
       text += `💰 *TOTAL: S/ ${total.toFixed(2)}*\n`;
 
       if (prodsPedido.length > 0) {
-        text += `\n📌 *CONDICIONES:*\n`;
+        text += `\n📌 *CONDICIONES DE PAGO:*\n`;
         text += `✅ *Anticipo a depositar (50%):* S/ ${anticipoRequerido.toFixed(2)}\n`;
         text += `🤝 *Saldo:* S/ ${saldoRestante.toFixed(2)}\n\n`;
         text += `Hola, envíame los datos de Yape/Plin o cuenta para hacer el anticipo y coordinar la entrega.`;
