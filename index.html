@@ -31,23 +31,23 @@
 
   <!-- ================= NAVBAR PREMIUM ================= -->
   <header class="sticky top-0 z-40 bg-[#fffaf7]/95 backdrop-blur-lg border-b border-rose-100 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-28 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-24 sm:h-28 flex items-center justify-between">
       
-      <!-- LOGO Y TÍTULO (ACCESO SECRETO AL PANEL) -->
-      <div id="logo-trigger" onclick="openLoginModal()" class="flex items-center gap-4 cursor-pointer select-none group">
-        <img src="logo.png" alt="Logo" class="h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" onerror="this.src='https://placehold.co/150x150?text=D%27Ana'"/>
-        <div class="hidden sm:block">
-          <h1 class="font-black text-3xl leading-none tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-rose-800 to-slate-900">D'Ana Boutique</h1>
-          <p class="text-[11px] font-bold text-rose-900/60 uppercase tracking-[0.2em] mt-1">Moda, Calzado & Fragancias</p>
+      <!-- LOGO Y TÍTULO (AHORA VISIBLE Y ADAPTADO EN CELULARES) -->
+      <div id="logo-trigger" onclick="openLoginModal()" class="flex items-center gap-2 sm:gap-4 cursor-pointer select-none group">
+        <img src="logo.png" alt="Logo" class="h-14 sm:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" onerror="this.src='https://placehold.co/150x150?text=D%27Ana'"/>
+        <div class="flex flex-col justify-center">
+          <h1 class="font-black text-lg sm:text-3xl leading-none tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-rose-800 to-slate-900">D'Ana Boutique</h1>
+          <p class="text-[7.5px] sm:text-[11px] font-bold text-rose-900/60 uppercase tracking-[0.1em] sm:tracking-[0.2em] mt-0.5 sm:mt-1 whitespace-nowrap">Moda, Calzado & Fragancias</p>
         </div>
       </div>
       
       <!-- BOTÓN CARRITO MODERNO -->
-      <div class="flex items-center gap-3">
-        <button id="btn-open-cart" class="relative bg-gradient-to-r from-slate-900 to-slate-800 hover:from-rose-900 hover:to-slate-900 text-white px-5 py-3 rounded-2xl flex items-center gap-2.5 shadow-lg hover:shadow-xl transition-all duration-300">
-          <i class="ph ph-shopping-bag text-2xl text-amber-400"></i>
-          <span class="font-bold text-sm hidden sm:inline">Mi Pedido</span>
-          <span id="cart-counter" class="absolute -top-2 -right-2 bg-rose-500 text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-md">0</span>
+      <div class="flex items-center gap-3 shrink-0">
+        <button id="btn-open-cart" class="relative bg-gradient-to-r from-slate-900 to-slate-800 hover:from-rose-900 hover:to-slate-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300">
+          <i class="ph ph-shopping-bag text-xl sm:text-2xl text-amber-400"></i>
+          <span class="font-bold text-xs sm:text-sm hidden sm:inline">Mi Pedido</span>
+          <span id="cart-counter" class="absolute -top-2 -right-2 bg-rose-500 text-white text-[10px] sm:text-xs font-black w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center border-2 border-white shadow-md">0</span>
         </button>
       </div>
     </div>
@@ -145,7 +145,7 @@
     <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 hidden"></div>
   </main>
 
-  <!-- ================= FOOTER PROFESIONAL ================= -->
+  <!-- ================= FOOTER Y TÉRMINOS LEGALES ================= -->
   <footer class="bg-slate-950 text-slate-400 pt-16 pb-8 border-t-4 border-rose-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center md:items-start gap-10">
       
@@ -173,9 +173,19 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-12 pt-8 border-t border-slate-800/50 text-center flex flex-col items-center relative">
+      
+      <!-- BOTONES DE TÉRMINOS Y CONDICIONES -->
+      <div class="mb-6 flex flex-wrap justify-center gap-3 sm:gap-6 text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">
+        <button onclick="openLegalModal('terminos')" class="hover:text-rose-500 transition">Términos y Condiciones</button>
+        <span class="text-slate-700 hidden sm:inline">|</span>
+        <button onclick="openLegalModal('envios')" class="hover:text-rose-500 transition">Políticas de Envío</button>
+        <span class="text-slate-700 hidden sm:inline">|</span>
+        <button onclick="openLegalModal('devoluciones')" class="hover:text-rose-500 transition">Cambios y Devoluciones</button>
+      </div>
+
       <p class="text-xs text-slate-600 font-medium">
         &copy; 2026 D'Ana Boutique. Todos los derechos reservados.<br>
-        Sitio protegido por derechos de autor y políticas de privacidad comercial.
+        Sitio protegido por políticas de comercio y privacidad.
       </p>
       <div onclick="openLoginModal()" class="absolute bottom-0 right-4 w-10 h-10 cursor-pointer flex items-center justify-center opacity-30 hover:opacity-100 transition">
         <i class="ph ph-lock-key text-slate-700"></i>
@@ -244,6 +254,24 @@
     </div>
   </div>
 
+  <!-- ================= MODAL LEGAL (TÉRMINOS Y CONDICIONES) ================= -->
+  <div id="legal-modal" class="fixed inset-0 z-[90] hidden bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-200">
+      <div class="p-6 border-b border-rose-100 flex items-center justify-between bg-slate-50">
+        <h3 id="legal-title" class="font-black text-slate-900 text-lg sm:text-xl tracking-tight">Título Legal</h3>
+        <button onclick="closeLegalModal()" class="text-slate-400 hover:text-rose-700 bg-white shadow-sm w-9 h-9 rounded-full flex items-center justify-center transition shrink-0">
+          <i class="ph ph-x text-lg font-bold"></i>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto flex-1">
+        <div id="legal-content" class="text-sm text-slate-600 space-y-4 leading-relaxed font-medium"></div>
+      </div>
+      <div class="p-4 border-t border-slate-100 bg-slate-50 text-center">
+        <button onclick="closeLegalModal()" class="bg-slate-900 hover:bg-rose-700 text-white font-bold py-3 px-8 rounded-xl text-sm transition shadow-md">Entendido</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= PANEL CARRITO ================= -->
   <div id="cart-drawer" class="fixed inset-0 z-[60] pointer-events-none transition-opacity duration-300 opacity-0">
     <div id="cart-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
@@ -262,7 +290,6 @@
 
       <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
 
-      <!-- FORMULARIO DE ENVÍO Y PAGO SIMPLIFICADO -->
       <div class="p-6 border-t border-rose-100 bg-white space-y-4 shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
         <div id="cart-pedido-alert" class="hidden bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900 font-medium">
           📦 Tu pedido incluye artículos <b>a pedido</b>. Coordinaremos el <b>50% de anticipo</b> vía WhatsApp.
@@ -279,7 +306,6 @@
             </select>
           </div>
 
-          <!-- Puntos Chiclayo -->
           <div id="box-contraentrega" class="flex flex-col">
             <select id="cust-delivery-point" class="w-full text-sm p-3 rounded-xl border border-rose-200 bg-rose-50 text-rose-900 font-bold focus:border-rose-500 outline-none transition cursor-pointer">
               <option value="Real Plaza Chiclayo">Real Plaza Chiclayo</option>
@@ -289,7 +315,6 @@
             </select>
           </div>
 
-          <!-- Campos Envío Nacional -->
           <div id="box-nacional" class="hidden flex-col gap-3">
             <input type="text" id="cust-dep" placeholder="Departamento (Ej: Lima)" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 outline-none transition" />
             <input type="text" id="cust-dist" placeholder="Provincia / Distrito" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 outline-none transition" />
@@ -518,6 +543,32 @@
       stock: true, catalogo: true, fragancias: true, zapatos: true, ropa: true
     };
 
+    // Textos Legales Dinámicos
+    const legalTexts = {
+      terminos: {
+        title: "Términos y Condiciones",
+        content: `
+          <p><b>1. Aceptación del Servicio:</b> Al realizar un pedido a través de D'Ana Boutique, el cliente acepta íntegramente las presentes condiciones de venta.</p>
+          <p><b>2. Precios y Formas de Pago:</b> Todos los precios están expresados en Soles (S/). Los pedidos de productos por catálogo (Natura, Avon, Ésika, Yanbal) requieren un anticipo indispensable del <b>50% del costo total</b>. El saldo restante se cancela antes o al momento de la entrega, dependiendo de la modalidad elegida.</p>
+          <p><b>3. Disponibilidad de Stock:</b> El inventario es limitado. En caso excepcional de quiebre de stock tras realizar una reserva, nos comunicaremos inmediatamente con el cliente para ofrecer un producto alternativo o realizar el reembolso total del abono.</p>
+          <p><b>4. Privacidad:</b> Los datos personales proporcionados (nombre, teléfono y dirección) son estrictamente confidenciales y se utilizarán única y exclusivamente para la correcta gestión, despacho y entrega de su pedido.</p>`
+      },
+      envios: {
+        title: "Políticas de Envío",
+        content: `
+          <p><b>1. Entregas Locales (Chiclayo):</b> Realizamos servicio de contraentrega sin costo adicional en puntos céntricos específicos y seguros (Real Plaza, Parque Principal, Plaza Elías Aguirre, Banco de la Nación centro).</p>
+          <p><b>2. Envíos Nacionales:</b> Realizamos envíos a todo el Perú mediante la agencia <b>Shalom</b>. Todo envío nacional se realiza <b>previa coordinación</b>. El costo del flete interprovincial es asumido por el comprador y pagado directamente en destino (si la agencia lo permite) o sumado al total de la compra antes del despacho.</p>
+          <p><b>3. Tiempos de Despacho:</b> Los artículos clasificados como "En Stock" se despachan en un plazo de 24 a 48 horas hábiles tras la confirmación de la orden. Los productos "A Pedido" dependen exclusivamente de las fechas de cierre de campaña de cada marca respectiva, lo cual se le informará al cliente vía WhatsApp.</p>`
+      },
+      devoluciones: {
+        title: "Cambios y Devoluciones",
+        content: `
+          <p><b>1. Condiciones Generales de Cambio:</b> Se aceptarán cambios de mercancía únicamente por evidentes fallas de fábrica dentro de los primeros <b>7 días calendario</b> posteriores a la recepción del producto. El artículo debe ser devuelto sin señales de uso, con sus etiquetas intactas, sellos de seguridad originales y en su empaque de fábrica.</p>
+          <p><b>2. Restricciones por Higiene y Salud:</b> En estricto cumplimiento de las medidas de salubridad vigentes, <b>no se aceptan cambios ni devoluciones</b> de productos de uso personal (maquillaje, cremas, fragancias, colonias o ropa interior) una vez que sus sellos han sido abiertos, rotos o probados.</p>
+          <p><b>3. Productos a Pedido (Catálogo):</b> No se realizan devoluciones de dinero ni cancelaciones de productos solicitados específicamente a pedido si el cliente desiste de la compra de forma unilateral, ya que la separación de la orden compromete el 50% de abono entregado a las marcas para procesar la unidad.</p>`
+      }
+    };
+
     window.addEventListener('load', () => {
       setTimeout(() => {
         const splash = document.getElementById('splash-screen');
@@ -525,6 +576,17 @@
         setTimeout(() => splash.classList.add('hidden'), 700);
       }, 1000);
     });
+
+    function openLegalModal(type) {
+      const data = legalTexts[type];
+      document.getElementById('legal-title').innerHTML = `<i class="ph ph-file-text text-rose-500 mr-2"></i>${data.title}`;
+      document.getElementById('legal-content').innerHTML = data.content;
+      document.getElementById('legal-modal').classList.remove('hidden');
+    }
+
+    function closeLegalModal() {
+      document.getElementById('legal-modal').classList.add('hidden');
+    }
 
     function getOptimizedImageUrl(url) {
       if (!url) return 'https://placehold.co/400x400?text=Sin+Imagen';
@@ -546,7 +608,6 @@
       try {
         const res = await fetch(`${FIREBASE_DB_URL}config.json`);
         const data = await res.json();
-        // Mezclamos la configuración de Firebase con la inicial por si faltan opciones
         if (data) storeConfig = { ...storeConfig, ...data };
         applyConfigToUI();
       } catch (e) {
@@ -556,7 +617,6 @@
     }
 
     function applyConfigToUI() {
-      // Mostrar/Ocultar botones del Navbar
       const cats = ['natura', 'avon', 'esika', 'yanbal', 'stock', 'catalogo', 'fragancias', 'zapatos', 'ropa'];
       cats.forEach(cat => {
         const btn = document.getElementById(`btn-cat-${cat}`);
