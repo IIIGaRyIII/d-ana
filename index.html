@@ -27,7 +27,7 @@
   <header class="sticky top-0 z-40 bg-[#fffaf7]/95 backdrop-blur-lg border-b border-rose-100 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-28 flex items-center justify-between">
       
-      <!-- LOGO Y TÍTULO (ACCESO SECRETO AL PANEL SIN TEXTOS QUE DELATEN) -->
+      <!-- LOGO Y TÍTULO (ACCESO SECRETO AL PANEL) -->
       <div id="logo-trigger" onclick="openLoginModal()" class="flex items-center gap-4 cursor-pointer select-none group">
         <img src="logo.png" alt="Logo" class="h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" onerror="this.src='https://placehold.co/150x150?text=D%27Ana'"/>
         <div class="hidden sm:block">
@@ -46,13 +46,18 @@
       </div>
     </div>
 
-    <!-- BARRA DE CATEGORÍAS -->
+    <!-- BARRA DE CATEGORÍAS (DINÁMICA) -->
     <div class="bg-white/60 border-t border-rose-50 overflow-x-auto shadow-inner">
       <div class="max-w-7xl mx-auto px-4 py-3 flex gap-2.5">
         <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
-        <button onclick="filterCategory('natura', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition whitespace-nowrap">🌿 Natura</button>
-        <button onclick="filterCategory('avon', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-fuchsia-50 text-fuchsia-800 border border-fuchsia-200 hover:bg-fuchsia-100 transition whitespace-nowrap">🌸 Avon</button>
-        <button onclick="filterCategory('stock', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">⚡ En Stock (Contraentrega)</button>
+        
+        <!-- BOTONES DE MARCAS (SE OCULTAN/MUESTRAN DESDE EL PANEL) -->
+        <button id="btn-cat-natura" onclick="filterCategory('natura', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition whitespace-nowrap">🌿 Natura</button>
+        <button id="btn-cat-avon" onclick="filterCategory('avon', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-fuchsia-50 text-fuchsia-800 border border-fuchsia-200 hover:bg-fuchsia-100 transition whitespace-nowrap">🌸 Avon</button>
+        <button id="btn-cat-esika" onclick="filterCategory('esika', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100 transition whitespace-nowrap">✨ Ésika</button>
+        <button id="btn-cat-unique" onclick="filterCategory('unique', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-orange-50 text-orange-800 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap">💎 Unique</button>
+        
+        <button onclick="filterCategory('stock', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">⚡ En Stock</button>
         <button onclick="filterCategory('catalogo', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition whitespace-nowrap">📖 Solo Catálogo</button>
         <button onclick="filterCategory('fragancias', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Fragancias & Perfumes</button>
         <button onclick="filterCategory('zapatos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Zapatos de Dama</button>
@@ -61,10 +66,10 @@
     </div>
   </header>
 
-  <!-- ================= BANNER PRINCIPAL (ACTUALIZADO) ================= -->
+  <!-- ================= BANNER PRINCIPAL ================= -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-4 w-full">
     <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 text-white rounded-3xl p-8 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden">
-      <!-- Elemento decorativo de fondo -->
+      <!-- Elemento decorativo -->
       <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
 
       <div class="relative z-10">
@@ -74,7 +79,7 @@
       </div>
 
       <div class="flex flex-col gap-4 w-full lg:w-auto relative z-10">
-        <!-- ATENCIÓN AL CLIENTE ACTUALIZADO -->
+        <!-- ATENCIÓN AL CLIENTE -->
         <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center gap-4 shadow-lg">
           <div class="w-12 h-12 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-inner">
             <i class="ph ph-info text-2xl font-bold"></i>
@@ -84,16 +89,10 @@
             Artículos de catálogo se reservan con el <b class="text-amber-300">50% de abono</b> previa coordinación.
           </div>
         </div>
-        <!-- MEDIOS DE PAGO ACTUALIZADOS -->
+        <!-- NOTA ENVÍOS -->
         <div class="bg-black/20 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
-          <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-2 text-center">Medios de pago oficiales</p>
-          <div class="flex flex-wrap gap-2 justify-center font-black text-xs sm:text-sm text-white mb-2">
-            <span class="bg-indigo-600 px-3 py-1 rounded-lg shadow-sm">Yape</span>
-            <span class="bg-sky-500 px-3 py-1 rounded-lg shadow-sm">Plin</span>
-            <span class="bg-emerald-600 px-3 py-1 rounded-lg shadow-sm">Efectivo</span>
-            <span class="bg-slate-700 px-3 py-1 rounded-lg shadow-sm">Transferencias</span>
-          </div>
-          <p class="text-[10px] text-amber-200/80 text-center font-bold tracking-wide">* Nota: Todo envío nacional se hace previa coordinación.</p>
+          <p class="text-[11px] text-amber-200/90 text-center font-bold tracking-wide uppercase">📦 Importante</p>
+          <p class="text-sm font-black text-white text-center mt-1">Todo envío nacional se hace<br>previa coordinación.</p>
         </div>
       </div>
     </div>
@@ -108,18 +107,18 @@
     <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 hidden"></div>
   </main>
 
-  <!-- ================= FOOTER PROFESIONAL (ACTUALIZADO) ================= -->
+  <!-- ================= FOOTER PROFESIONAL ================= -->
   <footer class="bg-slate-950 text-slate-400 pt-16 pb-8 border-t-4 border-rose-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center md:items-start gap-10">
       
       <div class="text-center md:text-left max-w-sm">
         <h2 class="text-2xl font-black text-white tracking-tight mb-3">D'Ana Boutique</h2>
-        <p class="text-sm leading-relaxed text-slate-500">Tu tienda de confianza en moda, accesorios y perfumes. Ofrecemos moda, fragancias y calzado con entrega segura y atención personalizada.</p>
+        <p class="text-sm leading-relaxed text-slate-500">Tu tienda de confianza en moda, accesorios y perfumes. Ofrecemos calidad con entrega segura y atención personalizada.</p>
       </div>
       
       <div class="flex flex-col items-center md:items-start gap-3 text-sm font-medium">
         <p class="flex items-center gap-3"><i class="ph ph-shield-check text-emerald-500 text-xl"></i> Compras 100% Seguras</p>
-        <p class="flex items-center gap-3"><i class="ph ph-truck text-rose-500 text-xl"></i> Envíos a todo el Perú <span class="text-[10px] text-slate-500 ml-1">(Previa coordinación)</span></p>
+        <p class="flex items-center gap-3"><i class="ph ph-truck text-rose-500 text-xl"></i> Envíos a todo el Perú</p>
         <p class="flex items-center gap-3"><i class="ph ph-whatsapp-logo text-green-500 text-xl"></i> Atención Inmediata</p>
       </div>
 
@@ -127,9 +126,12 @@
       <div class="flex flex-col items-center md:items-end gap-3">
         <p class="text-xs font-black uppercase tracking-widest text-slate-600 mb-1">Síguenos en</p>
         <div class="flex items-center gap-4">
-          <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-blue-600 hover:scale-110 transition duration-300"><i class="ph ph-facebook-logo text-xl"></i></a>
-          <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-pink-600 hover:scale-110 transition duration-300"><i class="ph ph-instagram-logo text-xl"></i></a>
-          <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-black hover:scale-110 transition duration-300"><i class="ph ph-tiktok-logo text-xl"></i></a>
+          
+          <!-- LÍNEA PARA AGREGAR TUS REDES (Reemplaza LINK_DE_..._AQUI por tus enlaces reales) -->
+          <a href="LINK_DE_FACEBOOK_AQUI" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-blue-600 hover:scale-110 transition duration-300"><i class="ph ph-facebook-logo text-xl"></i></a>
+          <a href="LINK_DE_INSTAGRAM_AQUI" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-pink-600 hover:scale-110 transition duration-300"><i class="ph ph-instagram-logo text-xl"></i></a>
+          <a href="LINK_DE_TIKTOK_AQUI" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-black hover:scale-110 transition duration-300"><i class="ph ph-tiktok-logo text-xl"></i></a>
+          
         </div>
       </div>
     </div>
@@ -169,9 +171,6 @@
         <button onclick="closeProductModal()" class="absolute top-5 right-5 bg-white/90 hover:bg-slate-900 text-slate-800 hover:text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition">
           <i class="ph ph-x text-xl font-bold"></i>
         </button>
-        <div class="absolute bottom-4 right-4 bg-black/60 text-white rounded-full p-2.5 pointer-events-none opacity-0 group-hover:opacity-100 transition duration-300">
-          <i class="ph ph-magnifying-glass-plus text-2xl"></i>
-        </div>
       </div>
 
       <div class="p-6 sm:p-8 flex-1 overflow-y-auto space-y-5">
@@ -188,7 +187,7 @@
             <i class="ph ph-warning-circle text-amber-600 text-lg font-bold"></i>
             <b class="text-amber-800">Condición de Catálogo:</b>
           </div>
-          Se reserva previo abono del <b>50% del costo total</b> vía Yape/Plin. El saldo restante se cancela al entregar.
+          Se reserva previo abono del <b>50% del costo total</b>. El saldo restante se cancela al entregar.
         </div>
 
         <div class="border-t border-slate-100 pt-4">
@@ -197,7 +196,6 @@
         </div>
       </div>
 
-      <!-- BOTONES: CONSULTAR Y AGREGAR -->
       <div class="p-5 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row items-center gap-3">
         <button id="modal-consult-btn" class="w-full sm:w-auto bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold py-3.5 px-5 rounded-2xl flex items-center justify-center gap-2 transition border border-emerald-200">
           <i class="ph ph-whatsapp-logo text-2xl"></i>
@@ -211,7 +209,7 @@
     </div>
   </div>
 
-  <!-- ================= PANEL CARRITO ================= -->
+  <!-- ================= PANEL CARRITO (NUEVO DISEÑO DE ENVÍO) ================= -->
   <div id="cart-drawer" class="fixed inset-0 z-[60] pointer-events-none transition-opacity duration-300 opacity-0">
     <div id="cart-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
     <div id="cart-panel" class="absolute right-0 top-0 h-full w-full max-w-md bg-[#fffaf7] shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 pointer-events-auto">
@@ -229,25 +227,24 @@
 
       <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
 
-      <!-- FORMULARIO DE ENVÍO Y PAGO -->
+      <!-- FORMULARIO DE ENVÍO Y PAGO SIMPLIFICADO -->
       <div class="p-6 border-t border-rose-100 bg-white space-y-4 shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
         <div id="cart-pedido-alert" class="hidden bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900 font-medium">
-          📦 Tu pedido incluye artículos <b>a pedido</b>. Se coordinará el <b>50% de anticipo</b> vía Yape/Plin.
+          📦 Tu pedido incluye artículos <b>a pedido</b>. Coordinaremos el <b>50% de anticipo</b> vía WhatsApp.
         </div>
 
         <div class="space-y-3">
-          <label class="block text-xs font-black text-slate-800 uppercase tracking-wider">Tus Datos para la Entrega</label>
-          <input type="text" id="cust-name" placeholder="Escribe tu nombre completo" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition" />
+          <label class="block text-xs font-black text-slate-800 uppercase tracking-wider">Tus Datos de Entrega</label>
+          <input type="text" id="cust-name" placeholder="Nombre completo" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition" />
           
           <div class="flex flex-col pt-1">
-            <select id="cust-payment" onchange="toggleDeliveryOptions()" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-700 focus:bg-white focus:border-rose-500 outline-none transition cursor-pointer">
-              <option value="Contraentrega">Contraentrega (Puntos céntricos Chiclayo)</option>
-              <option value="Yape">Pago con Yape</option>
-              <option value="Plin">Pago con Plin</option>
-              <option value="Transferencia">Transferencia Bancaria</option>
+            <select id="cust-delivery-type" onchange="toggleDeliveryOptions()" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-700 focus:bg-white focus:border-rose-500 outline-none transition cursor-pointer">
+              <option value="Contraentrega">Contraentrega (Solo Chiclayo)</option>
+              <option value="EnvioNacional">Envío Nacional</option>
             </select>
           </div>
 
+          <!-- Puntos Chiclayo -->
           <div id="box-contraentrega" class="flex flex-col">
             <select id="cust-delivery-point" class="w-full text-sm p-3 rounded-xl border border-rose-200 bg-rose-50 text-rose-900 font-bold focus:border-rose-500 outline-none transition cursor-pointer">
               <option value="Real Plaza Chiclayo">Real Plaza Chiclayo</option>
@@ -257,8 +254,13 @@
             </select>
           </div>
 
-          <div id="box-address" class="hidden flex flex-col">
-            <input type="text" id="cust-address" placeholder="Ej: Urb. Los Parques / Distrito / Ref." class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 outline-none transition" />
+          <!-- Campos Envío Nacional -->
+          <div id="box-nacional" class="hidden flex-col gap-3">
+            <input type="text" id="cust-dep" placeholder="Departamento (Ej: Lima)" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 outline-none transition" />
+            <input type="text" id="cust-dist" placeholder="Provincia / Distrito" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 outline-none transition" />
+            <select id="cust-agency" disabled class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-100 font-bold text-slate-600 outline-none opacity-80 cursor-not-allowed">
+              <option value="Shalom">Agencia: Shalom (Sugerido)</option>
+            </select>
           </div>
         </div>
 
@@ -281,7 +283,7 @@
     </div>
   </div>
 
-  <!-- ================= MODAL DE LOGIN (ESTILIZADO) ================= -->
+  <!-- ================= MODAL DE LOGIN ================= -->
   <div id="login-modal" class="fixed inset-0 z-[80] hidden bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-slate-100">
       <div class="p-6 text-center space-y-2 relative">
@@ -334,7 +336,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1.5">
               <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Nombre</label>
-              <input type="text" id="adm-name" placeholder="Ej: Pulpa Castaña Natura" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-medium" />
+              <input type="text" id="adm-name" placeholder="Ej: Pulpa Natura" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-medium" />
             </div>
             <div class="space-y-1.5">
               <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Precio (S/)</label>
@@ -344,8 +346,10 @@
             <div class="space-y-1.5">
               <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Categoría</label>
               <select id="adm-cat" onchange="handleCategorySelectionChange()" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-bold text-slate-700">
-                <option value="natura">🌿 Natura (Catálogo)</option>
-                <option value="avon">🌸 Avon (Catálogo)</option>
+                <option value="natura">🌿 Natura</option>
+                <option value="avon">🌸 Avon</option>
+                <option value="esika">✨ Ésika</option>
+                <option value="unique">💎 Unique</option>
                 <option value="fragancias">Fragancias & Perfumes</option>
                 <option value="zapatos">Zapatos de Dama</option>
                 <option value="ropa">Ropa & Accesorios</option>
@@ -370,7 +374,7 @@
                 <div class="flex-grow border-t border-slate-300"></div>
               </div>
               <div>
-                <label class="text-xs font-bold text-slate-600 block mb-1">Opción B: Pegar Link de Internet (No consume espacio)</label>
+                <label class="text-xs font-bold text-slate-600 block mb-1">Opción B: Pegar Link de Internet</label>
                 <input type="text" id="adm-img-url" placeholder="https://ejemplo.com/foto.jpg" class="w-full p-3 border border-slate-200 rounded-xl text-xs bg-white focus:border-slate-900 outline-none transition" />
               </div>
             </div>
@@ -406,6 +410,35 @@
           </h4>
           <div id="admin-prod-list" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
         </div>
+
+        <!-- NUEVA ZONA: CONFIGURACIÓN DE BOTONES -->
+        <div class="bg-rose-50 p-6 rounded-3xl border border-rose-200 shadow-sm mt-8">
+          <h4 class="font-black text-rose-900 text-sm uppercase tracking-widest mb-4 flex items-center gap-2">
+            <i class="ph ph-sliders text-rose-500 text-xl"></i> Configuración de Tienda (Activar Marcas)
+          </h4>
+          <p class="text-xs text-rose-800 mb-4 font-medium">Marca las casillas para mostrar los botones de estas categorías a tus clientes, o desmárcalas para ocultarlos.</p>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-natura" class="w-4 h-4 text-emerald-600" />
+              <span class="text-sm font-bold text-slate-700">🌿 Natura</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-avon" class="w-4 h-4 text-fuchsia-600" />
+              <span class="text-sm font-bold text-slate-700">🌸 Avon</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-esika" class="w-4 h-4 text-rose-600" />
+              <span class="text-sm font-bold text-slate-700">✨ Ésika</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+              <input type="checkbox" id="cfg-unique" class="w-4 h-4 text-orange-600" />
+              <span class="text-sm font-bold text-slate-700">💎 Unique</span>
+            </label>
+          </div>
+          <button onclick="saveStoreConfig()" class="mt-4 w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md transition">
+            <i class="ph ph-floppy-disk text-lg"></i> Guardar Ajustes
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -422,8 +455,8 @@
     let cart = [];
     let currentCategory = "todos";
     let editingProductData = null;
+    let storeConfig = { natura: false, avon: false, esika: false, unique: false };
 
-    // Splash Screen Logic
     window.addEventListener('load', () => {
       setTimeout(() => {
         const splash = document.getElementById('splash-screen');
@@ -432,7 +465,6 @@
       }, 1000);
     });
 
-    // Optimización de imágenes
     function getOptimizedImageUrl(url) {
       if (!url) return 'https://placehold.co/400x400?text=Sin+Imagen';
       if (url.includes('cloudinary.com') && url.includes('/upload/')) {
@@ -443,9 +475,63 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       fetchProductsFromCloud();
+      fetchStoreConfig();
       setupCartDrawer();
       setupPasswordEnterKey();
     });
+
+    // CONFIGURACIÓN DE BOTONES DINÁMICOS
+    async function fetchStoreConfig() {
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}config.json`);
+        const data = await res.json();
+        if (data) storeConfig = { ...storeConfig, ...data };
+        
+        applyConfigToUI();
+      } catch (e) {
+        console.error("Error cargando configuración", e);
+      }
+    }
+
+    function applyConfigToUI() {
+      // Mostrar/Ocultar en la barra superior
+      document.getElementById("btn-cat-natura").style.display = storeConfig.natura ? 'inline-block' : 'none';
+      document.getElementById("btn-cat-avon").style.display = storeConfig.avon ? 'inline-block' : 'none';
+      document.getElementById("btn-cat-esika").style.display = storeConfig.esika ? 'inline-block' : 'none';
+      document.getElementById("btn-cat-unique").style.display = storeConfig.unique ? 'inline-block' : 'none';
+      
+      // Marcar checkboxes en el panel
+      document.getElementById("cfg-natura").checked = storeConfig.natura;
+      document.getElementById("cfg-avon").checked = storeConfig.avon;
+      document.getElementById("cfg-esika").checked = storeConfig.esika;
+      document.getElementById("cfg-unique").checked = storeConfig.unique;
+    }
+
+    async function saveStoreConfig() {
+      const btn = event.currentTarget;
+      btn.innerHTML = `<i class="ph ph-spinner animate-spin text-lg"></i> Guardando...`;
+      
+      const newConfig = {
+        natura: document.getElementById("cfg-natura").checked,
+        avon: document.getElementById("cfg-avon").checked,
+        esika: document.getElementById("cfg-esika").checked,
+        unique: document.getElementById("cfg-unique").checked
+      };
+
+      try {
+        await fetch(`${FIREBASE_DB_URL}config.json`, {
+          method: "PUT",
+          body: JSON.stringify(newConfig)
+        });
+        storeConfig = newConfig;
+        applyConfigToUI();
+        alert("Configuración guardada. Los botones se han actualizado.");
+      } catch(e) {
+        alert("Error al guardar configuración.");
+      } finally {
+        btn.innerHTML = `<i class="ph ph-floppy-disk text-lg"></i> Guardar Ajustes`;
+      }
+    }
 
     function openLoginModal() {
       document.getElementById("input-admin-pass").value = "";
@@ -483,22 +569,24 @@
     function handleCategorySelectionChange() {
       const cat = document.getElementById("adm-cat").value;
       const checkPedido = document.getElementById("adm-is-pedido");
-      if (cat === "natura" || cat === "avon") {
+      if (cat === "natura" || cat === "avon" || cat === "esika" || cat === "unique") {
         checkPedido.checked = true;
       }
     }
 
+    // FORMULARIO DE ENVÍO - CAMBIO CONTRAENTREGA/NACIONAL
     function toggleDeliveryOptions() {
-      const paymentMethod = document.getElementById("cust-payment").value;
+      const type = document.getElementById("cust-delivery-type").value;
       const boxContraentrega = document.getElementById("box-contraentrega");
-      const boxAddress = document.getElementById("box-address");
+      const boxNacional = document.getElementById("box-nacional");
 
-      if (paymentMethod === "Contraentrega") {
+      if (type === "Contraentrega") {
         boxContraentrega.classList.remove("hidden");
-        boxAddress.classList.add("hidden");
+        boxNacional.classList.add("hidden");
       } else {
         boxContraentrega.classList.add("hidden");
-        boxAddress.classList.remove("hidden");
+        boxNacional.classList.remove("hidden");
+        boxNacional.classList.add("flex");
       }
     }
 
@@ -520,14 +608,11 @@
         document.getElementById("loading-spinner").classList.add("hidden");
         document.getElementById("product-grid").classList.remove("hidden");
         renderProducts();
-
       } catch (err) {
-        console.error("Error al cargar de Firebase:", err);
-        document.getElementById("loading-spinner").innerHTML = `<p class="text-rose-500 font-bold">Error de conexión con la base de datos.</p>`;
+        document.getElementById("loading-spinner").innerHTML = `<p class="text-rose-500 font-bold">Error de conexión.</p>`;
       }
     }
 
-    // Botón de Consultar en tarjeta y modal
     function consultProduct(prodId) {
       const prod = products.find(p => p.firebaseId === prodId);
       if (!prod) return;
@@ -580,10 +665,6 @@
                 : `<span class="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">⚡ En Stock</span>`
               }
             </div>
-            
-            <div class="absolute inset-0 bg-gradient-to-t from-rose-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4 z-10">
-              <span class="text-white text-xs font-bold flex items-center gap-1"><i class="ph ph-eye text-lg"></i> Ver detalles</span>
-            </div>
           </div>
           
           <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between bg-[#fffcfb] relative z-20">
@@ -597,10 +678,10 @@
                 <span class="text-xl font-black text-slate-900">S/ ${Number(p.price).toFixed(2)}</span>
               </div>
               <div class="flex items-center gap-2">
-                <button onclick="consultProduct('${p.firebaseId}')" class="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm" title="Consultar por WhatsApp">
+                <button onclick="consultProduct('${p.firebaseId}')" class="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm" title="Consultar">
                   <i class="ph ph-whatsapp-logo font-bold text-lg"></i>
                 </button>
-                <button onclick="addToCart('${p.firebaseId}')" ${isOutOfStock ? 'disabled' : ''} class="${isOutOfStock ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-rose-600 hover:scale-105 shadow-md'} w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center" title="${isOutOfStock ? 'Agotado' : 'Agregar al carrito'}">
+                <button onclick="addToCart('${p.firebaseId}')" ${isOutOfStock ? 'disabled' : ''} class="${isOutOfStock ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-rose-600 hover:scale-105 shadow-md'} w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center">
                   <i class="ph ph-plus font-bold text-lg"></i>
                 </button>
               </div>
@@ -642,18 +723,9 @@
         }
       `;
 
-      const warning = document.getElementById("modal-pedido-warning");
-      if (prod.isPedido) {
-        warning.classList.remove("hidden");
-      } else {
-        warning.classList.add("hidden");
-      }
-
-      // Configurar Botón Consultar
       const consultBtn = document.getElementById("modal-consult-btn");
       consultBtn.onclick = () => { consultProduct(prod.firebaseId); };
 
-      // Configurar Botón Agregar
       const addBtn = document.getElementById("modal-add-btn");
       const addText = document.getElementById("modal-add-text");
 
@@ -662,7 +734,7 @@
         addText.textContent = "AGOTADO";
       } else {
         addBtn.disabled = false;
-        addText.textContent = "Agregar a Mi Pedido";
+        addText.textContent = "Añadir";
         addBtn.onclick = () => {
           addToCart(prod.firebaseId);
           closeProductModal();
@@ -714,15 +786,13 @@
 
       if (directUrl) {
         imageUrl = directUrl;
-      }
-      else if (fileInput.files && fileInput.files.length > 0) {
+      } else if (fileInput.files && fileInput.files.length > 0) {
         btnText.textContent = "Subiendo foto...";
         btnIcon.className = "ph ph-spinner animate-spin text-xl text-emerald-400";
         try {
           const formData = new FormData();
           formData.append("file", fileInput.files[0]);
           formData.append("upload_preset", UPLOAD_PRESET);
-
           const responseCloud = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
             method: "POST",
             body: formData
@@ -744,37 +814,26 @@
       btnText.textContent = "Guardando...";
 
       const productPayload = {
-        name,
-        price,
-        category: cat,
-        stock: stock,
+        name, price, category: cat, stock: stock,
         isOutOfStock: isOutOfStock || stock <= 0,
-        image: imageUrl,
-        description: desc || "Disponible en tienda",
-        isPedido: isPedido,
-        updatedAt: Date.now()
+        image: imageUrl, description: desc || "Disponible en tienda",
+        isPedido: isPedido, updatedAt: Date.now()
       };
 
       try {
         if (editId) {
           await fetch(`${FIREBASE_DB_URL}productos/${editId}.json`, {
-            method: "PATCH",
-            body: JSON.stringify(productPayload)
+            method: "PATCH", body: JSON.stringify(productPayload)
           });
-          alert("¡Producto modificado con éxito!");
         } else {
           productPayload.createdAt = Date.now();
           await fetch(`${FIREBASE_DB_URL}productos.json`, {
-            method: "POST",
-            body: JSON.stringify(productPayload)
+            method: "POST", body: JSON.stringify(productPayload)
           });
-          alert("¡Producto publicado con éxito!");
         }
-
         cancelEditing();
         await fetchProductsFromCloud();
         renderAdminList();
-
       } catch (e) {
         alert("Error al guardar.");
       } finally {
@@ -860,7 +919,6 @@
       }
     }
 
-    // ================= CARRITO Y LÓGICA =================
     function setupCartDrawer() {
       const openBtn = document.getElementById("btn-open-cart");
       const closeBtn = document.getElementById("btn-close-cart");
@@ -888,18 +946,14 @@
       if (!prod) return;
       
       const stockUnits = typeof prod.stock !== "undefined" ? Number(prod.stock) : 1;
-      const isOutOfStock = prod.isOutOfStock || stockUnits <= 0;
-      if (isOutOfStock) return alert("Este producto se encuentra agotado.");
+      if (prod.isOutOfStock || stockUnits <= 0) return alert("Este producto se encuentra agotado.");
 
       const exist = cart.find(i => i.firebaseId === prodId);
-      
       if (!exist) {
         if (!prod.isPedido && stockUnits < 1) return alert(`Solo hay ${stockUnits} unidades.`);
         cart.push({ ...prod, qty: 1 });
       } else {
-        if (!prod.isPedido && (exist.qty + 1) > stockUnits) {
-          return alert(`Límite de stock: ${stockUnits} unidades.`);
-        }
+        if (!prod.isPedido && (exist.qty + 1) > stockUnits) return alert(`Límite de stock: ${stockUnits} unidades.`);
         exist.qty += 1;
       }
       renderCart();
@@ -916,9 +970,7 @@
       if (newQty <= 0) {
         cart = cart.filter(i => i.firebaseId !== prodId);
       } else {
-        if (!originalProd.isPedido && newQty > stockUnits) {
-          return alert(`Límite de stock: ${stockUnits} unidades.`);
-        }
+        if (!originalProd.isPedido && newQty > stockUnits) return alert(`Límite de stock: ${stockUnits} unidades.`);
         item.qty = newQty;
       }
       renderCart();
@@ -943,9 +995,7 @@
       }
 
       list.innerHTML = "";
-      let total = 0;
-      let montoPedidoTotal = 0;
-      let hasPedido = false;
+      let total = 0, montoPedidoTotal = 0, hasPedido = false;
 
       cart.forEach(item => {
         const sub = item.price * item.qty;
@@ -966,19 +1016,17 @@
             </div>
           </div>
           <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl p-1">
-            <button onclick="changeQty('${item.firebaseId}', -1)" class="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 font-bold bg-white rounded-lg shadow-sm">-</button>
+            <button onclick="changeQty('${item.firebaseId}', -1)" class="w-7 h-7 flex items-center justify-center text-slate-600 font-bold bg-white rounded-lg">-</button>
             <span class="text-sm font-black w-4 text-center">${item.qty}</span>
-            <button onclick="changeQty('${item.firebaseId}', 1)" class="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 font-bold bg-white rounded-lg shadow-sm">+</button>
+            <button onclick="changeQty('${item.firebaseId}', 1)" class="w-7 h-7 flex items-center justify-center text-slate-600 font-bold bg-white rounded-lg">+</button>
           </div>
         `;
         list.appendChild(row);
       });
 
       totalDisplay.textContent = `S/ ${total.toFixed(2)}`;
-
       if (hasPedido) {
-        const anticipoRequerido = montoPedidoTotal * 0.50;
-        anticipoDisplay.textContent = `S/ ${anticipoRequerido.toFixed(2)}`;
+        anticipoDisplay.textContent = `S/ ${(montoPedidoTotal * 0.50).toFixed(2)}`;
         anticipoRow.classList.remove("hidden");
         alertPedido.classList.remove("hidden");
       } else {
@@ -991,22 +1039,25 @@
       if (cart.length === 0) return alert("Tu carrito está vacío.");
       
       const name = document.getElementById("cust-name").value.trim();
-      const payment = document.getElementById("cust-payment").value;
+      const dType = document.getElementById("cust-delivery-type").value;
       const point = document.getElementById("cust-delivery-point").value;
-      const address = document.getElementById("cust-address").value.trim();
+      const dep = document.getElementById("cust-dep").value.trim();
+      const dist = document.getElementById("cust-dist").value.trim();
 
       if (!name) return alert("Por favor ingresa tu nombre completo.");
-      if (payment !== "Contraentrega" && !address) {
-        return alert("Por favor ingresa tu dirección de entrega.");
+      
+      if (dType === "EnvioNacional" && (!dep || !dist)) {
+        return alert("Por favor completa tu Departamento y Distrito.");
       }
 
       const prodsStock = cart.filter(i => !i.isPedido);
       const prodsPedido = cart.filter(i => i.isPedido);
-
-      let total = 0, totalStock = 0, totalPedido = 0;
-      prodsStock.forEach(i => { totalStock += (i.price * i.qty); });
-      prodsPedido.forEach(i => { totalPedido += (i.price * i.qty); });
-      total = totalStock + totalPedido;
+      let total = 0, totalPedido = 0;
+      cart.forEach(i => {
+        const sub = i.price * i.qty;
+        total += sub;
+        if (i.isPedido) totalPedido += sub;
+      });
 
       const anticipoRequerido = totalPedido * 0.50;
       const saldoRestante = total - anticipoRequerido;
@@ -1014,26 +1065,24 @@
       let text = `🛍️ *NUEVO PEDIDO - D'Ana Boutique*\n`;
       text += `----------------------------------\n`;
       text += `👤 *Cliente:* ${name}\n`;
-      text += `💳 *Pago:* ${payment}\n`;
 
-      if (payment === "Contraentrega") {
-        text += `📍 *Lugar:* ${point}\n`;
+      if (dType === "Contraentrega") {
+        text += `📍 *Modalidad:* Contraentrega (Chiclayo)\n`;
+        text += `🎯 *Punto:* ${point}\n`;
       } else {
-        text += `📍 *Dirección:* ${address}\n`;
+        text += `📍 *Modalidad:* Envío Nacional\n`;
+        text += `🏙️ *Destino:* ${dep} - ${dist}\n`;
+        text += `📦 *Agencia:* Shalom\n`;
       }
 
       if (prodsStock.length > 0) {
-        text += `\n⚡ *PRODUCTOS EN STOCK:*\n`;
-        prodsStock.forEach((i) => {
-          text += `  • ${i.name} x${i.qty} = S/ ${(i.price * i.qty).toFixed(2)}\n`;
-        });
+        text += `\n⚡ *EN STOCK:*\n`;
+        prodsStock.forEach((i) => { text += `  • ${i.name} x${i.qty} = S/ ${(i.price * i.qty).toFixed(2)}\n`; });
       }
 
       if (prodsPedido.length > 0) {
-        text += `\n📖 *A PEDIDO (NATURA/AVON):*\n`;
-        prodsPedido.forEach((i) => {
-          text += `  • ${i.name} x${i.qty} = S/ ${(i.price * i.qty).toFixed(2)}\n`;
-        });
+        text += `\n📖 *A PEDIDO:*\n`;
+        prodsPedido.forEach((i) => { text += `  • ${i.name} x${i.qty} = S/ ${(i.price * i.qty).toFixed(2)}\n`; });
       }
 
       text += `\n----------------------------------\n`;
@@ -1041,16 +1090,13 @@
 
       if (prodsPedido.length > 0) {
         text += `\n📌 *CONDICIONES:*\n`;
-        text += `✅ *Anticipo (50%):* S/ ${anticipoRequerido.toFixed(2)}\n`;
-        text += `🤝 *Saldo al entregar:* S/ ${saldoRestante.toFixed(2)}\n\n`;
-        text += `Hola, envíame los datos de Yape/Plin/Transferencia para abonar el anticipo de S/ ${anticipoRequerido.toFixed(2)} y reservar mi orden.`;
+        text += `✅ *Anticipo a depositar (50%):* S/ ${anticipoRequerido.toFixed(2)}\n`;
+        text += `🤝 *Saldo:* S/ ${saldoRestante.toFixed(2)}\n\n`;
+        text += `Hola, envíame los datos de Yape/Plin o cuenta para hacer el anticipo y coordinar la entrega.`;
       } else {
-        if (payment === "Contraentrega") {
-          text += `\nHola, deseo coordinar la entrega en el punto seleccionado.`;
-        } else {
-          text += `\nHola, envíame los datos para transferir el total de mi pedido.`;
-        }
+        text += `\nHola, deseo coordinar los detalles de pago y entrega para este pedido.`;
       }
+      
       window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURI(text)}`, "_blank");
     }
   </script>
