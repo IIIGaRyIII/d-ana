@@ -83,6 +83,7 @@
     <div class="bg-white/70 border-t border-rose-50 overflow-x-auto shadow-inner">
       <div class="max-w-7xl mx-auto px-4 py-2.5 flex gap-2.5 items-center">
         <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
+        <button id="btn-cat-ofertas" onclick="filterCategory('ofertas', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-black bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition whitespace-nowrap">🔥 Ofertas</button>
         
         <!-- BOTONES DE MARCAS (LOGOS EN PROGRAMACIÓN) -->
         <button id="btn-cat-natura" onclick="filterCategory('natura', this)" class="hidden cat-pill px-4 py-2 rounded-xl bg-orange-50 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap flex items-center gap-1.5">
@@ -164,12 +165,12 @@
   </section>
 
   <!-- ================= BARRA DE ORDENAR POR PRECIO ================= -->
-  <section id="catalog-section" class="max-w-7xl mx-auto px-4 sm:px-6 pt-2 pb-3 w-full scroll-mt-36">
+  <section id="catalog-section" class="max-w-7xl mx-auto px-4 sm:px-6 pt-3 pb-4 w-full scroll-mt-36">
     <div class="flex items-center justify-between gap-3">
-      <p id="products-count" class="text-xs sm:text-sm font-bold text-slate-500">Cargando catálogo...</p>
+      <p id="products-count" class="text-sm sm:text-base font-extrabold text-slate-600">Cargando catálogo...</p>
       <div class="flex items-center gap-2">
-        <i class="ph ph-arrows-down-up text-rose-700 text-base hidden sm:block"></i>
-        <select id="sort-select" onchange="handleSearchAndSort()" class="py-2 px-3 rounded-xl bg-white border border-rose-100 shadow-xs text-xs sm:text-sm font-bold text-slate-700 focus:border-rose-400 outline-none transition cursor-pointer">
+        <i class="ph ph-arrows-down-up text-rose-700 text-xl hidden sm:block"></i>
+        <select id="sort-select" onchange="handleSearchAndSort()" class="py-2.5 px-4 rounded-xl bg-white border-2 border-rose-200 shadow-sm text-sm sm:text-base font-black text-slate-800 focus:border-rose-500 outline-none transition cursor-pointer">
           <option value="recent">Más recientes</option>
           <option value="price-asc">Precio: Menor a mayor</option>
           <option value="price-desc">Precio: Mayor a menor</option>
@@ -962,7 +963,9 @@
       let filtered = [...products];
 
       // Filtro por categoría
-      if (currentCategory === "stock") {
+      if (currentCategory === "ofertas") {
+        filtered = filtered.filter(p => Number(p.oldPrice) > Number(p.price));
+      } else if (currentCategory === "stock") {
         filtered = filtered.filter(p => !p.isPedido);
       } else if (currentCategory === "catalogo") {
         filtered = filtered.filter(p => p.isPedido);
@@ -1025,7 +1028,6 @@
             ` : ''}
 
             <div class="absolute top-3 left-3 flex flex-col gap-1.5 z-20">
-              ${hasOffer ? `<span class="bg-rose-600 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm w-fit">🔥 OFERTA -${discountPct}%</span>` : ''}
               ${isPedido 
                 ? `<span class="bg-amber-400 text-amber-950 font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm w-fit">A Pedido (50%)</span>`
                 : `<span class="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm w-fit">⚡ En Stock</span>`
@@ -1044,12 +1046,19 @@
                 ${hasVariants ? `<span class="text-[9px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded">+ Opciones</span>` : ''}
               </div>
               <h4 class="font-black text-slate-900 text-sm sm:text-base leading-tight line-clamp-2 group-hover:text-rose-600 transition-colors">${p.name}</h4>
+              ${hasOffer ? `
+                <div class="mt-2">
+                  <span class="inline-flex items-center gap-1 bg-rose-600 text-white font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg shadow-sm tracking-wide">
+                    🔥 OFERTA -${discountPct}%
+                  </span>
+                </div>
+              ` : ''}
             </div>
             
-            <div class="mt-4 pt-3 border-t border-rose-100/60 flex items-end justify-between gap-1">
-              <div class="flex flex-col">
-                ${hasOffer ? `<span class="text-[11px] font-bold text-slate-400 line-through leading-none mb-0.5">S/ ${oldPriceNum.toFixed(2)}</span>` : ''}
+            <div class="mt-4 pt-3 border-t border-rose-100/60 flex items-center justify-between gap-1">
+              <div class="flex flex-wrap items-baseline gap-2">
                 <span class="text-lg sm:text-xl font-black text-slate-900 leading-none">S/ ${priceNum.toFixed(2)}</span>
+                ${hasOffer ? `<span class="text-xs sm:text-sm font-bold text-slate-400 line-through leading-none">S/ ${oldPriceNum.toFixed(2)}</span>` : ''}
               </div>
               <div class="flex items-center gap-1.5 shrink-0">
                 <button onclick="consultProduct('${p.firebaseId}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 w-9 h-9 sm:w-10 sm:h-10 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm" title="Consultar">
@@ -1218,13 +1227,18 @@
     function filterCategory(cat, element) {
       currentCategory = cat;
       document.querySelectorAll(".cat-pill").forEach(btn => {
-        btn.classList.remove("bg-slate-900", "text-white", "shadow-md");
-        if (!btn.id.includes("cat-natura") && !btn.id.includes("cat-avon") && !btn.id.includes("cat-esika") && !btn.id.includes("cat-yanbal")) {
+        btn.classList.remove("bg-slate-900", "bg-rose-600", "text-white", "shadow-md");
+        if (btn.id === "btn-cat-ofertas") {
+          btn.classList.add("bg-rose-50", "text-rose-700");
+        } else if (!btn.id.includes("cat-natura") && !btn.id.includes("cat-avon") && !btn.id.includes("cat-esika") && !btn.id.includes("cat-yanbal")) {
           btn.classList.add("bg-white", "text-slate-600");
         }
       });
       
-      if (cat === 'todos' || cat === 'stock' || cat === 'catalogo' || cat === 'fragancias' || cat === 'zapatos' || cat === 'ropa') {
+      if (cat === 'ofertas') {
+        element.classList.remove("bg-rose-50", "text-rose-700");
+        element.classList.add("bg-rose-600", "text-white", "shadow-md");
+      } else if (cat === 'todos' || cat === 'stock' || cat === 'catalogo' || cat === 'fragancias' || cat === 'zapatos' || cat === 'ropa') {
         element.classList.remove("bg-white", "text-slate-600");
         element.classList.add("bg-slate-900", "text-white", "shadow-md");
       }
