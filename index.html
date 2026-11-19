@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>D'Ana Boutique - Tienda Oficial</title>
+
+  <!-- ================= CONFIGURACIÓN DE DOMINIO Y VISTA PREVIA (WHATSAPP/FACEBOOK) ================= -->
+  <link rel="icon" type="image/png" href="logo.png" />
+  <meta name="description" content="Moda, Calzado y Fragancias exclusivas. Envíos a todo el Perú por Shalom y contraentrega en Chiclayo." />
+  <meta property="og:title" content="D'Ana Boutique - Tienda Oficial" />
+  <meta property="og:description" content="Explora nuestra colección de moda, calzado y fragancias. Envíos nacionales previa coordinación." />
+  <!-- CUANDO COMPRES TU .COM, REEMPLAZA "https://TUDOMINIO.com/" POR TU ENLACE REAL -->
+  <meta property="og:image" content="https://TUDOMINIO.com/logo.png" />
+  <meta property="og:url" content="https://TUDOMINIO.com/" />
+  <meta property="og:type" content="website" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
@@ -22,6 +33,12 @@
 </head>
 <body class="bg-[#fffaf7] text-slate-800 antialiased font-sans min-h-screen flex flex-col">
 
+  <!-- ================= NOTIFICACIÓN FLOTANTE (TOAST) ================= -->
+  <div id="toast-notification" class="fixed top-6 left-1/2 -translate-x-1/2 z-[110] bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-white/10 flex items-center gap-2.5 text-xs sm:text-sm font-bold transition-all duration-300 opacity-0 pointer-events-none -translate-y-4">
+    <i id="toast-icon" class="ph ph-check-circle text-emerald-400 text-xl"></i>
+    <span id="toast-message">Agregado a tu pedido</span>
+  </div>
+
   <!-- ================= ANIMACIÓN DE APERTURA (SPLASH SCREEN) ================= -->
   <div id="splash-screen" class="fixed inset-0 z-[100] bg-[#fffaf7] flex flex-col items-center justify-center transition-opacity duration-700">
     <img src="logo.png" alt="D'Ana Boutique" class="h-32 sm:h-40 mb-6 animate-pulse object-contain drop-shadow-md" onerror="this.src='https://placehold.co/200x200?text=D%27Ana'"/>
@@ -33,8 +50,8 @@
   <header class="sticky top-0 z-40 bg-[#fffaf7]/95 backdrop-blur-lg border-b border-rose-100 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-24 sm:h-28 flex items-center justify-between">
       
-      <!-- LOGO Y TÍTULO (AHORA VISIBLE Y ADAPTADO EN CELULARES) -->
-      <div id="logo-trigger" onclick="openLoginModal()" class="flex items-center gap-2 sm:gap-4 cursor-pointer select-none group">
+      <!-- LOGO Y TÍTULO (ACCESO SECRETO AL PANEL: 3 CLICS) -->
+      <div id="logo-trigger" onclick="handleSecretClick()" class="flex items-center gap-2 sm:gap-4 cursor-pointer select-none group">
         <img src="logo.png" alt="Logo" class="h-14 sm:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" onerror="this.src='https://placehold.co/150x150?text=D%27Ana'"/>
         <div class="flex flex-col justify-center">
           <h1 class="font-black text-lg sm:text-3xl leading-none tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-rose-800 to-slate-900">D'Ana Boutique</h1>
@@ -136,14 +153,66 @@
     </div>
   </section>
 
+  <!-- ================= BARRA DE BÚSQUEDA Y ORDEN POR PRECIO ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-2 pb-4 w-full">
+    <div class="bg-white p-3 sm:p-4 rounded-2xl border border-rose-100 shadow-sm flex flex-col sm:flex-row gap-3 items-center justify-between">
+      <div class="relative w-full sm:flex-1">
+        <i class="ph ph-magnifying-glass text-slate-400 text-xl absolute left-4 top-1/2 -translate-y-1/2"></i>
+        <input type="text" id="search-input" oninput="handleSearchAndSort()" placeholder="Buscar perfume, zapato, crema, marca..." class="w-full pl-11 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm focus:bg-white focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition font-medium" />
+      </div>
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <i class="ph ph-arrows-down-up text-rose-700 text-lg hidden sm:block"></i>
+        <select id="sort-select" onchange="handleSearchAndSort()" class="w-full sm:w-52 py-2.5 px-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-bold text-slate-700 focus:bg-white focus:border-rose-400 outline-none transition cursor-pointer">
+          <option value="recent">Más recientes</option>
+          <option value="price-asc">Precio: Menor a mayor</option>
+          <option value="price-desc">Precio: Mayor a menor</option>
+          <option value="offers">Solo en Oferta</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= PRODUCTOS ================= -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-20 flex-1 w-full mt-2">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-16 flex-1 w-full mt-1">
     <div id="loading-spinner" class="py-24 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
       <i class="ph ph-spinner-gap animate-spin text-5xl text-rose-800"></i>
       <p class="text-base font-bold tracking-wide">Cargando la mejor selección...</p>
     </div>
     <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 hidden"></div>
   </main>
+
+  <!-- ================= SECCIÓN DE CONFIANZA (GARANTÍAS REALES) ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 pb-16 w-full">
+    <div class="bg-white rounded-3xl border border-rose-100 p-6 sm:p-10 shadow-sm">
+      <div class="text-center max-w-xl mx-auto mb-8">
+        <span class="text-[11px] font-black uppercase tracking-[0.2em] text-rose-600">Compra Segura</span>
+        <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">¿Por qué confiar en D'Ana Boutique?</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-5 rounded-2xl bg-[#fffaf7] border border-rose-100/70 flex flex-col items-center text-center">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-3">
+            <i class="ph ph-receipt text-2xl font-bold"></i>
+          </div>
+          <h4 class="font-black text-slate-900 text-base mb-1">Envío Rastreado Shalom</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Te enviamos foto de tu paquete y la boleta oficial de Shalom con tu código de seguimiento apenas lo despachamos.</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-[#fffaf7] border border-rose-100/70 flex flex-col items-center text-center">
+          <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center mb-3">
+            <i class="ph ph-handshake text-2xl font-bold"></i>
+          </div>
+          <h4 class="font-black text-slate-900 text-base mb-1">Contraentrega Segura</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">En Chiclayo puedes revisar tu producto en persona y pagar al recibir en puntos céntricos seguros.</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-[#fffaf7] border border-rose-100/70 flex flex-col items-center text-center">
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mb-3">
+            <i class="ph ph-chats-circle text-2xl font-bold"></i>
+          </div>
+          <h4 class="font-black text-slate-900 text-base mb-1">Atención Directa 1 a 1</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Nada de bots. Resolvemos tus dudas de tallas, aromas y tiempos de llegada directamente por WhatsApp.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ================= FOOTER Y TÉRMINOS LEGALES ================= -->
   <footer class="bg-slate-950 text-slate-400 pt-16 pb-8 border-t-4 border-rose-900">
@@ -187,7 +256,8 @@
         &copy; 2026 D'Ana Boutique. Todos los derechos reservados.<br>
         Sitio protegido por políticas de comercio y privacidad.
       </p>
-      <div onclick="openLoginModal()" class="absolute bottom-0 right-4 w-10 h-10 cursor-pointer flex items-center justify-center opacity-30 hover:opacity-100 transition">
+      <!-- Candado invisible (3 clics) -->
+      <div onclick="handleSecretClick()" class="absolute bottom-0 right-4 w-10 h-10 cursor-pointer flex items-center justify-center opacity-30 hover:opacity-100 transition">
         <i class="ph ph-lock-key text-slate-700"></i>
       </div>
     </div>
@@ -210,21 +280,40 @@
   <!-- ================= MODAL VISTA DETALLADA DEL PRODUCTO ================= -->
   <div id="product-modal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-      <div class="relative bg-slate-50 h-72 sm:h-80 w-full overflow-hidden flex items-center justify-center group">
-        <img id="modal-img" src="" alt="Detalle" onclick="document.getElementById('zoom-modal').classList.remove('hidden'); document.getElementById('zoom-img').src = this.src;" class="w-full h-full object-contain bg-white cursor-zoom-in transition duration-500 group-hover:scale-110" title="Toca para ampliar imagen" />
-        <div id="modal-badge-container" class="absolute top-5 left-5 flex flex-col gap-2 pointer-events-none"></div>
-        <button onclick="closeProductModal()" class="absolute top-5 right-5 bg-white/90 hover:bg-slate-900 text-slate-800 hover:text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition">
-          <i class="ph ph-x text-xl font-bold"></i>
-        </button>
+      <div class="relative bg-slate-50 h-64 sm:h-72 w-full overflow-hidden flex items-center justify-center group shrink-0">
+        <img id="modal-img" src="" alt="Detalle" onclick="document.getElementById('zoom-modal').classList.remove('hidden'); document.getElementById('zoom-img').src = this.src;" class="w-full h-full object-contain bg-white cursor-zoom-in transition duration-500 group-hover:scale-105" title="Toca para ampliar imagen" />
+        <div id="modal-badge-container" class="absolute top-4 left-4 flex flex-col gap-1.5 pointer-events-none"></div>
+        
+        <div class="absolute top-4 right-4 flex items-center gap-2">
+          <button id="modal-share-btn" class="bg-white/90 hover:bg-rose-600 text-slate-800 hover:text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition" title="Compartir producto">
+            <i class="ph ph-share-network text-lg font-bold"></i>
+          </button>
+          <button onclick="closeProductModal()" class="bg-white/90 hover:bg-slate-900 text-slate-800 hover:text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition">
+            <i class="ph ph-x text-xl font-bold"></i>
+          </button>
+        </div>
       </div>
 
-      <div class="p-6 sm:p-8 flex-1 overflow-y-auto space-y-5">
+      <!-- GALERÍA MINIATURA (SOLO SI HAY MÁS DE 1 FOTO) -->
+      <div id="modal-gallery" class="hidden bg-white px-6 pt-3 pb-1 flex items-center justify-center gap-2.5 border-b border-slate-100 shrink-0"></div>
+
+      <div class="p-6 sm:p-7 flex-1 overflow-y-auto space-y-5">
         <div>
           <div class="flex items-start justify-between gap-4">
-            <h3 id="modal-name" class="text-2xl font-black text-slate-900 leading-tight"></h3>
+            <h3 id="modal-name" class="text-xl sm:text-2xl font-black text-slate-900 leading-tight"></h3>
             <span id="modal-stock-indicator" class="text-xs font-black px-3 py-1.5 rounded-lg shrink-0 uppercase tracking-widest shadow-sm border border-slate-200"></span>
           </div>
-          <p id="modal-price" class="text-3xl font-black text-rose-700 mt-3"></p>
+          <div class="flex items-baseline gap-3 mt-2.5">
+            <p id="modal-price" class="text-3xl font-black text-rose-700"></p>
+            <p id="modal-old-price" class="hidden text-base font-bold text-slate-400 line-through"></p>
+            <span id="modal-discount-badge" class="hidden bg-rose-600 text-white text-[10px] font-black px-2 py-0.5 rounded-md uppercase"></span>
+          </div>
+        </div>
+
+        <!-- SELECTOR DE VARIANTES (TALLAS / TONOS) -->
+        <div id="modal-variants-box" class="hidden border-t border-slate-100 pt-4">
+          <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2.5">Elige una opción (Talla / Tono):</h4>
+          <div id="modal-variants-list" class="flex flex-wrap gap-2"></div>
         </div>
 
         <div id="modal-pedido-warning" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-2xl text-sm text-amber-950 shadow-inner">
@@ -241,7 +330,7 @@
         </div>
       </div>
 
-      <div class="p-5 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row items-center gap-3">
+      <div class="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row items-center gap-3 shrink-0">
         <button id="modal-consult-btn" class="w-full sm:w-auto bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold py-3.5 px-5 rounded-2xl flex items-center justify-center gap-2 transition border border-emerald-200">
           <i class="ph ph-whatsapp-logo text-2xl"></i>
           <span>Consultar</span>
@@ -394,13 +483,19 @@
           <input type="hidden" id="adm-edit-id" value="" />
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="space-y-1.5">
-              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Nombre</label>
-              <input type="text" id="adm-name" placeholder="Ej: Pulpa Natura" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-medium" />
+            <div class="space-y-1.5 sm:col-span-2">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Nombre del Producto</label>
+              <input type="text" id="adm-name" placeholder="Ej: Pulpa Castaña Natura / Zapatilla Urbana" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-medium" />
             </div>
+
             <div class="space-y-1.5">
-              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Precio (S/)</label>
-              <input type="number" id="adm-price" placeholder="85.00" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-black text-slate-900" />
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Precio Actual (S/)</label>
+              <input type="number" step="0.01" id="adm-price" placeholder="Ej: 85.00" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-black text-slate-900" />
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-[10px] font-black text-rose-600 uppercase tracking-widest ml-1">Precio Anterior / Tachado (Opcional Oferta)</label>
+              <input type="number" step="0.01" id="adm-old-price" placeholder="Ej: 110.00 (Dejar vacío si no es oferta)" class="w-full p-3 border border-rose-200 rounded-xl text-sm bg-rose-50/40 focus:bg-white focus:border-rose-500 outline-none transition font-bold text-slate-700" />
             </div>
             
             <div class="space-y-1.5">
@@ -419,23 +514,35 @@
               <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Unidades en Stock</label>
               <input type="number" id="adm-stock" placeholder="Cantidad" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-bold" min="0" value="1" />
             </div>
+
+            <div class="space-y-1.5 sm:col-span-2">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Tallas o Tonos (Opcional, separar con comas)</label>
+              <input type="text" id="adm-variants" placeholder="Ej: 36, 37, 38   o   Rojo, Nude, Rosa" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition font-medium" />
+            </div>
           </div>
 
+          <!-- GALERÍA DE HASTA 3 FOTOS -->
           <div class="bg-slate-100 p-4 rounded-2xl border border-slate-200 space-y-4">
-            <h5 class="text-[11px] font-black text-slate-700 uppercase tracking-widest">Imagen del Producto</h5>
-            <div class="flex flex-col gap-3">
-              <div>
-                <label class="text-xs font-bold text-slate-600 block mb-1">Opción A: Subir Foto</label>
-                <input type="file" id="adm-file" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition" />
+            <h5 class="text-[11px] font-black text-slate-700 uppercase tracking-widest">Imágenes del Producto (Hasta 3 fotos)</h5>
+            
+            <!-- Foto 1 (Principal) -->
+            <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+              <label class="text-xs font-black text-slate-800 block">Foto 1 (Principal):</label>
+              <input type="file" id="adm-file" accept="image/*" class="w-full text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition" />
+              <input type="text" id="adm-img-url" placeholder="O pega el link directo de la Foto 1..." class="w-full p-2 border border-slate-200 rounded-lg text-xs bg-slate-50 focus:bg-white outline-none" />
+            </div>
+
+            <!-- Fotos adicionales opcionales -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                <label class="text-[11px] font-bold text-slate-600 block">Foto 2 (Opcional):</label>
+                <input type="file" id="adm-file-2" accept="image/*" class="w-full text-[11px] file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-slate-700 file:text-white" />
+                <input type="text" id="adm-img-url-2" placeholder="O link Foto 2..." class="w-full p-2 border border-slate-200 rounded-lg text-xs bg-slate-50 focus:bg-white outline-none" />
               </div>
-              <div class="relative flex items-center py-2">
-                <div class="flex-grow border-t border-slate-300"></div>
-                <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-bold uppercase">O</span>
-                <div class="flex-grow border-t border-slate-300"></div>
-              </div>
-              <div>
-                <label class="text-xs font-bold text-slate-600 block mb-1">Opción B: Pegar Link de Internet</label>
-                <input type="text" id="adm-img-url" placeholder="https://ejemplo.com/foto.jpg" class="w-full p-3 border border-slate-200 rounded-xl text-xs bg-white focus:border-slate-900 outline-none transition" />
+              <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                <label class="text-[11px] font-bold text-slate-600 block">Foto 3 (Opcional):</label>
+                <input type="file" id="adm-file-3" accept="image/*" class="w-full text-[11px] file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-slate-700 file:text-white" />
+                <input type="text" id="adm-img-url-3" placeholder="O link Foto 3..." class="w-full p-2 border border-slate-200 rounded-lg text-xs bg-slate-50 focus:bg-white outline-none" />
               </div>
             </div>
           </div>
@@ -454,7 +561,7 @@
 
           <div class="space-y-1.5">
             <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Descripción</label>
-            <textarea id="adm-desc" placeholder="Detalles, aroma, tallas..." rows="2" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition resize-none"></textarea>
+            <textarea id="adm-desc" placeholder="Detalles, aroma, material, contenido..." rows="2" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:border-slate-900 outline-none transition resize-none"></textarea>
           </div>
 
           <button id="btn-save-prod" onclick="handleDirectUploadAndSave()" class="w-full bg-slate-900 hover:bg-emerald-600 text-white font-black py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all duration-300">
@@ -516,7 +623,7 @@
               <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Ropa</span>
             </label>
           </div>
-          <button onclick="saveStoreConfig()" class="mt-5 w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md transition transform hover:-translate-y-1">
+          <button onclick="saveStoreConfig(this)" class="mt-5 w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md transition transform hover:-translate-y-1">
             <i class="ph ph-floppy-disk text-xl"></i> GUARDAR CONFIGURACIÓN
           </button>
         </div>
@@ -531,12 +638,53 @@
     const UPLOAD_PRESET = "ml_default";
     const ADMIN_PASSWORD = "15062018";
     const WHATSAPP_PHONE = "51916052207";
+    const CART_STORAGE_KEY = "dana_boutique_cart_v1";
 
     let products = [];
     let cart = [];
     let currentCategory = "todos";
     let editingProductData = null;
-    
+    let selectedModalVariant = "";
+    let toastTimer;
+
+    // === LÓGICA DE 3 CLICS PARA EL PANEL SECRETO ===
+    let secretClickCount = 0;
+    let secretClickTimer;
+
+    function handleSecretClick() {
+      secretClickCount++;
+      clearTimeout(secretClickTimer);
+      if (secretClickCount === 3) {
+        openLoginModal();
+        secretClickCount = 0;
+      } else {
+        secretClickTimer = setTimeout(() => {
+          secretClickCount = 0;
+        }, 1000);
+      }
+    }
+
+    // === NOTIFICACIÓN FLOTANTE (TOAST) ===
+    function showToast(message, isWarning = false) {
+      const toast = document.getElementById("toast-notification");
+      const icon = document.getElementById("toast-icon");
+      const msg = document.getElementById("toast-message");
+
+      msg.textContent = message;
+      icon.className = isWarning 
+        ? "ph ph-info text-amber-400 text-xl" 
+        : "ph ph-check-circle text-emerald-400 text-xl";
+
+      toast.classList.remove("opacity-0", "-translate-y-4");
+      toast.classList.add("opacity-100", "translate-y-0");
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add("opacity-0", "-translate-y-4");
+        toast.classList.remove("opacity-100", "translate-y-0");
+      }, 2500);
+    }
+
     // Estado inicial predeterminado para las 9 categorías
     let storeConfig = {
       natura: false, avon: false, esika: false, yanbal: false,
@@ -574,7 +722,7 @@
         const splash = document.getElementById('splash-screen');
         splash.style.opacity = '0';
         setTimeout(() => splash.classList.add('hidden'), 700);
-      }, 1000);
+      }, 900);
     });
 
     function openLegalModal(type) {
@@ -588,15 +736,33 @@
       document.getElementById('legal-modal').classList.add('hidden');
     }
 
-    function getOptimizedImageUrl(url) {
+    function getOptimizedImageUrl(url, width = 600) {
       if (!url) return 'https://placehold.co/400x400?text=Sin+Imagen';
       if (url.includes('cloudinary.com') && url.includes('/upload/')) {
-        return url.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
+        return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width}/`);
       }
       return url;
     }
 
+    // === MEMORIA DEL CARRITO ===
+    function loadCartFromStorage() {
+      try {
+        const saved = localStorage.getItem(CART_STORAGE_KEY);
+        if (saved) cart = JSON.parse(saved);
+      } catch (e) {
+        cart = [];
+      }
+      renderCart();
+    }
+
+    function saveCartToStorage() {
+      try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+      } catch (e) {}
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
+      loadCartFromStorage();
       fetchProductsFromCloud();
       fetchStoreConfig();
       setupCartDrawer();
@@ -611,7 +777,6 @@
         if (data) storeConfig = { ...storeConfig, ...data };
         applyConfigToUI();
       } catch (e) {
-        console.error("Error cargando configuración", e);
         applyConfigToUI();
       }
     }
@@ -626,8 +791,7 @@
       });
     }
 
-    async function saveStoreConfig() {
-      const btn = event.currentTarget;
+    async function saveStoreConfig(btn) {
       btn.innerHTML = `<i class="ph ph-spinner animate-spin text-xl"></i> GUARDANDO...`;
       
       const newConfig = {
@@ -649,7 +813,7 @@
         });
         storeConfig = newConfig;
         applyConfigToUI();
-        alert("¡Configuración guardada exitosamente!");
+        showToast("Configuración guardada");
       } catch(e) {
         alert("Error al guardar configuración.");
       } finally {
@@ -731,33 +895,88 @@
         document.getElementById("loading-spinner").classList.add("hidden");
         document.getElementById("product-grid").classList.remove("hidden");
         renderProducts();
+
+        // Abrir producto automáticamente si viene de un enlace compartido (?producto=ID)
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedProdId = urlParams.get("producto");
+        if (sharedProdId && products.some(p => p.firebaseId === sharedProdId)) {
+          openProductModal(sharedProdId);
+        }
       } catch (err) {
         document.getElementById("loading-spinner").innerHTML = `<p class="text-rose-500 font-bold">Error de conexión.</p>`;
       }
     }
 
-    function consultProduct(prodId) {
+    function consultProduct(prodId, variant = "") {
       const prod = products.find(p => p.firebaseId === prodId);
       if (!prod) return;
-      const text = `Hola D'Ana Boutique, deseo más información o consultar disponibilidad sobre el producto: *${prod.name}* (S/ ${Number(prod.price).toFixed(2)}).`;
+      const variantText = variant ? ` (Opción: ${variant})` : "";
+      const text = `Hola D'Ana Boutique, deseo más información o consultar disponibilidad sobre el producto: *${prod.name}${variantText}* (S/ ${Number(prod.price).toFixed(2)}).`;
       window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURI(text)}`, "_blank");
+    }
+
+    function shareProduct(prodId) {
+      const prod = products.find(p => p.firebaseId === prodId);
+      if (!prod) return;
+      const shareUrl = `${window.location.origin}${window.location.pathname}?producto=${prodId}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: `${prod.name} - D'Ana Boutique`,
+          text: `Mira este producto en D'Ana Boutique: ${prod.name} a S/ ${Number(prod.price).toFixed(2)}`,
+          url: shareUrl
+        }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showToast("Enlace copiado para compartir");
+        }).catch(() => {
+          prompt("Copia este enlace para compartir:", shareUrl);
+        });
+      }
+    }
+
+    function handleSearchAndSort() {
+      renderProducts();
     }
 
     function renderProducts() {
       const grid = document.getElementById("product-grid");
       grid.innerHTML = "";
 
-      let filtered = products;
+      const searchQuery = (document.getElementById("search-input")?.value || "").trim().toLowerCase();
+      const sortOrder = document.getElementById("sort-select")?.value || "recent";
+
+      let filtered = [...products];
+
+      // Filtro por categoría
       if (currentCategory === "stock") {
-        filtered = products.filter(p => !p.isPedido);
+        filtered = filtered.filter(p => !p.isPedido);
       } else if (currentCategory === "catalogo") {
-        filtered = products.filter(p => p.isPedido);
+        filtered = filtered.filter(p => p.isPedido);
       } else if (currentCategory !== "todos") {
-        filtered = products.filter(p => p.category === currentCategory);
+        filtered = filtered.filter(p => p.category === currentCategory);
+      }
+
+      // Filtro por búsqueda en vivo
+      if (searchQuery) {
+        filtered = filtered.filter(p =>
+          (p.name || "").toLowerCase().includes(searchQuery) ||
+          (p.description || "").toLowerCase().includes(searchQuery) ||
+          (p.category || "").toLowerCase().includes(searchQuery)
+        );
+      }
+
+      // Filtro/Orden por precio u ofertas
+      if (sortOrder === "price-asc") {
+        filtered.sort((a, b) => Number(a.price) - Number(b.price));
+      } else if (sortOrder === "price-desc") {
+        filtered.sort((a, b) => Number(b.price) - Number(a.price));
+      } else if (sortOrder === "offers") {
+        filtered = filtered.filter(p => Number(p.oldPrice) > Number(p.price));
       }
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 font-bold text-lg">No hay productos en esta sección.</div>`;
+        grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 font-bold text-base">No se encontraron productos con esos filtros.</div>`;
         return;
       }
 
@@ -766,6 +985,11 @@
         const stockUnits = typeof p.stock !== "undefined" ? Number(p.stock) : 1;
         const isOutOfStock = p.isOutOfStock || stockUnits <= 0;
         const displayImage = getOptimizedImageUrl(p.image);
+        const priceNum = Number(p.price);
+        const oldPriceNum = Number(p.oldPrice) || 0;
+        const hasOffer = oldPriceNum > priceNum;
+        const discountPct = hasOffer ? Math.round(((oldPriceNum - priceNum) / oldPriceNum) * 100) : 0;
+        const hasVariants = !!(p.variants && p.variants.trim().length > 0);
 
         const card = document.createElement("div");
         card.className = `bg-white rounded-[1.5rem] overflow-hidden border border-rose-50 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group ${isOutOfStock ? 'opacity-70' : ''}`;
@@ -783,9 +1007,10 @@
             ` : ''}
 
             <div class="absolute top-3 left-3 flex flex-col gap-1.5 z-20">
+              ${hasOffer ? `<span class="bg-rose-600 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm w-fit">🔥 OFERTA -${discountPct}%</span>` : ''}
               ${isPedido 
-                ? `<span class="bg-amber-400 text-amber-950 font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">A Pedido (50%)</span>`
-                : `<span class="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">⚡ En Stock</span>`
+                ? `<span class="bg-amber-400 text-amber-950 font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm w-fit">A Pedido (50%)</span>`
+                : `<span class="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm w-fit">⚡ En Stock</span>`
               }
             </div>
             
@@ -796,19 +1021,23 @@
           
           <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between bg-[#fffcfb] relative z-20">
             <div onclick="openProductModal('${p.firebaseId}')" class="cursor-pointer">
-              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1 block">${p.category}</span>
-              <h4 class="font-black text-slate-900 text-base leading-tight line-clamp-2 group-hover:text-rose-600 transition-colors">${p.name}</h4>
+              <div class="flex items-center justify-between gap-1 mb-1">
+                <span class="text-[10px] font-black uppercase tracking-wider text-slate-400">${p.category}</span>
+                ${hasVariants ? `<span class="text-[9px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded">+ Opciones</span>` : ''}
+              </div>
+              <h4 class="font-black text-slate-900 text-sm sm:text-base leading-tight line-clamp-2 group-hover:text-rose-600 transition-colors">${p.name}</h4>
             </div>
             
-            <div class="mt-4 pt-4 border-t border-rose-100/60 flex items-center justify-between">
-              <div>
-                <span class="text-xl font-black text-slate-900">S/ ${Number(p.price).toFixed(2)}</span>
+            <div class="mt-4 pt-3 border-t border-rose-100/60 flex items-end justify-between gap-1">
+              <div class="flex flex-col">
+                ${hasOffer ? `<span class="text-[11px] font-bold text-slate-400 line-through leading-none mb-0.5">S/ ${oldPriceNum.toFixed(2)}</span>` : ''}
+                <span class="text-lg sm:text-xl font-black text-slate-900 leading-none">S/ ${priceNum.toFixed(2)}</span>
               </div>
-              <div class="flex items-center gap-2">
-                <button onclick="consultProduct('${p.firebaseId}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm" title="Consultar">
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="consultProduct('${p.firebaseId}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 w-9 h-9 sm:w-10 sm:h-10 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm" title="Consultar">
                   <i class="ph ph-whatsapp-logo font-bold text-lg"></i>
                 </button>
-                <button onclick="addToCart('${p.firebaseId}')" ${isOutOfStock ? 'disabled' : ''} class="${isOutOfStock ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-rose-600 hover:scale-105 shadow-md'} w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center">
+                <button onclick="handleCardAddClick('${p.firebaseId}')" ${isOutOfStock ? 'disabled' : ''} class="${isOutOfStock ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-rose-600 hover:scale-105 shadow-md'} w-9 h-9 sm:w-10 sm:h-10 rounded-full transition-all duration-300 flex items-center justify-center">
                   <i class="ph ph-plus font-bold text-lg"></i>
                 </button>
               </div>
@@ -819,18 +1048,103 @@
       });
     }
 
+    function handleCardAddClick(prodId) {
+      const prod = products.find(p => p.firebaseId === prodId);
+      if (!prod) return;
+      if (prod.variants && prod.variants.trim().length > 0) {
+        openProductModal(prodId);
+        showToast("Elige tu talla o tono primero", true);
+      } else {
+        addToCart(prodId, "");
+      }
+    }
+
     function openProductModal(prodId) {
       const prod = products.find(p => p.firebaseId === prodId);
       if (!prod) return;
 
+      selectedModalVariant = "";
       const stockUnits = typeof prod.stock !== "undefined" ? Number(prod.stock) : 1;
       const isOutOfStock = prod.isOutOfStock || stockUnits <= 0;
-      const displayImage = getOptimizedImageUrl(prod.image);
 
-      document.getElementById("modal-img").src = displayImage;
+      // Galería de fotos (solo se cargan al abrir el modal)
+      const allImages = Array.isArray(prod.images) && prod.images.length > 0
+        ? prod.images.filter(Boolean)
+        : [prod.image].filter(Boolean);
+      const mainImgUrl = getOptimizedImageUrl(allImages[0] || prod.image);
+
+      document.getElementById("modal-img").src = mainImgUrl;
+      const galleryEl = document.getElementById("modal-gallery");
+      if (allImages.length > 1) {
+        galleryEl.innerHTML = "";
+        allImages.forEach((imgUrl, idx) => {
+          const thumb = document.createElement("button");
+          thumb.className = `w-14 h-14 rounded-xl border-2 p-0.5 overflow-hidden bg-slate-50 transition ${idx === 0 ? 'border-rose-600' : 'border-slate-200 hover:border-rose-300'}`;
+          thumb.innerHTML = `<img src="${getOptimizedImageUrl(imgUrl, 200)}" class="w-full h-full object-contain rounded-lg" />`;
+          thumb.onclick = () => {
+            document.getElementById("modal-img").src = getOptimizedImageUrl(imgUrl, 600);
+            Array.from(galleryEl.children).forEach(c => {
+              c.classList.remove("border-rose-600");
+              c.classList.add("border-slate-200");
+            });
+            thumb.classList.remove("border-slate-200");
+            thumb.classList.add("border-rose-600");
+          };
+          galleryEl.appendChild(thumb);
+        });
+        galleryEl.classList.remove("hidden");
+      } else {
+        galleryEl.classList.add("hidden");
+      }
+
       document.getElementById("modal-name").textContent = prod.name;
       document.getElementById("modal-price").textContent = `S/ ${Number(prod.price).toFixed(2)}`;
       document.getElementById("modal-desc").textContent = prod.description || "Sin descripción detallada.";
+
+      // Precio anterior / Oferta
+      const oldPriceEl = document.getElementById("modal-old-price");
+      const discountEl = document.getElementById("modal-discount-badge");
+      const oldPriceNum = Number(prod.oldPrice) || 0;
+      const priceNum = Number(prod.price);
+      if (oldPriceNum > priceNum) {
+        const pct = Math.round(((oldPriceNum - priceNum) / oldPriceNum) * 100);
+        oldPriceEl.textContent = `S/ ${oldPriceNum.toFixed(2)}`;
+        discountEl.textContent = `-${pct}%`;
+        oldPriceEl.classList.remove("hidden");
+        discountEl.classList.remove("hidden");
+      } else {
+        oldPriceEl.classList.add("hidden");
+        discountEl.classList.add("hidden");
+      }
+
+      // Variantes (Tallas / Tonos)
+      const variantsBox = document.getElementById("modal-variants-box");
+      const variantsList = document.getElementById("modal-variants-list");
+      const variantItems = (prod.variants || "").split(",").map(v => v.trim()).filter(Boolean);
+
+      if (variantItems.length > 0) {
+        variantsList.innerHTML = "";
+        variantItems.forEach((v, idx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = v;
+          btn.className = "variant-pill px-3.5 py-2 rounded-xl text-xs font-black border-2 transition cursor-pointer " +
+            (idx === 0 ? "bg-slate-900 text-white border-slate-900 shadow-sm" : "bg-white text-slate-700 border-slate-200 hover:border-rose-400");
+          if (idx === 0) selectedModalVariant = v;
+
+          btn.onclick = () => {
+            selectedModalVariant = v;
+            variantsList.querySelectorAll(".variant-pill").forEach(p => {
+              p.className = "variant-pill px-3.5 py-2 rounded-xl text-xs font-black border-2 transition cursor-pointer bg-white text-slate-700 border-slate-200 hover:border-rose-400";
+            });
+            btn.className = "variant-pill px-3.5 py-2 rounded-xl text-xs font-black border-2 transition cursor-pointer bg-slate-900 text-white border-slate-900 shadow-sm";
+          };
+          variantsList.appendChild(btn);
+        });
+        variantsBox.classList.remove("hidden");
+      } else {
+        variantsBox.classList.add("hidden");
+      }
 
       const stockIndicator = document.getElementById("modal-stock-indicator");
       if (isOutOfStock) {
@@ -843,15 +1157,19 @@
 
       const badgeBox = document.getElementById("modal-badge-container");
       badgeBox.innerHTML = `
-        <span class="bg-white/95 text-slate-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg shadow-sm">${prod.category}</span>
+        <span class="bg-white/95 text-slate-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg shadow-sm w-fit">${prod.category}</span>
         ${prod.isPedido 
-          ? `<span class="bg-amber-400 text-amber-950 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg shadow-sm">Catálogo (50%)</span>`
-          : `<span class="bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg shadow-sm">En Stock</span>`
+          ? `<span class="bg-amber-400 text-amber-950 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg shadow-sm w-fit">Catálogo (50%)</span>`
+          : `<span class="bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg shadow-sm w-fit">En Stock</span>`
         }
       `;
 
-      const consultBtn = document.getElementById("modal-consult-btn");
-      consultBtn.onclick = () => { consultProduct(prod.firebaseId); };
+      const pedidoWarning = document.getElementById("modal-pedido-warning");
+      if (prod.isPedido) pedidoWarning.classList.remove("hidden");
+      else pedidoWarning.classList.add("hidden");
+
+      document.getElementById("modal-share-btn").onclick = () => shareProduct(prod.firebaseId);
+      document.getElementById("modal-consult-btn").onclick = () => consultProduct(prod.firebaseId, selectedModalVariant);
 
       const addBtn = document.getElementById("modal-add-btn");
       const addText = document.getElementById("modal-add-text");
@@ -863,7 +1181,7 @@
         addBtn.disabled = false;
         addText.textContent = "Añadir a mi pedido";
         addBtn.onclick = () => {
-          addToCart(prod.firebaseId);
+          addToCart(prod.firebaseId, selectedModalVariant);
           closeProductModal();
         };
       }
@@ -883,32 +1201,51 @@
       currentCategory = cat;
       document.querySelectorAll(".cat-pill").forEach(btn => {
         btn.classList.remove("bg-slate-900", "text-white", "shadow-md");
-        // Restaurar bordes a los botones de marcas si no están seleccionados
         if (!btn.id.includes("cat-natura") && !btn.id.includes("cat-avon") && !btn.id.includes("cat-esika") && !btn.id.includes("cat-yanbal")) {
-            btn.classList.add("bg-white", "text-slate-600");
+          btn.classList.add("bg-white", "text-slate-600");
         }
       });
       
-      // Estilizar el botón activo
       if (cat === 'todos' || cat === 'stock' || cat === 'catalogo' || cat === 'fragancias' || cat === 'zapatos' || cat === 'ropa') {
         element.classList.remove("bg-white", "text-slate-600");
         element.classList.add("bg-slate-900", "text-white", "shadow-md");
       }
-      
       renderProducts();
+    }
+
+    async function uploadFileToCloudinary(file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", UPLOAD_PRESET);
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if (!data.secure_url) throw new Error("Error subiendo imagen");
+      return data.secure_url;
     }
 
     async function handleDirectUploadAndSave() {
       const editId = document.getElementById("adm-edit-id").value;
       const name = document.getElementById("adm-name").value.trim();
       const price = parseFloat(document.getElementById("adm-price").value);
+      const oldPriceVal = parseFloat(document.getElementById("adm-old-price").value);
+      const oldPrice = (!isNaN(oldPriceVal) && oldPriceVal > price) ? oldPriceVal : 0;
       const cat = document.getElementById("adm-cat").value;
       const stock = parseInt(document.getElementById("adm-stock").value) || 0;
+      const variants = document.getElementById("adm-variants").value.trim();
       const desc = document.getElementById("adm-desc").value.trim();
       const isPedido = document.getElementById("adm-is-pedido").checked;
       const isOutOfStock = document.getElementById("adm-is-outofstock").checked;
-      const fileInput = document.getElementById("adm-file");
-      const directUrl = document.getElementById("adm-img-url").value.trim();
+
+      const file1 = document.getElementById("adm-file").files[0];
+      const file2 = document.getElementById("adm-file-2").files[0];
+      const file3 = document.getElementById("adm-file-3").files[0];
+
+      const url1 = document.getElementById("adm-img-url").value.trim();
+      const url2 = document.getElementById("adm-img-url-2").value.trim();
+      const url3 = document.getElementById("adm-img-url-3").value.trim();
 
       if (!name || isNaN(price)) {
         alert("Por favor completa el nombre y el precio.");
@@ -917,42 +1254,47 @@
 
       const btnText = document.getElementById("btn-save-text");
       const btnIcon = document.querySelector("#btn-save-prod i");
-      let imageUrl = editingProductData ? editingProductData.image : "";
 
-      if (directUrl) {
-        imageUrl = directUrl;
-      } else if (fileInput.files && fileInput.files.length > 0) {
-        btnText.textContent = "Subiendo foto...";
-        btnIcon.className = "ph ph-spinner animate-spin text-xl text-emerald-400";
-        try {
-          const formData = new FormData();
-          formData.append("file", fileInput.files[0]);
-          formData.append("upload_preset", UPLOAD_PRESET);
-          const responseCloud = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-            method: "POST",
-            body: formData
-          });
-          const dataCloud = await responseCloud.json();
-          if (!dataCloud.secure_url) throw new Error("Error con imagen");
-          imageUrl = dataCloud.secure_url;
-        } catch (err) {
-          alert("Error al subir la imagen.");
-          btnText.textContent = editId ? "Guardar Modificación" : "Publicar en Tienda";
-          btnIcon.className = "ph ph-cloud-arrow-up text-xl text-emerald-400";
-          return;
+      let img1 = url1 || (editingProductData ? editingProductData.image : "");
+      let img2 = url2 || "";
+      let img3 = url3 || "";
+
+      try {
+        if (file1 || file2 || file3) {
+          btnText.textContent = "Subiendo fotos...";
+          btnIcon.className = "ph ph-spinner animate-spin text-xl text-emerald-400";
         }
-      } else if (!editId && !imageUrl) {
-        alert("Selecciona una foto o pega un link.");
+        if (!url1 && file1) img1 = await uploadFileToCloudinary(file1);
+        if (!url2 && file2) img2 = await uploadFileToCloudinary(file2);
+        if (!url3 && file3) img3 = await uploadFileToCloudinary(file3);
+      } catch (err) {
+        alert("Error al subir una de las imágenes.");
+        btnText.textContent = editId ? "Guardar Modificación" : "Publicar en Tienda";
+        btnIcon.className = "ph ph-cloud-arrow-up text-xl text-emerald-400";
         return;
       }
 
+      if (!editId && !img1) {
+        alert("Selecciona al menos la Foto 1 o pega su link.");
+        return;
+      }
+
+      const imagesArray = [img1, img2, img3].filter(Boolean);
       btnText.textContent = "Guardando...";
 
       const productPayload = {
-        name, price, category: cat, stock: stock,
+        name,
+        price,
+        oldPrice,
+        category: cat,
+        stock,
+        variants,
         isOutOfStock: isOutOfStock || stock <= 0,
-        image: imageUrl, description: desc || "Disponible en tienda",
-        isPedido: isPedido, updatedAt: Date.now()
+        image: img1,
+        images: imagesArray,
+        description: desc || "Disponible en tienda",
+        isPedido,
+        updatedAt: Date.now()
       };
 
       try {
@@ -960,11 +1302,13 @@
           await fetch(`${FIREBASE_DB_URL}productos/${editId}.json`, {
             method: "PATCH", body: JSON.stringify(productPayload)
           });
+          showToast("Producto actualizado");
         } else {
           productPayload.createdAt = Date.now();
           await fetch(`${FIREBASE_DB_URL}productos.json`, {
             method: "POST", body: JSON.stringify(productPayload)
           });
+          showToast("Producto publicado");
         }
         cancelEditing();
         await fetchProductsFromCloud();
@@ -986,10 +1330,14 @@
       document.getElementById("adm-edit-id").value = prod.firebaseId;
       document.getElementById("adm-name").value = prod.name;
       document.getElementById("adm-price").value = prod.price;
+      document.getElementById("adm-old-price").value = prod.oldPrice || "";
       document.getElementById("adm-cat").value = prod.category;
       document.getElementById("adm-stock").value = typeof prod.stock !== "undefined" ? prod.stock : 1;
+      document.getElementById("adm-variants").value = prod.variants || "";
       document.getElementById("adm-desc").value = prod.description || "";
       document.getElementById("adm-img-url").value = prod.image || "";
+      document.getElementById("adm-img-url-2").value = (prod.images && prod.images[1]) ? prod.images[1] : "";
+      document.getElementById("adm-img-url-3").value = (prod.images && prod.images[2]) ? prod.images[2] : "";
       document.getElementById("adm-is-pedido").checked = !!prod.isPedido;
       document.getElementById("adm-is-outofstock").checked = !!prod.isOutOfStock;
       
@@ -1003,12 +1351,18 @@
       document.getElementById("adm-edit-id").value = "";
       document.getElementById("adm-name").value = "";
       document.getElementById("adm-price").value = "";
+      document.getElementById("adm-old-price").value = "";
       document.getElementById("adm-stock").value = "1";
+      document.getElementById("adm-variants").value = "";
       document.getElementById("adm-desc").value = "";
       document.getElementById("adm-img-url").value = "";
+      document.getElementById("adm-img-url-2").value = "";
+      document.getElementById("adm-img-url-3").value = "";
       document.getElementById("adm-is-pedido").checked = false;
       document.getElementById("adm-is-outofstock").checked = false;
       document.getElementById("adm-file").value = "";
+      document.getElementById("adm-file-2").value = "";
+      document.getElementById("adm-file-3").value = "";
       document.getElementById("btn-save-text").textContent = "Publicar en Tienda";
       document.getElementById("btn-cancel-edit").classList.add("hidden");
     }
@@ -1018,14 +1372,16 @@
       list.innerHTML = "";
       products.forEach(p => {
         const isOutOfStock = p.isOutOfStock || (typeof p.stock !== "undefined" && p.stock <= 0);
+        const hasOffer = Number(p.oldPrice) > Number(p.price);
         const item = document.createElement("div");
         item.className = "flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-slate-300 transition";
         item.innerHTML = `
           <div class="flex items-center gap-4 truncate">
-            <img src="${getOptimizedImageUrl(p.image)}" class="w-12 h-12 rounded-xl object-contain bg-slate-50" />
+            <img src="${getOptimizedImageUrl(p.image, 150)}" class="w-12 h-12 rounded-xl object-contain bg-slate-50" />
             <div>
               <div class="font-black text-slate-900 text-sm flex items-center gap-2">
                 <span class="truncate">${p.name}</span>
+                ${hasOffer ? `<span class="bg-rose-600 text-white text-[9px] px-1.5 py-0.5 rounded uppercase">OFERTA</span>` : ''}
                 ${isOutOfStock ? `<span class="bg-rose-100 text-rose-700 text-[9px] px-2 py-0.5 rounded uppercase">AGOTADO</span>` : `<span class="text-slate-400 text-[10px]">(${p.stock || 1} u)</span>`}
               </div>
               <div class="text-xs font-medium text-slate-500 capitalize mt-0.5">
@@ -1049,6 +1405,7 @@
         await fetch(`${FIREBASE_DB_URL}productos/${id}.json`, { method: "DELETE" });
         await fetchProductsFromCloud();
         renderAdminList();
+        showToast("Producto eliminado", true);
       } catch (e) {
         alert("Error al eliminar.");
       }
@@ -1076,38 +1433,54 @@
       document.getElementById("btn-send-whatsapp").addEventListener("click", sendWhatsAppOrder);
     }
 
-    function addToCart(prodId) {
+    function addToCart(prodId, variant = "") {
       const prod = products.find(p => p.firebaseId === prodId);
       if (!prod) return;
       
       const stockUnits = typeof prod.stock !== "undefined" ? Number(prod.stock) : 1;
       if (prod.isOutOfStock || stockUnits <= 0) return alert("Este producto se encuentra agotado.");
 
-      const exist = cart.find(i => i.firebaseId === prodId);
+      const cartKey = variant ? `${prodId}::${variant}` : prodId;
+      const totalQtyOfProdInCart = cart
+        .filter(i => i.firebaseId === prodId)
+        .reduce((acc, i) => acc + i.qty, 0);
+
+      if (!prod.isPedido && (totalQtyOfProdInCart + 1) > stockUnits) {
+        return showToast(`Solo hay ${stockUnits} unidades disponibles`, true);
+      }
+
+      const exist = cart.find(i => i.cartKey === cartKey);
       if (!exist) {
-        if (!prod.isPedido && stockUnits < 1) return alert(`Solo hay ${stockUnits} unidades.`);
-        cart.push({ ...prod, qty: 1 });
+        cart.push({ ...prod, cartKey, selectedVariant: variant, qty: 1 });
       } else {
-        if (!prod.isPedido && (exist.qty + 1) > stockUnits) return alert(`Límite de stock: ${stockUnits} unidades.`);
         exist.qty += 1;
       }
+
+      saveCartToStorage();
       renderCart();
+      showToast("Agregado a tu pedido");
     }
 
-    function changeQty(prodId, delta) {
-      const item = cart.find(i => i.firebaseId === prodId);
+    function changeQty(cartKey, delta) {
+      const item = cart.find(i => i.cartKey === cartKey);
       if (!item) return;
-      const originalProd = products.find(p => p.firebaseId === prodId);
+
+      const originalProd = products.find(p => p.firebaseId === item.firebaseId) || item;
       const stockUnits = typeof originalProd.stock !== "undefined" ? Number(originalProd.stock) : 1;
-      
       const newQty = item.qty + delta;
       
       if (newQty <= 0) {
-        cart = cart.filter(i => i.firebaseId !== prodId);
+        cart = cart.filter(i => i.cartKey !== cartKey);
       } else {
-        if (!originalProd.isPedido && newQty > stockUnits) return alert(`Límite de stock: ${stockUnits} unidades.`);
+        const totalOtherVariants = cart
+          .filter(i => i.firebaseId === item.firebaseId && i.cartKey !== cartKey)
+          .reduce((acc, i) => acc + i.qty, 0);
+        if (!originalProd.isPedido && (totalOtherVariants + newQty) > stockUnits) {
+          return showToast(`Límite de stock: ${stockUnits} unidades`, true);
+        }
         item.qty = newQty;
       }
+      saveCartToStorage();
       renderCart();
     }
 
@@ -1117,6 +1490,7 @@
       const totalDisplay = document.getElementById("cart-total");
       const anticipoDisplay = document.getElementById("cart-anticipo");
       const anticipoRow = document.getElementById("row-anticipo");
+      const alertPedido = document.getElementById("cart-pedido-alert");
 
       counter.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
 
@@ -1124,6 +1498,7 @@
         list.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-rose-900/30 space-y-3"><i class="ph ph-shopping-cart text-6xl"></i><p class="font-bold text-sm">Tu carrito está vacío</p></div>`;
         totalDisplay.textContent = "S/ 0.00";
         anticipoRow.classList.add("hidden");
+        alertPedido.classList.add("hidden");
         return;
       }
 
@@ -1138,20 +1513,22 @@
           montoPedidoTotal += sub;
         }
 
+        const safeKey = item.cartKey.replace(/'/g, "\\'");
         const row = document.createElement("div");
         row.className = "flex items-center gap-4 p-3 bg-white rounded-2xl border border-rose-50 shadow-sm";
         row.innerHTML = `
-          <img src="${getOptimizedImageUrl(item.image)}" class="w-16 h-16 object-contain rounded-xl bg-slate-50" />
+          <img src="${getOptimizedImageUrl(item.image, 150)}" class="w-16 h-16 object-contain rounded-xl bg-slate-50" />
           <div class="flex-1 min-w-0">
             <h5 class="text-sm font-black text-slate-900 truncate leading-tight">${item.name}</h5>
+            ${item.selectedVariant ? `<span class="inline-block text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded mt-0.5">Opción: ${item.selectedVariant}</span>` : ''}
             <div class="flex items-center gap-2 mt-1">
-              <span class="text-sm font-bold text-rose-600">S/ ${item.price.toFixed(2)}</span>
+              <span class="text-sm font-bold text-rose-600">S/ ${Number(item.price).toFixed(2)}</span>
             </div>
           </div>
           <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl p-1">
-            <button onclick="changeQty('${item.firebaseId}', -1)" class="w-7 h-7 flex items-center justify-center text-slate-600 font-bold bg-white rounded-lg">-</button>
+            <button onclick="changeQty('${safeKey}', -1)" class="w-7 h-7 flex items-center justify-center text-slate-600 font-bold bg-white rounded-lg">-</button>
             <span class="text-sm font-black w-4 text-center">${item.qty}</span>
-            <button onclick="changeQty('${item.firebaseId}', 1)" class="w-7 h-7 flex items-center justify-center text-slate-600 font-bold bg-white rounded-lg">+</button>
+            <button onclick="changeQty('${safeKey}', 1)" class="w-7 h-7 flex items-center justify-center text-slate-600 font-bold bg-white rounded-lg">+</button>
           </div>
         `;
         list.appendChild(row);
@@ -1161,8 +1538,10 @@
       if (hasPedido) {
         anticipoDisplay.textContent = `S/ ${(montoPedidoTotal * 0.50).toFixed(2)}`;
         anticipoRow.classList.remove("hidden");
+        alertPedido.classList.remove("hidden");
       } else {
         anticipoRow.classList.add("hidden");
+        alertPedido.classList.add("hidden");
       }
     }
 
@@ -1206,14 +1585,19 @@
         text += `📦 *Agencia:* Shalom\n`;
       }
 
+      const formatItem = (i) => {
+        const vTxt = i.selectedVariant ? ` [${i.selectedVariant}]` : "";
+        return `  • ${i.name}${vTxt} x${i.qty} = S/ ${(i.price * i.qty).toFixed(2)}\n`;
+      };
+
       if (prodsStock.length > 0) {
         text += `\n⚡ *EN STOCK:*\n`;
-        prodsStock.forEach((i) => { text += `  • ${i.name} x${i.qty} = S/ ${(i.price * i.qty).toFixed(2)}\n`; });
+        prodsStock.forEach((i) => { text += formatItem(i); });
       }
 
       if (prodsPedido.length > 0) {
         text += `\n📖 *A PEDIDO:*\n`;
-        prodsPedido.forEach((i) => { text += `  • ${i.name} x${i.qty} = S/ ${(i.price * i.qty).toFixed(2)}\n`; });
+        prodsPedido.forEach((i) => { text += formatItem(i); });
       }
 
       text += `\n----------------------------------\n`;
