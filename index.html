@@ -97,8 +97,14 @@
         </div>
       </div>
       
-      <!-- BOTÓN CARRITO MODERNO -->
-      <div class="order-2 md:order-3 flex items-center gap-3 shrink-0">
+      <!-- BOTONES FAVORITOS Y CARRITO -->
+      <div class="order-2 md:order-3 flex items-center gap-2 sm:gap-3 shrink-0">
+        <button id="btn-cat-favoritos" onclick="filterCategory('favoritos', this); scrollToProducts();" class="cat-pill relative bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl flex items-center gap-1.5 shadow-sm transition-all duration-300" title="Mis Favoritos">
+          <i class="ph-fill ph-heart text-xl sm:text-2xl"></i>
+          <span class="font-bold text-xs sm:text-sm hidden sm:inline">Favoritos</span>
+          <span id="fav-count-pill" class="hidden absolute -top-2 -right-2 bg-rose-600 text-white text-[10px] sm:text-xs font-black w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center border-2 border-white shadow-md">0</span>
+        </button>
+
         <button id="btn-open-cart" class="relative bg-gradient-to-r from-slate-900 to-slate-800 hover:from-rose-900 hover:to-slate-900 text-white px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300">
           <i class="ph ph-shopping-bag text-xl sm:text-2xl text-amber-400"></i>
           <span class="font-bold text-xs sm:text-sm hidden sm:inline">Mi Pedido</span>
@@ -112,10 +118,6 @@
       <div class="max-w-7xl mx-auto px-4 py-2.5 flex gap-2.5 items-center">
         <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
         <button id="btn-cat-ofertas" onclick="filterCategory('ofertas', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-black bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition whitespace-nowrap">🔥 Ofertas</button>
-        <button id="btn-cat-favoritos" onclick="filterCategory('favoritos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-pink-50 text-pink-700 border border-pink-200 hover:bg-pink-100 transition whitespace-nowrap flex items-center gap-1.5">
-          <span>❤️ Favoritos</span>
-          <span id="fav-count-pill" class="hidden bg-pink-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none">0</span>
-        </button>
         
         <!-- BOTONES DE MARCAS (LOGOS EN PROGRAMACIÓN) -->
         <button id="btn-cat-natura" onclick="filterCategory('natura', this)" class="hidden cat-pill px-4 py-2 rounded-xl bg-orange-50 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap flex items-center gap-1.5">
@@ -512,9 +514,9 @@
     </div>
   </div>
 
-  <!-- ================= MODAL ADMIN PREMIUM ================= -->
-  <div id="admin-modal" class="fixed inset-0 z-[80] hidden bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6">
-    <div class="bg-white w-full max-w-2xl rounded-[2rem] shadow-2xl flex flex-col h-full max-h-[90vh] overflow-hidden">
+  <!-- ================= MODAL ADMIN PREMIUM (AMPLIADO) ================= -->
+  <div id="admin-modal" class="fixed inset-0 z-[80] hidden bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white w-full max-w-5xl rounded-[2rem] shadow-2xl flex flex-col h-full max-h-[95vh] overflow-hidden">
       <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white">
         <h3 class="font-black text-lg sm:text-xl flex items-center gap-3 tracking-tight">
           <i class="ph ph-storefront text-amber-400 text-2xl"></i> Centro de Control
@@ -630,12 +632,12 @@
             <h4 class="font-black text-slate-900 text-sm uppercase tracking-widest flex items-center gap-2">
               <i class="ph ph-archive text-slate-400 text-xl"></i> Inventario Actual
             </h4>
-            <div class="relative w-full sm:w-64">
+            <div class="relative w-full sm:w-72">
               <i class="ph ph-magnifying-glass text-slate-400 text-base absolute left-3 top-1/2 -translate-y-1/2"></i>
               <input type="text" id="admin-search-input" oninput="renderAdminList()" placeholder="Buscar en tu inventario..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:border-slate-900 outline-none transition" />
             </div>
           </div>
-          <div id="admin-prod-list" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
+          <div id="admin-prod-list" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
         </div>
 
         <!-- CONFIGURACIÓN DE TIENDA (CINTA DESLIZANTE, BLACK FRIDAY, ENVÍO Y 9 CATEGORÍAS) -->
@@ -657,17 +659,40 @@
             <p class="text-[10px] text-slate-500">Cada línea que escribas aparecerá separada por <b>✦</b> moviéndose de derecha a izquierda.</p>
           </div>
 
-          <!-- MODO BLACK FRIDAY -->
-          <div class="bg-slate-900 text-white p-4 rounded-2xl border border-amber-400/40 space-y-3">
+          <!-- MODO BLACK FRIDAY (CON 2 MODOS DE PRECIO + SELECTOR DE CATEGORÍAS) -->
+          <div class="bg-slate-900 text-white p-5 rounded-2xl border border-amber-400/40 space-y-4">
             <label class="flex items-center gap-2.5 cursor-pointer">
               <input type="checkbox" id="cfg-bf-active" class="w-4 h-4 accent-amber-400 rounded" />
               <span class="text-xs font-black text-amber-400 uppercase tracking-wider">🖤 Activar Modo Black Friday</span>
             </label>
-            <div class="flex items-center gap-3">
-              <label class="text-[11px] text-slate-300 font-bold whitespace-nowrap">Descuento global (%):</label>
-              <input type="number" id="cfg-bf-discount" min="1" max="80" value="20" class="w-24 p-2 rounded-xl border border-slate-700 bg-slate-800 text-white text-xs font-black text-center outline-none focus:border-amber-400" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="space-y-1">
+                <label class="text-[11px] text-slate-300 font-bold block">Porcentaje (%):</label>
+                <input type="number" id="cfg-bf-discount" min="1" max="80" value="25" class="w-full p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-white text-xs font-black outline-none focus:border-amber-400" />
+              </div>
+              <div class="space-y-1">
+                <label class="text-[11px] text-slate-300 font-bold block">Cómo aplicar el precio:</label>
+                <select id="cfg-bf-mode" class="w-full p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-white text-xs font-bold outline-none focus:border-amber-400 cursor-pointer">
+                  <option value="discount">Descuento real (Baja el precio actual)</option>
+                  <option value="keep">Mantener precio actual (Calcula tachado mayor)</option>
+                </select>
+              </div>
             </div>
-            <p class="text-[10px] text-slate-400">Al activarlo, el banner cambia a Black Friday y aplica este % de descuento a todos los productos automáticamente.</p>
+
+            <div class="pt-1">
+              <p class="text-[10px] font-black text-amber-300 uppercase tracking-wider mb-2">Aplicar Black Friday solo a:</p>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <label class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-slate-700 transition"><input type="checkbox" id="bf-cat-fragancias" class="accent-amber-400" /><span>Fragancias</span></label>
+                <label class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-slate-700 transition"><input type="checkbox" id="bf-cat-zapatos" class="accent-amber-400" /><span>Zapatos</span></label>
+                <label class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-slate-700 transition"><input type="checkbox" id="bf-cat-ropa" class="accent-amber-400" /><span>Ropa</span></label>
+                <label class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-slate-700 transition"><input type="checkbox" id="bf-cat-natura" class="accent-amber-400" /><span>Natura</span></label>
+                <label class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-slate-700 transition"><input type="checkbox" id="bf-cat-avon" class="accent-amber-400" /><span>Avon</span></label>
+                <label class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-slate-700 transition"><input type="checkbox" id="bf-cat-esika" class="accent-amber-400" /><span>Ésika</span></label>
+                <label class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-slate-700 transition"><input type="checkbox" id="bf-cat-yanbal" class="accent-amber-400" /><span>Yanbal</span></label>
+              </div>
+            </div>
+            <p class="text-[10px] text-slate-400">Puedes dejar sin marcar las categorías de catálogo (Natura, Avon, Ésika, Yanbal) para que no se vean afectadas.</p>
           </div>
 
           <!-- AGENCIA DE ENVÍO -->
@@ -802,17 +827,28 @@
       bannerActive: false,
       bannerText: "",
       blackFriday: false,
-      bfDiscount: 20
+      bfDiscount: 25,
+      bfMode: "discount",
+      bfCategories: ["fragancias", "zapatos", "ropa"]
     };
 
-    // Calculadora de precios (incluye Modo Black Friday)
+    // Calculadora de precios (Black Friday con 2 modos y solo en categorías seleccionadas)
     function getEffectivePricing(p) {
       const basePrice = Number(p.price);
       const baseOld = Number(p.oldPrice) || 0;
-      if (storeConfig.blackFriday && Number(storeConfig.bfDiscount) > 0) {
+      const bfCats = Array.isArray(storeConfig.bfCategories) ? storeConfig.bfCategories : ["fragancias", "zapatos", "ropa"];
+      const appliesBF = storeConfig.blackFriday && Number(storeConfig.bfDiscount) > 0 && bfCats.includes(p.category);
+
+      if (appliesBF) {
         const pct = Number(storeConfig.bfDiscount);
-        const discounted = Number((basePrice * (1 - pct / 100)).toFixed(2));
-        return { price: discounted, oldPrice: basePrice, hasOffer: true, discountPct: pct, isBF: true };
+        const mode = storeConfig.bfMode || "discount";
+        if (mode === "keep") {
+          const inflatedOld = Number((basePrice / (1 - pct / 100)).toFixed(2));
+          return { price: basePrice, oldPrice: inflatedOld, hasOffer: true, discountPct: pct, isBF: true };
+        } else {
+          const discounted = Number((basePrice * (1 - pct / 100)).toFixed(2));
+          return { price: discounted, oldPrice: basePrice, hasOffer: true, discountPct: pct, isBF: true };
+        }
       }
       const hasOffer = baseOld > basePrice;
       const discountPct = hasOffer ? Math.round(((baseOld - basePrice) / baseOld) * 100) : 0;
@@ -1013,12 +1049,10 @@
           const singleCycle = lines
             .map(line => `<span class="mx-6 inline-flex items-center">${escapeHtml(line)}</span><span class="text-amber-300/80">✦</span>`)
             .join("");
-          // Repetimos lo necesario para llenar pantallas anchas y duplicamos para bucle infinito sin saltos
           const repeats = lines.length === 1 ? 4 : (lines.length === 2 ? 3 : 2);
           const halfTrack = singleCycle.repeat(repeats);
           track.innerHTML = `<div class="flex items-center shrink-0">${halfTrack}</div><div class="flex items-center shrink-0" aria-hidden="true">${halfTrack}</div>`;
 
-          // Velocidad equilibrada según la cantidad de texto
           const charCount = lines.join(" ").length * repeats;
           const durationSec = Math.max(18, Math.min(55, Math.round(charCount * 0.14)));
           track.style.animationDuration = `${durationSec}s`;
@@ -1052,11 +1086,21 @@
 
       // Modo Black Friday
       const bfActive = !!storeConfig.blackFriday;
-      const bfPct = Number(storeConfig.bfDiscount) || 20;
+      const bfPct = Number(storeConfig.bfDiscount) || 25;
+      const bfMode = storeConfig.bfMode || "discount";
+      const bfCats = Array.isArray(storeConfig.bfCategories) ? storeConfig.bfCategories : ["fragancias", "zapatos", "ropa"];
+
       const chkBf = document.getElementById("cfg-bf-active");
       const inpBf = document.getElementById("cfg-bf-discount");
+      const selBfMode = document.getElementById("cfg-bf-mode");
       if (chkBf) chkBf.checked = bfActive;
       if (inpBf) inpBf.value = bfPct;
+      if (selBfMode) selBfMode.value = bfMode;
+
+      ['fragancias', 'zapatos', 'ropa', 'natura', 'avon', 'esika', 'yanbal'].forEach(c => {
+        const cb = document.getElementById(`bf-cat-${c}`);
+        if (cb) cb.checked = bfCats.includes(c);
+      });
 
       const heroBox = document.getElementById("hero-banner-box");
       const heroBadge = document.getElementById("hero-badge");
@@ -1065,8 +1109,8 @@
         if (bfActive) {
           heroBox.className = "bg-gradient-to-br from-black via-zinc-900 to-rose-950 border-2 border-amber-400/50 text-white rounded-3xl p-6 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden transition-all duration-500";
           heroBadge.className = "inline-block bg-rose-600 text-white text-xs uppercase tracking-widest font-black px-4 py-1.5 rounded-full mb-4 shadow-md animate-pulse";
-          heroBadge.textContent = `🖤 BLACK FRIDAY • -${bfPct}% OFF`;
-          heroTitle.innerHTML = `BLACK <span class="text-amber-400">FRIDAY</span><br><span class="text-rose-400 text-2xl sm:text-4xl">Todo con ${bfPct}% de descuento.</span>`;
+          heroBadge.textContent = `🖤 BLACK FRIDAY • HASTA -${bfPct}% OFF`;
+          heroTitle.innerHTML = `BLACK <span class="text-amber-400">FRIDAY</span><br><span class="text-rose-400 text-2xl sm:text-4xl">Hasta ${bfPct}% de descuento.</span>`;
         } else {
           heroBox.className = "bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 text-white rounded-3xl p-6 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden transition-all duration-500";
           heroBadge.className = "inline-block bg-amber-400 text-amber-950 text-xs uppercase tracking-widest font-black px-4 py-1.5 rounded-full mb-4 shadow-sm";
@@ -1106,7 +1150,10 @@
         bannerActive: document.getElementById("cfg-banner-active").checked,
         bannerText: document.getElementById("cfg-banner-text").value.trim(),
         blackFriday: document.getElementById("cfg-bf-active").checked,
-        bfDiscount: parseInt(document.getElementById("cfg-bf-discount").value) || 20
+        bfDiscount: parseInt(document.getElementById("cfg-bf-discount").value) || 25,
+        bfMode: document.getElementById("cfg-bf-mode").value || "discount",
+        bfCategories: ['fragancias', 'zapatos', 'ropa', 'natura', 'avon', 'esika', 'yanbal']
+          .filter(c => document.getElementById(`bf-cat-${c}`)?.checked)
       };
 
       try {
