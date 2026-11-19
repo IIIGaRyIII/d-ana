@@ -7,7 +7,7 @@
 
   <!-- ================= CONFIGURACIÓN DE DOMINIO Y VISTA PREVIA (WHATSAPP/FACEBOOK) ================= -->
   <link rel="icon" type="image/png" href="logo.png" />
-  <meta name="description" content="Moda, Calzado y Fragancias exclusivas. Envíos a todo el Perú por Shalom y contraentrega en Chiclayo." />
+  <meta name="description" content="Moda, Calzado y Fragancias exclusivas. Envíos a todo el Perú previa coordinación y contraentrega en Chiclayo." />
   <meta property="og:title" content="D'Ana Boutique - Tienda Oficial" />
   <meta property="og:description" content="Explora nuestra colección de moda, calzado y fragancias. Envíos nacionales previa coordinación." />
   <!-- CUANDO COMPRES TU .COM, REEMPLAZA "https://TUDOMINIO.com/" POR TU ENLACE REAL -->
@@ -46,22 +46,32 @@
     <p class="text-slate-500 text-xs mt-2 tracking-widest uppercase font-bold">Cargando colección...</p>
   </div>
 
-  <!-- ================= NAVBAR PREMIUM ================= -->
+  <!-- ================= NAVBAR PREMIUM ESTILO ALIEXPRESS ================= -->
   <header class="sticky top-0 z-40 bg-[#fffaf7]/95 backdrop-blur-lg border-b border-rose-100 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-24 sm:h-28 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap md:flex-nowrap items-center justify-between gap-3 md:gap-6">
       
       <!-- LOGO Y TÍTULO (ACCESO SECRETO AL PANEL: 3 CLICS) -->
-      <div id="logo-trigger" onclick="handleSecretClick()" class="flex items-center gap-2 sm:gap-4 cursor-pointer select-none group">
-        <img src="logo.png" alt="Logo" class="h-14 sm:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" onerror="this.src='https://placehold.co/150x150?text=D%27Ana'"/>
+      <div id="logo-trigger" onclick="handleSecretClick()" class="order-1 flex items-center gap-2 sm:gap-3.5 cursor-pointer select-none group shrink-0">
+        <img src="logo.png" alt="Logo" class="h-14 sm:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" onerror="this.src='https://placehold.co/150x150?text=D%27Ana'"/>
         <div class="flex flex-col justify-center">
-          <h1 class="font-black text-lg sm:text-3xl leading-none tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-rose-800 to-slate-900">D'Ana Boutique</h1>
-          <p class="text-[7.5px] sm:text-[11px] font-bold text-rose-900/60 uppercase tracking-[0.1em] sm:tracking-[0.2em] mt-0.5 sm:mt-1 whitespace-nowrap">Moda, Calzado & Fragancias</p>
+          <h1 class="font-black text-lg sm:text-2xl lg:text-3xl leading-none tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-rose-800 to-slate-900">D'Ana Boutique</h1>
+          <p class="text-[7.5px] sm:text-[10px] font-bold text-rose-900/60 uppercase tracking-[0.1em] sm:tracking-[0.2em] mt-0.5 sm:mt-1 whitespace-nowrap">Moda, Calzado & Fragancias</p>
+        </div>
+      </div>
+
+      <!-- BUSCADOR TIPO CÁPSULA (AL COSTADO EN PC / DEBAJO DEL LOGO EN CELULAR) -->
+      <div class="order-3 md:order-2 w-full md:flex-1 md:max-w-xl">
+        <div class="relative flex items-center w-full bg-white border-2 border-slate-900/90 rounded-full p-1 pl-4 shadow-sm focus-within:border-rose-700 focus-within:ring-2 focus-within:ring-rose-100 transition">
+          <input type="text" id="search-input" oninput="handleSearchAndSort()" onkeydown="if(event.key==='Enter'){scrollToProducts();}" placeholder="Buscar perfume, zapato, crema, marca..." class="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 outline-none font-medium pr-2" />
+          <button type="button" onclick="handleSearchAndSort(); scrollToProducts();" class="bg-slate-900 hover:bg-rose-700 text-white rounded-full px-4 sm:px-5 py-1.5 sm:py-2 flex items-center justify-center transition shrink-0" title="Buscar">
+            <i class="ph ph-magnifying-glass text-lg font-bold"></i>
+          </button>
         </div>
       </div>
       
       <!-- BOTÓN CARRITO MODERNO -->
-      <div class="flex items-center gap-3 shrink-0">
-        <button id="btn-open-cart" class="relative bg-gradient-to-r from-slate-900 to-slate-800 hover:from-rose-900 hover:to-slate-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300">
+      <div class="order-2 md:order-3 flex items-center gap-3 shrink-0">
+        <button id="btn-open-cart" class="relative bg-gradient-to-r from-slate-900 to-slate-800 hover:from-rose-900 hover:to-slate-900 text-white px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300">
           <i class="ph ph-shopping-bag text-xl sm:text-2xl text-amber-400"></i>
           <span class="font-bold text-xs sm:text-sm hidden sm:inline">Mi Pedido</span>
           <span id="cart-counter" class="absolute -top-2 -right-2 bg-rose-500 text-white text-[10px] sm:text-xs font-black w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center border-2 border-white shadow-md">0</span>
@@ -70,30 +80,30 @@
     </div>
 
     <!-- BARRA DE CATEGORÍAS (DINÁMICA DESDE PANEL) -->
-    <div class="bg-white/60 border-t border-rose-50 overflow-x-auto shadow-inner">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex gap-2.5 items-center">
-        <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
+    <div class="bg-white/70 border-t border-rose-50 overflow-x-auto shadow-inner">
+      <div class="max-w-7xl mx-auto px-4 py-2.5 flex gap-2.5 items-center">
+        <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
         
         <!-- BOTONES DE MARCAS (LOGOS EN PROGRAMACIÓN) -->
-        <button id="btn-cat-natura" onclick="filterCategory('natura', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl bg-orange-50 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap flex items-center gap-1.5">
+        <button id="btn-cat-natura" onclick="filterCategory('natura', this)" class="hidden cat-pill px-4 py-2 rounded-xl bg-orange-50 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap flex items-center gap-1.5">
           <i class="ph ph-flower-tulip text-lg text-[#FF6B00]"></i><span class="logo-natura text-lg lowercase">natura</span>
         </button>
-        <button id="btn-cat-avon" onclick="filterCategory('avon', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl bg-pink-50 border border-pink-200 hover:bg-pink-100 transition whitespace-nowrap">
+        <button id="btn-cat-avon" onclick="filterCategory('avon', this)" class="hidden cat-pill px-4 py-2 rounded-xl bg-pink-50 border border-pink-200 hover:bg-pink-100 transition whitespace-nowrap">
           <span class="logo-avon text-base uppercase">AVON</span>
         </button>
-        <button id="btn-cat-esika" onclick="filterCategory('esika', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl bg-red-50 border border-red-200 hover:bg-red-100 transition whitespace-nowrap">
+        <button id="btn-cat-esika" onclick="filterCategory('esika', this)" class="hidden cat-pill px-4 py-2 rounded-xl bg-red-50 border border-red-200 hover:bg-red-100 transition whitespace-nowrap">
           <span class="logo-esika text-lg lowercase">ésika</span>
         </button>
-        <button id="btn-cat-yanbal" onclick="filterCategory('yanbal', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl bg-orange-50 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap flex items-center gap-1.5">
+        <button id="btn-cat-yanbal" onclick="filterCategory('yanbal', this)" class="hidden cat-pill px-4 py-2 rounded-xl bg-orange-50 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap flex items-center gap-1.5">
           <div class="w-3.5 h-3.5 border-2 border-[#F27329] relative"><div class="absolute -top-1 -right-1 w-2 h-2 bg-[#F27329] rounded-bl-full"></div></div><span class="logo-yanbal text-sm uppercase">YANBAL</span>
         </button>
         
         <!-- OTRAS CATEGORÍAS -->
-        <button id="btn-cat-stock" onclick="filterCategory('stock', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">⚡ En Stock</button>
-        <button id="btn-cat-catalogo" onclick="filterCategory('catalogo', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition whitespace-nowrap">📖 Solo Catálogo</button>
-        <button id="btn-cat-fragancias" onclick="filterCategory('fragancias', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Fragancias & Perfumes</button>
-        <button id="btn-cat-zapatos" onclick="filterCategory('zapatos', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Zapatos de Dama</button>
-        <button id="btn-cat-ropa" onclick="filterCategory('ropa', this)" class="hidden cat-pill px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Ropa & Accesorios</button>
+        <button id="btn-cat-stock" onclick="filterCategory('stock', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">⚡ En Stock</button>
+        <button id="btn-cat-catalogo" onclick="filterCategory('catalogo', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition whitespace-nowrap">📖 Solo Catálogo</button>
+        <button id="btn-cat-fragancias" onclick="filterCategory('fragancias', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Fragancias & Perfumes</button>
+        <button id="btn-cat-zapatos" onclick="filterCategory('zapatos', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Zapatos de Dama</button>
+        <button id="btn-cat-ropa" onclick="filterCategory('ropa', this)" class="hidden cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 transition whitespace-nowrap">Ropa & Accesorios</button>
       </div>
     </div>
   </header>
@@ -153,16 +163,13 @@
     </div>
   </section>
 
-  <!-- ================= BARRA DE BÚSQUEDA Y ORDEN POR PRECIO ================= -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-2 pb-4 w-full">
-    <div class="bg-white p-3 sm:p-4 rounded-2xl border border-rose-100 shadow-sm flex flex-col sm:flex-row gap-3 items-center justify-between">
-      <div class="relative w-full sm:flex-1">
-        <i class="ph ph-magnifying-glass text-slate-400 text-xl absolute left-4 top-1/2 -translate-y-1/2"></i>
-        <input type="text" id="search-input" oninput="handleSearchAndSort()" placeholder="Buscar perfume, zapato, crema, marca..." class="w-full pl-11 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm focus:bg-white focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition font-medium" />
-      </div>
-      <div class="flex items-center gap-2 w-full sm:w-auto">
-        <i class="ph ph-arrows-down-up text-rose-700 text-lg hidden sm:block"></i>
-        <select id="sort-select" onchange="handleSearchAndSort()" class="w-full sm:w-52 py-2.5 px-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-bold text-slate-700 focus:bg-white focus:border-rose-400 outline-none transition cursor-pointer">
+  <!-- ================= BARRA DE ORDENAR POR PRECIO ================= -->
+  <section id="catalog-section" class="max-w-7xl mx-auto px-4 sm:px-6 pt-2 pb-3 w-full scroll-mt-36">
+    <div class="flex items-center justify-between gap-3">
+      <p id="products-count" class="text-xs sm:text-sm font-bold text-slate-500">Cargando catálogo...</p>
+      <div class="flex items-center gap-2">
+        <i class="ph ph-arrows-down-up text-rose-700 text-base hidden sm:block"></i>
+        <select id="sort-select" onchange="handleSearchAndSort()" class="py-2 px-3 rounded-xl bg-white border border-rose-100 shadow-xs text-xs sm:text-sm font-bold text-slate-700 focus:border-rose-400 outline-none transition cursor-pointer">
           <option value="recent">Más recientes</option>
           <option value="price-asc">Precio: Menor a mayor</option>
           <option value="price-desc">Precio: Mayor a menor</option>
@@ -173,7 +180,7 @@
   </section>
 
   <!-- ================= PRODUCTOS ================= -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-16 flex-1 w-full mt-1">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-16 flex-1 w-full">
     <div id="loading-spinner" class="py-24 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
       <i class="ph ph-spinner-gap animate-spin text-5xl text-rose-800"></i>
       <p class="text-base font-bold tracking-wide">Cargando la mejor selección...</p>
@@ -193,15 +200,16 @@
           <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-3">
             <i class="ph ph-receipt text-2xl font-bold"></i>
           </div>
-          <h4 class="font-black text-slate-900 text-base mb-1">Envío Rastreado Shalom</h4>
-          <p class="text-xs text-slate-600 leading-relaxed">Te enviamos foto de tu paquete y la boleta oficial de Shalom con tu código de seguimiento apenas lo despachamos.</p>
+          <h4 class="font-black text-slate-900 text-base mb-1">Envío Rastreado</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Te enviamos foto de tu paquete y la boleta oficial de la agencia de tu preferencia con tu código de seguimiento apenas lo despachamos.</p>
         </div>
         <div class="p-5 rounded-2xl bg-[#fffaf7] border border-rose-100/70 flex flex-col items-center text-center">
           <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center mb-3">
             <i class="ph ph-handshake text-2xl font-bold"></i>
           </div>
-          <h4 class="font-black text-slate-900 text-base mb-1">Contraentrega Segura</h4>
-          <p class="text-xs text-slate-600 leading-relaxed">En Chiclayo puedes revisar tu producto en persona y pagar al recibir en puntos céntricos seguros.</p>
+          <h4 class="font-black text-slate-900 text-base mb-0.5">Contraentrega Segura</h4>
+          <span class="text-[11px] font-bold text-rose-600 mb-1.5">(Disponible solo en Chiclayo)</span>
+          <p class="text-xs text-slate-600 leading-relaxed">Puedes revisar tu producto en persona y pagar al recibir en puntos céntricos seguros.</p>
         </div>
         <div class="p-5 rounded-2xl bg-[#fffaf7] border border-rose-100/70 flex flex-col items-center text-center">
           <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mb-3">
@@ -664,6 +672,11 @@
       }
     }
 
+    function scrollToProducts() {
+      const section = document.getElementById("catalog-section");
+      if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
     // === NOTIFICACIÓN FLOTANTE (TOAST) ===
     function showToast(message, isWarning = false) {
       const toast = document.getElementById("toast-notification");
@@ -705,7 +718,7 @@
         title: "Políticas de Envío",
         content: `
           <p><b>1. Entregas Locales (Chiclayo):</b> Realizamos servicio de contraentrega sin costo adicional en puntos céntricos específicos y seguros (Real Plaza, Parque Principal, Plaza Elías Aguirre, Banco de la Nación centro).</p>
-          <p><b>2. Envíos Nacionales:</b> Realizamos envíos a todo el Perú mediante la agencia <b>Shalom</b>. Todo envío nacional se realiza <b>previa coordinación</b>. El costo del flete interprovincial es asumido por el comprador y pagado directamente en destino (si la agencia lo permite) o sumado al total de la compra antes del despacho.</p>
+          <p><b>2. Envíos Nacionales:</b> Realizamos envíos a todo el Perú mediante agencia de transporte (previa coordinación). El costo del flete interprovincial es asumido por el comprador y pagado directamente en destino (si la agencia lo permite) o sumado al total de la compra antes del despacho.</p>
           <p><b>3. Tiempos de Despacho:</b> Los artículos clasificados como "En Stock" se despachan en un plazo de 24 a 48 horas hábiles tras la confirmación de la orden. Los productos "A Pedido" dependen exclusivamente de las fechas de cierre de campaña de cada marca respectiva, lo cual se le informará al cliente vía WhatsApp.</p>`
       },
       devoluciones: {
@@ -973,6 +986,11 @@
         filtered.sort((a, b) => Number(b.price) - Number(a.price));
       } else if (sortOrder === "offers") {
         filtered = filtered.filter(p => Number(p.oldPrice) > Number(p.price));
+      }
+
+      const countEl = document.getElementById("products-count");
+      if (countEl) {
+        countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'producto encontrado' : 'productos disponibles'}`;
       }
 
       if (filtered.length === 0) {
