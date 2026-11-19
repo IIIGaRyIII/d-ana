@@ -29,6 +29,27 @@
     .logo-avon { font-family: 'Arial', sans-serif; font-weight: 900; letter-spacing: 0.05em; color: #E5004B; }
     .logo-esika { font-family: 'Arial', sans-serif; font-weight: 400; letter-spacing: -0.02em; color: #E60000; }
     .logo-yanbal { font-family: 'Trebuchet MS', sans-serif; font-weight: 600; letter-spacing: 0.1em; color: #F27329; }
+
+    /* Cinta deslizante de anuncios (derecha a izquierda) */
+    .marquee-container {
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      width: 100%;
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 24s linear infinite;
+    }
+    .marquee-container:hover .marquee-track {
+      animation-play-state: paused;
+    }
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
   </style>
 </head>
 <body class="bg-[#fffaf7] text-slate-800 antialiased font-sans min-h-screen flex flex-col">
@@ -46,9 +67,11 @@
     <p class="text-slate-500 text-xs mt-2 tracking-widest uppercase font-bold">Cargando colección...</p>
   </div>
 
-  <!-- ================= CINTA SUPERIOR DE ANUNCIOS (EDITABLE DESDE EL PANEL) ================= -->
-  <div id="top-announcement-bar" class="hidden bg-gradient-to-r from-rose-900 via-rose-700 to-slate-900 text-white text-center py-2 px-4 text-xs sm:text-sm font-bold tracking-wide shadow-sm">
-    <span id="top-announcement-text"></span>
+  <!-- ================= CINTA SUPERIOR DE ANUNCIOS DESLIZANTE (EDITABLE DESDE EL PANEL) ================= -->
+  <div id="top-announcement-bar" class="hidden bg-gradient-to-r from-rose-900 via-rose-700 to-slate-900 text-white py-2 text-xs sm:text-sm font-bold tracking-wide shadow-sm">
+    <div class="marquee-container">
+      <div id="top-announcement-track" class="marquee-track"></div>
+    </div>
   </div>
 
   <!-- ================= NAVBAR PREMIUM ESTILO ALIEXPRESS ================= -->
@@ -120,12 +143,12 @@
 
   <!-- ================= BANNER PRINCIPAL ================= -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-4 w-full">
-    <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 text-white rounded-3xl p-6 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden">
+    <div id="hero-banner-box" class="bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 text-white rounded-3xl p-6 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden transition-all duration-500">
       <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
 
       <div class="relative z-10 w-full lg:w-1/2">
-        <span class="inline-block bg-amber-400 text-amber-950 text-xs uppercase tracking-widest font-black px-4 py-1.5 rounded-full mb-4 shadow-sm">Nueva Temporada</span>
-        <h2 class="text-3xl sm:text-5xl font-black mb-4 tracking-tight leading-tight">Encuentra tu estilo<br><span class="text-amber-300">perfecto hoy.</span></h2>
+        <span id="hero-badge" class="inline-block bg-amber-400 text-amber-950 text-xs uppercase tracking-widest font-black px-4 py-1.5 rounded-full mb-4 shadow-sm">Nueva Temporada</span>
+        <h2 id="hero-title" class="text-3xl sm:text-5xl font-black mb-4 tracking-tight leading-tight">Encuentra tu estilo<br><span class="text-amber-300">perfecto hoy.</span></h2>
         
         <!-- MEDIOS DE PAGO VISUALES -->
         <div class="mt-6 pt-6 border-t border-white/10">
@@ -615,22 +638,36 @@
           <div id="admin-prod-list" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
         </div>
 
-        <!-- CONFIGURACIÓN DE TIENDA (CINTA, ENVÍO Y 9 CATEGORÍAS) -->
+        <!-- CONFIGURACIÓN DE TIENDA (CINTA DESLIZANTE, BLACK FRIDAY, ENVÍO Y 9 CATEGORÍAS) -->
         <div class="bg-rose-50 p-6 rounded-3xl border border-rose-200 shadow-sm mt-8 space-y-6">
           <div>
             <h4 class="font-black text-rose-900 text-sm uppercase tracking-widest mb-1 flex items-center gap-2">
               <i class="ph ph-sliders text-rose-500 text-xl"></i> Configuración de Tienda
             </h4>
-            <p class="text-xs text-rose-800 font-medium">Activa anuncios, configura envíos y elige qué pestañas se ven arriba.</p>
+            <p class="text-xs text-rose-800 font-medium">Activa anuncios deslizantes, Modo Black Friday, envíos y pestañas del menú.</p>
           </div>
 
-          <!-- CINTA SUPERIOR DE ANUNCIOS -->
-          <div class="bg-white p-4 rounded-2xl border border-rose-100 space-y-3">
+          <!-- CINTA SUPERIOR DE ANUNCIOS (1 ANUNCIO POR LÍNEA) -->
+          <div class="bg-white p-4 rounded-2xl border border-rose-100 space-y-2.5">
             <label class="flex items-center gap-2.5 cursor-pointer">
               <input type="checkbox" id="cfg-banner-active" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-800 uppercase tracking-wider">📢 Mostrar Cinta Superior de Anuncios</span>
+              <span class="text-xs font-black text-slate-800 uppercase tracking-wider">📢 Mostrar Cinta Deslizante de Anuncios</span>
             </label>
-            <input type="text" id="cfg-banner-text" placeholder="Ej: 🔥 Campaña Natura abierta hasta el viernes • Envíos a todo el Perú" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium focus:bg-white focus:border-rose-500 outline-none transition" />
+            <textarea id="cfg-banner-text" rows="3" placeholder="Escribe un anuncio por línea, por ejemplo:&#10;🔥 Aprovecha descuentos hoy en perfumes&#10;🚚 Envíos a todo el Perú previa coordinación&#10;✨ Nueva colección de moda disponible" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium focus:bg-white focus:border-rose-500 outline-none transition resize-y"></textarea>
+            <p class="text-[10px] text-slate-500">Cada línea que escribas aparecerá separada por <b>✦</b> moviéndose de derecha a izquierda.</p>
+          </div>
+
+          <!-- MODO BLACK FRIDAY -->
+          <div class="bg-slate-900 text-white p-4 rounded-2xl border border-amber-400/40 space-y-3">
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" id="cfg-bf-active" class="w-4 h-4 accent-amber-400 rounded" />
+              <span class="text-xs font-black text-amber-400 uppercase tracking-wider">🖤 Activar Modo Black Friday</span>
+            </label>
+            <div class="flex items-center gap-3">
+              <label class="text-[11px] text-slate-300 font-bold whitespace-nowrap">Descuento global (%):</label>
+              <input type="number" id="cfg-bf-discount" min="1" max="80" value="20" class="w-24 p-2 rounded-xl border border-slate-700 bg-slate-800 text-white text-xs font-black text-center outline-none focus:border-amber-400" />
+            </div>
+            <p class="text-[10px] text-slate-400">Al activarlo, el banner cambia a Black Friday y aplica este % de descuento a todos los productos automáticamente.</p>
           </div>
 
           <!-- AGENCIA DE ENVÍO -->
@@ -763,8 +800,30 @@
       stock: true, catalogo: true, fragancias: true, zapatos: true, ropa: true,
       shalom: true,
       bannerActive: false,
-      bannerText: ""
+      bannerText: "",
+      blackFriday: false,
+      bfDiscount: 20
     };
+
+    // Calculadora de precios (incluye Modo Black Friday)
+    function getEffectivePricing(p) {
+      const basePrice = Number(p.price);
+      const baseOld = Number(p.oldPrice) || 0;
+      if (storeConfig.blackFriday && Number(storeConfig.bfDiscount) > 0) {
+        const pct = Number(storeConfig.bfDiscount);
+        const discounted = Number((basePrice * (1 - pct / 100)).toFixed(2));
+        return { price: discounted, oldPrice: basePrice, hasOffer: true, discountPct: pct, isBF: true };
+      }
+      const hasOffer = baseOld > basePrice;
+      const discountPct = hasOffer ? Math.round(((baseOld - basePrice) / baseOld) * 100) : 0;
+      return { price: basePrice, oldPrice: baseOld, hasOffer, discountPct, isBF: false };
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
 
     // Textos Legales Dinámicos
     const legalTexts = {
@@ -913,7 +972,7 @@
       setupPasswordEnterKey();
     });
 
-    // CONFIGURACIÓN DE TIENDA (MENÚ, CINTA DE ANUNCIOS Y AGENCIA SHALOM)
+    // CONFIGURACIÓN DE TIENDA (MENÚ, CINTA DESLIZANTE, BLACK FRIDAY Y SHALOM)
     async function fetchStoreConfig() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}config.json`);
@@ -935,18 +994,35 @@
         if (chk) chk.checked = !!storeConfig[cat];
       });
 
-      // Cinta superior de anuncios
+      // Cinta superior deslizante (1 anuncio por línea)
       const bar = document.getElementById("top-announcement-bar");
-      const barText = document.getElementById("top-announcement-text");
+      const track = document.getElementById("top-announcement-track");
       const chkBanner = document.getElementById("cfg-banner-active");
       const inpBanner = document.getElementById("cfg-banner-text");
 
       if (chkBanner) chkBanner.checked = !!storeConfig.bannerActive;
       if (inpBanner) inpBanner.value = storeConfig.bannerText || "";
 
-      if (bar && barText) {
-        if (storeConfig.bannerActive && storeConfig.bannerText && storeConfig.bannerText.trim() !== "") {
-          barText.textContent = storeConfig.bannerText.trim();
+      if (bar && track) {
+        const lines = (storeConfig.bannerText || "")
+          .split(/\r?\n/)
+          .map(l => l.trim())
+          .filter(Boolean);
+
+        if (storeConfig.bannerActive && lines.length > 0) {
+          const singleCycle = lines
+            .map(line => `<span class="mx-6 inline-flex items-center">${escapeHtml(line)}</span><span class="text-amber-300/80">✦</span>`)
+            .join("");
+          // Repetimos lo necesario para llenar pantallas anchas y duplicamos para bucle infinito sin saltos
+          const repeats = lines.length === 1 ? 4 : (lines.length === 2 ? 3 : 2);
+          const halfTrack = singleCycle.repeat(repeats);
+          track.innerHTML = `<div class="flex items-center shrink-0">${halfTrack}</div><div class="flex items-center shrink-0" aria-hidden="true">${halfTrack}</div>`;
+
+          // Velocidad equilibrada según la cantidad de texto
+          const charCount = lines.join(" ").length * repeats;
+          const durationSec = Math.max(18, Math.min(55, Math.round(charCount * 0.14)));
+          track.style.animationDuration = `${durationSec}s`;
+
           bar.classList.remove("hidden");
         } else {
           bar.classList.add("hidden");
@@ -954,7 +1030,7 @@
       }
 
       // Agencia Shalom en el carrito
-      const shalomEnabled = storeConfig.shalom !== false; // Activa por defecto
+      const shalomEnabled = storeConfig.shalom !== false;
       const chkShalom = document.getElementById("cfg-shalom");
       if (chkShalom) chkShalom.checked = shalomEnabled;
 
@@ -973,6 +1049,33 @@
         }
         toggleOtherAgencyInput();
       }
+
+      // Modo Black Friday
+      const bfActive = !!storeConfig.blackFriday;
+      const bfPct = Number(storeConfig.bfDiscount) || 20;
+      const chkBf = document.getElementById("cfg-bf-active");
+      const inpBf = document.getElementById("cfg-bf-discount");
+      if (chkBf) chkBf.checked = bfActive;
+      if (inpBf) inpBf.value = bfPct;
+
+      const heroBox = document.getElementById("hero-banner-box");
+      const heroBadge = document.getElementById("hero-badge");
+      const heroTitle = document.getElementById("hero-title");
+      if (heroBox && heroBadge && heroTitle) {
+        if (bfActive) {
+          heroBox.className = "bg-gradient-to-br from-black via-zinc-900 to-rose-950 border-2 border-amber-400/50 text-white rounded-3xl p-6 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden transition-all duration-500";
+          heroBadge.className = "inline-block bg-rose-600 text-white text-xs uppercase tracking-widest font-black px-4 py-1.5 rounded-full mb-4 shadow-md animate-pulse";
+          heroBadge.textContent = `🖤 BLACK FRIDAY • -${bfPct}% OFF`;
+          heroTitle.innerHTML = `BLACK <span class="text-amber-400">FRIDAY</span><br><span class="text-rose-400 text-2xl sm:text-4xl">Todo con ${bfPct}% de descuento.</span>`;
+        } else {
+          heroBox.className = "bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 text-white rounded-3xl p-6 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden transition-all duration-500";
+          heroBadge.className = "inline-block bg-amber-400 text-amber-950 text-xs uppercase tracking-widest font-black px-4 py-1.5 rounded-full mb-4 shadow-sm";
+          heroBadge.textContent = "Nueva Temporada";
+          heroTitle.innerHTML = `Encuentra tu estilo<br><span class="text-amber-300">perfecto hoy.</span>`;
+        }
+      }
+
+      if (products.length > 0) renderProducts();
     }
 
     function toggleOtherAgencyInput() {
@@ -1001,7 +1104,9 @@
         ropa: document.getElementById("cfg-ropa").checked,
         shalom: document.getElementById("cfg-shalom").checked,
         bannerActive: document.getElementById("cfg-banner-active").checked,
-        bannerText: document.getElementById("cfg-banner-text").value.trim()
+        bannerText: document.getElementById("cfg-banner-text").value.trim(),
+        blackFriday: document.getElementById("cfg-bf-active").checked,
+        bfDiscount: parseInt(document.getElementById("cfg-bf-discount").value) || 20
       };
 
       try {
@@ -1111,20 +1216,22 @@
     function consultProduct(prodId, variant = "") {
       const prod = products.find(p => p.firebaseId === prodId);
       if (!prod) return;
+      const pricing = getEffectivePricing(prod);
       const variantText = variant ? ` (Opción: ${variant})` : "";
-      const text = `Hola D'Ana Boutique, deseo más información o consultar disponibilidad sobre el producto: *${prod.name}${variantText}* (S/ ${Number(prod.price).toFixed(2)}).`;
+      const text = `Hola D'Ana Boutique, deseo más información o consultar disponibilidad sobre el producto: *${prod.name}${variantText}* (S/ ${pricing.price.toFixed(2)}).`;
       window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURI(text)}`, "_blank");
     }
 
     function shareProduct(prodId) {
       const prod = products.find(p => p.firebaseId === prodId);
       if (!prod) return;
+      const pricing = getEffectivePricing(prod);
       const shareUrl = `${window.location.origin}${window.location.pathname}?producto=${prodId}`;
       
       if (navigator.share) {
         navigator.share({
           title: `${prod.name} - D'Ana Boutique`,
-          text: `Mira este producto en D'Ana Boutique: ${prod.name} a S/ ${Number(prod.price).toFixed(2)}`,
+          text: `Mira este producto en D'Ana Boutique: ${prod.name} a S/ ${pricing.price.toFixed(2)}`,
           url: shareUrl
         }).catch(() => {});
       } else {
@@ -1151,7 +1258,7 @@
 
       // Filtro por categoría
       if (currentCategory === "ofertas") {
-        filtered = filtered.filter(p => Number(p.oldPrice) > Number(p.price));
+        filtered = filtered.filter(p => getEffectivePricing(p).hasOffer);
       } else if (currentCategory === "favoritos") {
         filtered = filtered.filter(p => isFavorite(p.firebaseId));
       } else if (currentCategory === "stock") {
@@ -1173,11 +1280,11 @@
 
       // Filtro/Orden por precio u ofertas
       if (sortOrder === "price-asc") {
-        filtered.sort((a, b) => Number(a.price) - Number(b.price));
+        filtered.sort((a, b) => getEffectivePricing(a).price - getEffectivePricing(b).price);
       } else if (sortOrder === "price-desc") {
-        filtered.sort((a, b) => Number(b.price) - Number(a.price));
+        filtered.sort((a, b) => getEffectivePricing(b).price - getEffectivePricing(a).price);
       } else if (sortOrder === "offers") {
-        filtered = filtered.filter(p => Number(p.oldPrice) > Number(p.price));
+        filtered = filtered.filter(p => getEffectivePricing(p).hasOffer);
       }
 
       const countEl = document.getElementById("products-count");
@@ -1198,10 +1305,11 @@
         const stockUnits = typeof p.stock !== "undefined" ? Number(p.stock) : 1;
         const isOutOfStock = p.isOutOfStock || stockUnits <= 0;
         const displayImage = getOptimizedImageUrl(p.image);
-        const priceNum = Number(p.price);
-        const oldPriceNum = Number(p.oldPrice) || 0;
-        const hasOffer = oldPriceNum > priceNum;
-        const discountPct = hasOffer ? Math.round(((oldPriceNum - priceNum) / oldPriceNum) * 100) : 0;
+        const pricing = getEffectivePricing(p);
+        const priceNum = pricing.price;
+        const oldPriceNum = pricing.oldPrice;
+        const hasOffer = pricing.hasOffer;
+        const discountPct = pricing.discountPct;
         const hasVariants = !!(p.variants && p.variants.trim().length > 0);
         const favActive = isFavorite(p.firebaseId);
 
@@ -1245,8 +1353,8 @@
               <h4 class="font-black text-slate-900 text-sm sm:text-base leading-tight line-clamp-2 group-hover:text-rose-600 transition-colors">${p.name}</h4>
               ${hasOffer ? `
                 <div class="mt-2">
-                  <span class="inline-flex items-center gap-1 bg-rose-600 text-white font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg shadow-sm tracking-wide">
-                    🔥 OFERTA -${discountPct}%
+                  <span class="inline-flex items-center gap-1 ${pricing.isBF ? 'bg-slate-900 text-amber-400 border border-amber-400/50' : 'bg-rose-600 text-white'} font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg shadow-sm tracking-wide">
+                    ${pricing.isBF ? '🖤 BLACK FRIDAY' : '🔥 OFERTA'} -${discountPct}%
                   </span>
                 </div>
               ` : ''}
@@ -1299,6 +1407,7 @@
 
       grid.innerHTML = "";
       related.forEach(rp => {
+        const rpPricing = getEffectivePricing(rp);
         const card = document.createElement("div");
         card.className = "flex items-center gap-2.5 p-2 rounded-2xl border border-rose-100 bg-[#fffaf7] hover:border-rose-300 hover:shadow-sm cursor-pointer transition";
         card.onclick = () => {
@@ -1310,7 +1419,7 @@
           <img src="${getOptimizedImageUrl(rp.image, 150)}" alt="${rp.name}" class="w-12 h-12 rounded-xl object-contain bg-white shrink-0 border border-slate-100" onerror="this.src='https://placehold.co/100x100?text=Sin+Foto'" />
           <div class="min-w-0 flex-1">
             <p class="text-xs font-black text-slate-900 line-clamp-2 leading-tight">${rp.name}</p>
-            <p class="text-xs font-black text-rose-700 mt-0.5">S/ ${Number(rp.price).toFixed(2)}</p>
+            <p class="text-xs font-black text-rose-700 mt-0.5">S/ ${rpPricing.price.toFixed(2)}</p>
           </div>
         `;
         grid.appendChild(card);
@@ -1356,19 +1465,20 @@
         galleryEl.classList.add("hidden");
       }
 
+      const pricing = getEffectivePricing(prod);
       document.getElementById("modal-name").textContent = prod.name;
-      document.getElementById("modal-price").textContent = `S/ ${Number(prod.price).toFixed(2)}`;
+      document.getElementById("modal-price").textContent = `S/ ${pricing.price.toFixed(2)}`;
       document.getElementById("modal-desc").textContent = prod.description || "Sin descripción detallada.";
 
-      // Precio anterior / Oferta
+      // Precio anterior / Oferta / Black Friday
       const oldPriceEl = document.getElementById("modal-old-price");
       const discountEl = document.getElementById("modal-discount-badge");
-      const oldPriceNum = Number(prod.oldPrice) || 0;
-      const priceNum = Number(prod.price);
-      if (oldPriceNum > priceNum) {
-        const pct = Math.round(((oldPriceNum - priceNum) / oldPriceNum) * 100);
-        oldPriceEl.textContent = `S/ ${oldPriceNum.toFixed(2)}`;
-        discountEl.textContent = `🔥 -${pct}%`;
+      if (pricing.hasOffer) {
+        oldPriceEl.textContent = `S/ ${pricing.oldPrice.toFixed(2)}`;
+        discountEl.textContent = `${pricing.isBF ? '🖤' : '🔥'} -${pricing.discountPct}%`;
+        discountEl.className = pricing.isBF
+          ? "bg-slate-900 text-amber-400 text-xs font-black px-2.5 py-0.5 rounded-md uppercase border border-amber-400/50"
+          : "bg-rose-600 text-white text-xs font-black px-2.5 py-0.5 rounded-md uppercase";
         oldPriceEl.classList.remove("hidden");
         discountEl.classList.remove("hidden");
       } else {
@@ -1736,10 +1846,12 @@
         return showToast(`Solo hay ${stockUnits} unidades disponibles`, true);
       }
 
+      const pricing = getEffectivePricing(prod);
       const exist = cart.find(i => i.cartKey === cartKey);
       if (!exist) {
-        cart.push({ ...prod, cartKey, selectedVariant: variant, qty: 1 });
+        cart.push({ ...prod, price: pricing.price, cartKey, selectedVariant: variant, qty: 1 });
       } else {
+        exist.price = pricing.price;
         exist.qty += 1;
       }
 
