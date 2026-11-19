@@ -46,6 +46,11 @@
     <p class="text-slate-500 text-xs mt-2 tracking-widest uppercase font-bold">Cargando colección...</p>
   </div>
 
+  <!-- ================= CINTA SUPERIOR DE ANUNCIOS (EDITABLE DESDE EL PANEL) ================= -->
+  <div id="top-announcement-bar" class="hidden bg-gradient-to-r from-rose-900 via-rose-700 to-slate-900 text-white text-center py-2 px-4 text-xs sm:text-sm font-bold tracking-wide shadow-sm">
+    <span id="top-announcement-text"></span>
+  </div>
+
   <!-- ================= NAVBAR PREMIUM ESTILO ALIEXPRESS ================= -->
   <header class="sticky top-0 z-40 bg-[#fffaf7]/95 backdrop-blur-lg border-b border-rose-100 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap md:flex-nowrap items-center justify-between gap-3 md:gap-6">
@@ -84,6 +89,10 @@
       <div class="max-w-7xl mx-auto px-4 py-2.5 flex gap-2.5 items-center">
         <button onclick="filterCategory('todos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-md transition whitespace-nowrap">Ver Todo</button>
         <button id="btn-cat-ofertas" onclick="filterCategory('ofertas', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-black bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition whitespace-nowrap">🔥 Ofertas</button>
+        <button id="btn-cat-favoritos" onclick="filterCategory('favoritos', this)" class="cat-pill px-4 py-2 rounded-xl text-sm font-bold bg-pink-50 text-pink-700 border border-pink-200 hover:bg-pink-100 transition whitespace-nowrap flex items-center gap-1.5">
+          <span>❤️ Favoritos</span>
+          <span id="fav-count-pill" class="hidden bg-pink-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none">0</span>
+        </button>
         
         <!-- BOTONES DE MARCAS (LOGOS EN PROGRAMACIÓN) -->
         <button id="btn-cat-natura" onclick="filterCategory('natura', this)" class="hidden cat-pill px-4 py-2 rounded-xl bg-orange-50 border border-orange-200 hover:bg-orange-100 transition whitespace-nowrap flex items-center gap-1.5">
@@ -242,7 +251,7 @@
       <div class="flex flex-col items-center md:items-end gap-3">
         <p class="text-xs font-black uppercase tracking-widest text-slate-600 mb-1">Síguenos en</p>
         <div class="flex items-center gap-4">
-          <!-- REEMPLAZA LOS LINKS AQUÍ -->
+          <!-- REEMPLAZA LOS LINKS DE TUS REDES AQUÍ -->
           <a href="LINK_DE_FACEBOOK_AQUI" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-blue-600 hover:scale-110 transition duration-300"><i class="ph ph-facebook-logo text-xl"></i></a>
           <a href="LINK_DE_INSTAGRAM_AQUI" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-pink-600 hover:scale-110 transition duration-300"><i class="ph ph-instagram-logo text-xl"></i></a>
           <a href="LINK_DE_TIKTOK_AQUI" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-black hover:scale-110 transition duration-300"><i class="ph ph-tiktok-logo text-xl"></i></a>
@@ -272,8 +281,8 @@
     </div>
   </footer>
 
-  <!-- ================= BOTÓN FLOTANTE WHATSAPP ================= -->
-  <a href="https://api.whatsapp.com/send?phone=51916052207&text=Hola%20D'Ana%20Boutique,%20necesito%20ayuda%20o%20tengo%20una%20consulta%20en%20general." target="_blank" class="fixed bottom-6 right-6 z-40 bg-emerald-500 text-white w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:bg-emerald-400 transition-all duration-300">
+  <!-- ================= BOTÓN FLOTANTE WHATSAPP (SE ACTUALIZA SOLO CON WHATSAPP_PHONE) ================= -->
+  <a id="floating-wa-btn" href="#" target="_blank" class="fixed bottom-6 right-6 z-40 bg-emerald-500 text-white w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:bg-emerald-400 transition-all duration-300">
     <i class="ph ph-whatsapp-logo text-3xl sm:text-4xl"></i>
     <span class="absolute -top-1 -left-2 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md animate-pulse">Ayuda</span>
   </a>
@@ -294,6 +303,9 @@
         <div id="modal-badge-container" class="absolute top-4 left-4 flex flex-col gap-1.5 pointer-events-none"></div>
         
         <div class="absolute top-4 right-4 flex items-center gap-2">
+          <button id="modal-fav-btn" class="bg-white/90 hover:bg-pink-50 text-slate-400 hover:text-rose-600 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition" title="Guardar en favoritos">
+            <i id="modal-fav-icon" class="ph ph-heart text-lg font-bold"></i>
+          </button>
           <button id="modal-share-btn" class="bg-white/90 hover:bg-rose-600 text-slate-800 hover:text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition" title="Compartir producto">
             <i class="ph ph-share-network text-lg font-bold"></i>
           </button>
@@ -306,7 +318,7 @@
       <!-- GALERÍA MINIATURA (SOLO SI HAY MÁS DE 1 FOTO) -->
       <div id="modal-gallery" class="hidden bg-white px-6 pt-3 pb-1 flex items-center justify-center gap-2.5 border-b border-slate-100 shrink-0"></div>
 
-      <div class="p-6 sm:p-7 flex-1 overflow-y-auto space-y-5">
+      <div id="modal-scroll-body" class="p-6 sm:p-7 flex-1 overflow-y-auto space-y-5">
         <div>
           <div class="flex items-start justify-between gap-4">
             <h3 id="modal-name" class="text-xl sm:text-2xl font-black text-slate-900 leading-tight"></h3>
@@ -315,7 +327,7 @@
           <div class="flex items-baseline gap-3 mt-2.5">
             <p id="modal-price" class="text-3xl font-black text-rose-700"></p>
             <p id="modal-old-price" class="hidden text-base font-bold text-slate-400 line-through"></p>
-            <span id="modal-discount-badge" class="hidden bg-rose-600 text-white text-[10px] font-black px-2 py-0.5 rounded-md uppercase"></span>
+            <span id="modal-discount-badge" class="hidden bg-rose-600 text-white text-xs font-black px-2.5 py-0.5 rounded-md uppercase"></span>
           </div>
         </div>
 
@@ -336,6 +348,14 @@
         <div class="border-t border-slate-100 pt-4">
           <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Descripción del Producto</h4>
           <p id="modal-desc" class="text-slate-600 text-sm leading-relaxed whitespace-pre-line"></p>
+        </div>
+
+        <!-- PRODUCTOS RELACIONADOS ("TAMBIÉN TE PUEDE INTERESAR") -->
+        <div id="modal-related-section" class="hidden border-t border-slate-100 pt-5">
+          <h4 class="text-xs font-black text-rose-700 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+            <i class="ph ph-sparkle text-base"></i> También te puede interesar
+          </h4>
+          <div id="modal-related-grid" class="grid grid-cols-2 gap-3"></div>
         </div>
       </div>
 
@@ -416,9 +436,11 @@
           <div id="box-nacional" class="hidden flex-col gap-3">
             <input type="text" id="cust-dep" placeholder="Departamento (Ej: Lima)" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 outline-none transition" />
             <input type="text" id="cust-dist" placeholder="Provincia / Distrito" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-rose-500 outline-none transition" />
-            <select id="cust-agency" disabled class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-100 font-bold text-slate-600 outline-none opacity-80 cursor-not-allowed">
+            <select id="cust-agency" onchange="toggleOtherAgencyInput()" class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-700 focus:bg-white focus:border-rose-500 outline-none transition cursor-pointer">
               <option value="Shalom">Agencia: Shalom (Sugerido)</option>
+              <option value="Otra">Otra agencia (Sugerir)</option>
             </select>
+            <input type="text" id="cust-other-agency" placeholder="Escribe la agencia que prefieres (Ej: Olva, Marvisur...)" class="hidden w-full text-sm p-3 rounded-xl border border-rose-200 bg-rose-50/40 focus:bg-white focus:border-rose-500 outline-none transition" />
           </div>
         </div>
 
@@ -579,60 +601,93 @@
           </button>
         </div>
 
-        <!-- LISTA DE PRODUCTOS (INVENTARIO) -->
+        <!-- LISTA DE PRODUCTOS (INVENTARIO) CON BUSCADOR INTERNO -->
         <div>
-          <h4 class="font-black text-slate-900 text-sm uppercase tracking-widest mb-4 flex items-center gap-2">
-            <i class="ph ph-archive text-slate-400 text-xl"></i> Inventario Actual
-          </h4>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <h4 class="font-black text-slate-900 text-sm uppercase tracking-widest flex items-center gap-2">
+              <i class="ph ph-archive text-slate-400 text-xl"></i> Inventario Actual
+            </h4>
+            <div class="relative w-full sm:w-64">
+              <i class="ph ph-magnifying-glass text-slate-400 text-base absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="admin-search-input" oninput="renderAdminList()" placeholder="Buscar en tu inventario..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:border-slate-900 outline-none transition" />
+            </div>
+          </div>
           <div id="admin-prod-list" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
         </div>
 
-        <!-- CONFIGURACIÓN DE BOTONES (9 CATEGORÍAS) -->
-        <div class="bg-rose-50 p-6 rounded-3xl border border-rose-200 shadow-sm mt-8">
-          <h4 class="font-black text-rose-900 text-sm uppercase tracking-widest mb-2 flex items-center gap-2">
-            <i class="ph ph-sliders text-rose-500 text-xl"></i> Configuración de Menú
-          </h4>
-          <p class="text-xs text-rose-800 mb-5 font-medium">Marca o desmarca para mostrar u ocultar las pestañas en la barra superior.</p>
-          
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-natura" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Natura</span>
+        <!-- CONFIGURACIÓN DE TIENDA (CINTA, ENVÍO Y 9 CATEGORÍAS) -->
+        <div class="bg-rose-50 p-6 rounded-3xl border border-rose-200 shadow-sm mt-8 space-y-6">
+          <div>
+            <h4 class="font-black text-rose-900 text-sm uppercase tracking-widest mb-1 flex items-center gap-2">
+              <i class="ph ph-sliders text-rose-500 text-xl"></i> Configuración de Tienda
+            </h4>
+            <p class="text-xs text-rose-800 font-medium">Activa anuncios, configura envíos y elige qué pestañas se ven arriba.</p>
+          </div>
+
+          <!-- CINTA SUPERIOR DE ANUNCIOS -->
+          <div class="bg-white p-4 rounded-2xl border border-rose-100 space-y-3">
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" id="cfg-banner-active" class="w-4 h-4 text-rose-600 rounded" />
+              <span class="text-xs font-black text-slate-800 uppercase tracking-wider">📢 Mostrar Cinta Superior de Anuncios</span>
             </label>
-            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-avon" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Avon</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-esika" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Ésika</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-yanbal" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Yanbal</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-stock" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">En Stock</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-catalogo" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Solo Catálogo</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-fragancias" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Fragancias</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-zapatos" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Zapatos</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
-              <input type="checkbox" id="cfg-ropa" class="w-4 h-4 text-rose-600 rounded" />
-              <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Ropa</span>
+            <input type="text" id="cfg-banner-text" placeholder="Ej: 🔥 Campaña Natura abierta hasta el viernes • Envíos a todo el Perú" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium focus:bg-white focus:border-rose-500 outline-none transition" />
+          </div>
+
+          <!-- AGENCIA DE ENVÍO -->
+          <div class="bg-white p-4 rounded-2xl border border-rose-100">
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" id="cfg-shalom" class="w-4 h-4 text-rose-600 rounded" />
+              <div>
+                <span class="text-xs font-black text-slate-800 uppercase tracking-wider block">📦 Activar Agencia Shalom (Sugerida)</span>
+                <span class="text-[11px] text-slate-500 font-medium">La opción "Otra agencia (Sugerir)" siempre queda disponible para el cliente.</span>
+              </div>
             </label>
           </div>
-          <button onclick="saveStoreConfig(this)" class="mt-5 w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md transition transform hover:-translate-y-1">
+          
+          <!-- MENÚ DE CATEGORÍAS -->
+          <div>
+            <p class="text-[11px] font-black text-rose-900 uppercase tracking-widest mb-2.5">Pestañas visibles en el menú:</p>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+                <input type="checkbox" id="cfg-natura" class="w-4 h-4 text-rose-600 rounded" />
+                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Natura</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+                <input type="checkbox" id="cfg-avon" class="w-4 h-4 text-rose-600 rounded" />
+                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Avon</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+                <input type="checkbox" id="cfg-esika" class="w-4 h-4 text-rose-600 rounded" />
+                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Ésika</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+                <input type="checkbox" id="cfg-yanbal" class="w-4 h-4 text-rose-600 rounded" />
+                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Yanbal</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+                <input type="checkbox" id="cfg-stock" class="w-4 h-4 text-rose-600 rounded" />
+                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">En Stock</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+                <input type="checkbox" id="cfg-catalogo" class="w-4 h-4 text-rose-600 rounded" />
+                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Solo Catálogo</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+                <input type="checkbox" id="cfg-fragancias" class="w-4 h-4 text-rose-600 rounded" />
+                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Fragancias</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+                <input type="checkbox" id="cfg-zapatos" class="w-4 h-4 text-rose-600 rounded" />
+                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Zapatos</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-rose-100 cursor-pointer hover:border-rose-300 transition">
+                <input type="checkbox" id="cfg-ropa" class="w-4 h-4 text-rose-600 rounded" />
+                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Ropa</span>
+              </label>
+            </div>
+          </div>
+
+          <button onclick="saveStoreConfig(this)" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md transition transform hover:-translate-y-1">
             <i class="ph ph-floppy-disk text-xl"></i> GUARDAR CONFIGURACIÓN
           </button>
         </div>
@@ -646,11 +701,14 @@
     const CLOUD_NAME = "jykepmvw";
     const UPLOAD_PRESET = "ml_default";
     const ADMIN_PASSWORD = "15062018";
+    // CAMBIA AQUÍ TU NUEVO NÚMERO DE WHATSAPP BUSINESS (CON 51 DELANTE, SIN ESPACIOS)
     const WHATSAPP_PHONE = "51916052207";
     const CART_STORAGE_KEY = "dana_boutique_cart_v1";
+    const FAV_STORAGE_KEY = "dana_boutique_favs_v1";
 
     let products = [];
     let cart = [];
+    let favorites = [];
     let currentCategory = "todos";
     let editingProductData = null;
     let selectedModalVariant = "";
@@ -699,10 +757,13 @@
       }, 2500);
     }
 
-    // Estado inicial predeterminado para las 9 categorías
+    // Estado inicial predeterminado de la tienda
     let storeConfig = {
       natura: false, avon: false, esika: false, yanbal: false,
-      stock: true, catalogo: true, fragancias: true, zapatos: true, ropa: true
+      stock: true, catalogo: true, fragancias: true, zapatos: true, ropa: true,
+      shalom: true,
+      bannerActive: false,
+      bannerText: ""
     };
 
     // Textos Legales Dinámicos
@@ -758,7 +819,7 @@
       return url;
     }
 
-    // === MEMORIA DEL CARRITO ===
+    // === MEMORIA DEL CARRITO Y FAVORITOS (100% LOCAL, NO CONSUME BASE DE DATOS) ===
     function loadCartFromStorage() {
       try {
         const saved = localStorage.getItem(CART_STORAGE_KEY);
@@ -775,15 +836,84 @@
       } catch (e) {}
     }
 
+    function loadFavoritesFromStorage() {
+      try {
+        const saved = localStorage.getItem(FAV_STORAGE_KEY);
+        if (saved) favorites = JSON.parse(saved);
+      } catch (e) {
+        favorites = [];
+      }
+      updateFavCounterPill();
+    }
+
+    function saveFavoritesToStorage() {
+      try {
+        localStorage.setItem(FAV_STORAGE_KEY, JSON.stringify(favorites));
+      } catch (e) {}
+      updateFavCounterPill();
+    }
+
+    function updateFavCounterPill() {
+      const pill = document.getElementById("fav-count-pill");
+      if (!pill) return;
+      if (favorites.length > 0) {
+        pill.textContent = favorites.length;
+        pill.classList.remove("hidden");
+      } else {
+        pill.classList.add("hidden");
+      }
+    }
+
+    function isFavorite(prodId) {
+      return favorites.includes(prodId);
+    }
+
+    function toggleFavorite(prodId, event) {
+      if (event) event.stopPropagation();
+      const idx = favorites.indexOf(prodId);
+      if (idx === -1) {
+        favorites.push(prodId);
+        showToast("Guardado en tus favoritos ❤️");
+      } else {
+        favorites.splice(idx, 1);
+        showToast("Quitado de favoritos", true);
+      }
+      saveFavoritesToStorage();
+      renderProducts();
+      updateModalFavButton(prodId);
+    }
+
+    function updateModalFavButton(prodId) {
+      const btn = document.getElementById("modal-fav-btn");
+      const icon = document.getElementById("modal-fav-icon");
+      if (!btn || !icon) return;
+      if (isFavorite(prodId)) {
+        btn.classList.remove("text-slate-400");
+        btn.classList.add("text-rose-600");
+        icon.className = "ph-fill ph-heart text-lg";
+      } else {
+        btn.classList.remove("text-rose-600");
+        btn.classList.add("text-slate-400");
+        icon.className = "ph ph-heart text-lg font-bold";
+      }
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
+      // Configurar botón flotante de WhatsApp con la constante central
+      const waBtn = document.getElementById("floating-wa-btn");
+      if (waBtn) {
+        waBtn.href = `https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURI("Hola D'Ana Boutique, necesito ayuda o tengo una consulta en general.")}`;
+      }
+
       loadCartFromStorage();
+      loadFavoritesFromStorage();
       fetchProductsFromCloud();
       fetchStoreConfig();
       setupCartDrawer();
       setupPasswordEnterKey();
     });
 
-    // CONFIGURACIÓN DE BOTONES
+    // CONFIGURACIÓN DE TIENDA (MENÚ, CINTA DE ANUNCIOS Y AGENCIA SHALOM)
     async function fetchStoreConfig() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}config.json`);
@@ -796,13 +926,64 @@
     }
 
     function applyConfigToUI() {
+      // Categorías
       const cats = ['natura', 'avon', 'esika', 'yanbal', 'stock', 'catalogo', 'fragancias', 'zapatos', 'ropa'];
       cats.forEach(cat => {
         const btn = document.getElementById(`btn-cat-${cat}`);
         const chk = document.getElementById(`cfg-${cat}`);
         if (btn) btn.style.display = storeConfig[cat] ? 'inline-flex' : 'none';
-        if (chk) chk.checked = storeConfig[cat];
+        if (chk) chk.checked = !!storeConfig[cat];
       });
+
+      // Cinta superior de anuncios
+      const bar = document.getElementById("top-announcement-bar");
+      const barText = document.getElementById("top-announcement-text");
+      const chkBanner = document.getElementById("cfg-banner-active");
+      const inpBanner = document.getElementById("cfg-banner-text");
+
+      if (chkBanner) chkBanner.checked = !!storeConfig.bannerActive;
+      if (inpBanner) inpBanner.value = storeConfig.bannerText || "";
+
+      if (bar && barText) {
+        if (storeConfig.bannerActive && storeConfig.bannerText && storeConfig.bannerText.trim() !== "") {
+          barText.textContent = storeConfig.bannerText.trim();
+          bar.classList.remove("hidden");
+        } else {
+          bar.classList.add("hidden");
+        }
+      }
+
+      // Agencia Shalom en el carrito
+      const shalomEnabled = storeConfig.shalom !== false; // Activa por defecto
+      const chkShalom = document.getElementById("cfg-shalom");
+      if (chkShalom) chkShalom.checked = shalomEnabled;
+
+      const agencySelect = document.getElementById("cust-agency");
+      if (agencySelect) {
+        const currentVal = agencySelect.value;
+        agencySelect.innerHTML = "";
+        if (shalomEnabled) {
+          agencySelect.innerHTML += `<option value="Shalom">Agencia: Shalom (Sugerido)</option>`;
+        }
+        agencySelect.innerHTML += `<option value="Otra">Otra agencia (Sugerir)</option>`;
+        if (shalomEnabled && currentVal === "Shalom") {
+          agencySelect.value = "Shalom";
+        } else if (!shalomEnabled) {
+          agencySelect.value = "Otra";
+        }
+        toggleOtherAgencyInput();
+      }
+    }
+
+    function toggleOtherAgencyInput() {
+      const agencySelect = document.getElementById("cust-agency");
+      const otherInput = document.getElementById("cust-other-agency");
+      if (!agencySelect || !otherInput) return;
+      if (agencySelect.value === "Otra") {
+        otherInput.classList.remove("hidden");
+      } else {
+        otherInput.classList.add("hidden");
+      }
     }
 
     async function saveStoreConfig(btn) {
@@ -817,7 +998,10 @@
         catalogo: document.getElementById("cfg-catalogo").checked,
         fragancias: document.getElementById("cfg-fragancias").checked,
         zapatos: document.getElementById("cfg-zapatos").checked,
-        ropa: document.getElementById("cfg-ropa").checked
+        ropa: document.getElementById("cfg-ropa").checked,
+        shalom: document.getElementById("cfg-shalom").checked,
+        bannerActive: document.getElementById("cfg-banner-active").checked,
+        bannerText: document.getElementById("cfg-banner-text").value.trim()
       };
 
       try {
@@ -856,6 +1040,8 @@
       const entered = document.getElementById("input-admin-pass").value;
       if (entered === ADMIN_PASSWORD) {
         closeLoginModal();
+        const searchAdmin = document.getElementById("admin-search-input");
+        if (searchAdmin) searchAdmin.value = "";
         renderAdminList();
         document.getElementById("admin-modal").classList.remove("hidden");
       } else {
@@ -888,6 +1074,7 @@
         boxContraentrega.classList.add("hidden");
         boxNacional.classList.remove("hidden");
         boxNacional.classList.add("flex");
+        toggleOtherAgencyInput();
       }
     }
 
@@ -965,6 +1152,8 @@
       // Filtro por categoría
       if (currentCategory === "ofertas") {
         filtered = filtered.filter(p => Number(p.oldPrice) > Number(p.price));
+      } else if (currentCategory === "favoritos") {
+        filtered = filtered.filter(p => isFavorite(p.firebaseId));
       } else if (currentCategory === "stock") {
         filtered = filtered.filter(p => !p.isPedido);
       } else if (currentCategory === "catalogo") {
@@ -997,7 +1186,10 @@
       }
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 font-bold text-base">No se encontraron productos con esos filtros.</div>`;
+        const emptyMsg = currentCategory === "favoritos"
+          ? "Aún no tienes favoritos guardados. Toca el ❤️ en cualquier producto para guardarlo aquí."
+          : "No se encontraron productos con esos filtros.";
+        grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 font-bold text-base">${emptyMsg}</div>`;
         return;
       }
 
@@ -1011,6 +1203,7 @@
         const hasOffer = oldPriceNum > priceNum;
         const discountPct = hasOffer ? Math.round(((oldPriceNum - priceNum) / oldPriceNum) * 100) : 0;
         const hasVariants = !!(p.variants && p.variants.trim().length > 0);
+        const favActive = isFavorite(p.firebaseId);
 
         const card = document.createElement("div");
         card.className = `bg-white rounded-[1.5rem] overflow-hidden border border-rose-50 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group ${isOutOfStock ? 'opacity-70' : ''}`;
@@ -1033,6 +1226,10 @@
                 : `<span class="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm w-fit">⚡ En Stock</span>`
               }
             </div>
+
+            <button type="button" onclick="toggleFavorite('${p.firebaseId}', event)" class="absolute top-2.5 right-2.5 z-20 w-8 h-8 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center transition transform hover:scale-110 ${favActive ? 'text-rose-600' : 'text-slate-400 hover:text-rose-500'}" title="Guardar en favoritos">
+              <i class="${favActive ? 'ph-fill ph-heart' : 'ph ph-heart font-bold'} text-base"></i>
+            </button>
             
             <div class="absolute inset-0 bg-gradient-to-t from-rose-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4 z-10">
               <span class="text-white text-xs font-bold flex items-center gap-1"><i class="ph ph-eye text-lg"></i> Ver detalles</span>
@@ -1086,6 +1283,41 @@
       }
     }
 
+    function renderRelatedProducts(currentProd) {
+      const section = document.getElementById("modal-related-section");
+      const grid = document.getElementById("modal-related-grid");
+      if (!section || !grid) return;
+
+      const related = products
+        .filter(p => p.firebaseId !== currentProd.firebaseId && p.category === currentProd.category && !(p.isOutOfStock || (typeof p.stock !== "undefined" && Number(p.stock) <= 0)))
+        .slice(0, 4);
+
+      if (related.length === 0) {
+        section.classList.add("hidden");
+        return;
+      }
+
+      grid.innerHTML = "";
+      related.forEach(rp => {
+        const card = document.createElement("div");
+        card.className = "flex items-center gap-2.5 p-2 rounded-2xl border border-rose-100 bg-[#fffaf7] hover:border-rose-300 hover:shadow-sm cursor-pointer transition";
+        card.onclick = () => {
+          openProductModal(rp.firebaseId);
+          const scrollBody = document.getElementById("modal-scroll-body");
+          if (scrollBody) scrollBody.scrollTop = 0;
+        };
+        card.innerHTML = `
+          <img src="${getOptimizedImageUrl(rp.image, 150)}" alt="${rp.name}" class="w-12 h-12 rounded-xl object-contain bg-white shrink-0 border border-slate-100" onerror="this.src='https://placehold.co/100x100?text=Sin+Foto'" />
+          <div class="min-w-0 flex-1">
+            <p class="text-xs font-black text-slate-900 line-clamp-2 leading-tight">${rp.name}</p>
+            <p class="text-xs font-black text-rose-700 mt-0.5">S/ ${Number(rp.price).toFixed(2)}</p>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      section.classList.remove("hidden");
+    }
+
     function openProductModal(prodId) {
       const prod = products.find(p => p.firebaseId === prodId);
       if (!prod) return;
@@ -1136,7 +1368,7 @@
       if (oldPriceNum > priceNum) {
         const pct = Math.round(((oldPriceNum - priceNum) / oldPriceNum) * 100);
         oldPriceEl.textContent = `S/ ${oldPriceNum.toFixed(2)}`;
-        discountEl.textContent = `-${pct}%`;
+        discountEl.textContent = `🔥 -${pct}%`;
         oldPriceEl.classList.remove("hidden");
         discountEl.classList.remove("hidden");
       } else {
@@ -1195,8 +1427,15 @@
       if (prod.isPedido) pedidoWarning.classList.remove("hidden");
       else pedidoWarning.classList.add("hidden");
 
+      // Favorito en modal
+      updateModalFavButton(prod.firebaseId);
+      document.getElementById("modal-fav-btn").onclick = (e) => toggleFavorite(prod.firebaseId, e);
+
       document.getElementById("modal-share-btn").onclick = () => shareProduct(prod.firebaseId);
       document.getElementById("modal-consult-btn").onclick = () => consultProduct(prod.firebaseId, selectedModalVariant);
+
+      // Productos relacionados
+      renderRelatedProducts(prod);
 
       const addBtn = document.getElementById("modal-add-btn");
       const addText = document.getElementById("modal-add-text");
@@ -1227,9 +1466,11 @@
     function filterCategory(cat, element) {
       currentCategory = cat;
       document.querySelectorAll(".cat-pill").forEach(btn => {
-        btn.classList.remove("bg-slate-900", "bg-rose-600", "text-white", "shadow-md");
+        btn.classList.remove("bg-slate-900", "bg-rose-600", "bg-pink-600", "text-white", "shadow-md");
         if (btn.id === "btn-cat-ofertas") {
           btn.classList.add("bg-rose-50", "text-rose-700");
+        } else if (btn.id === "btn-cat-favoritos") {
+          btn.classList.add("bg-pink-50", "text-pink-700");
         } else if (!btn.id.includes("cat-natura") && !btn.id.includes("cat-avon") && !btn.id.includes("cat-esika") && !btn.id.includes("cat-yanbal")) {
           btn.classList.add("bg-white", "text-slate-600");
         }
@@ -1238,6 +1479,9 @@
       if (cat === 'ofertas') {
         element.classList.remove("bg-rose-50", "text-rose-700");
         element.classList.add("bg-rose-600", "text-white", "shadow-md");
+      } else if (cat === 'favoritos') {
+        element.classList.remove("bg-pink-50", "text-pink-700");
+        element.classList.add("bg-pink-600", "text-white", "shadow-md");
       } else if (cat === 'todos' || cat === 'stock' || cat === 'catalogo' || cat === 'fragancias' || cat === 'zapatos' || cat === 'ropa') {
         element.classList.remove("bg-white", "text-slate-600");
         element.classList.add("bg-slate-900", "text-white", "shadow-md");
@@ -1401,8 +1645,19 @@
 
     function renderAdminList() {
       const list = document.getElementById("admin-prod-list");
+      const query = (document.getElementById("admin-search-input")?.value || "").trim().toLowerCase();
       list.innerHTML = "";
-      products.forEach(p => {
+
+      const filteredAdmin = query
+        ? products.filter(p => (p.name || "").toLowerCase().includes(query) || (p.category || "").toLowerCase().includes(query))
+        : products;
+
+      if (filteredAdmin.length === 0) {
+        list.innerHTML = `<p class="text-center text-xs text-slate-400 py-6 font-bold">No se encontraron productos en el inventario.</p>`;
+        return;
+      }
+
+      filteredAdmin.forEach(p => {
         const isOutOfStock = p.isOutOfStock || (typeof p.stock !== "undefined" && p.stock <= 0);
         const hasOffer = Number(p.oldPrice) > Number(p.price);
         const item = document.createElement("div");
@@ -1585,11 +1840,18 @@
       const point = document.getElementById("cust-delivery-point").value;
       const dep = document.getElementById("cust-dep").value.trim();
       const dist = document.getElementById("cust-dist").value.trim();
+      const agencySelect = document.getElementById("cust-agency").value;
+      const otherAgency = document.getElementById("cust-other-agency").value.trim();
 
       if (!name) return alert("Por favor ingresa tu nombre completo.");
       
       if (dType === "EnvioNacional" && (!dep || !dist)) {
         return alert("Por favor completa tu Departamento y Distrito.");
+      }
+
+      let finalAgency = agencySelect;
+      if (dType === "EnvioNacional" && agencySelect === "Otra") {
+        finalAgency = otherAgency ? `${otherAgency} (Sugerida por cliente)` : "Otra agencia (Por coordinar)";
       }
 
       const prodsStock = cart.filter(i => !i.isPedido);
@@ -1614,7 +1876,7 @@
       } else {
         text += `📍 *Modalidad:* Envío Nacional\n`;
         text += `🏙️ *Destino:* ${dep} - ${dist}\n`;
-        text += `📦 *Agencia:* Shalom\n`;
+        text += `📦 *Agencia:* ${finalAgency}\n`;
       }
 
       const formatItem = (i) => {
